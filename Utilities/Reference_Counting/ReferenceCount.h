@@ -7,6 +7,9 @@
 
 #include <string>
 #include <iostream>
+#include "../easylogging++.h"
+
+INITIALIZE_EASYLOGGINGPP
 
 using namespace std;
 

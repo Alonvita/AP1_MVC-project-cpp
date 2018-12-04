@@ -13,6 +13,8 @@ using namespace std;
 int main() {
     cout << "MAIN\n";
 
+    LOG(INFO) << "WHAT....\n";
+
     smart_ptr<Command> cmdSmrtPtr(new TestPrintCommand("Test one"));
     Variable v = cmdSmrtPtr;
 

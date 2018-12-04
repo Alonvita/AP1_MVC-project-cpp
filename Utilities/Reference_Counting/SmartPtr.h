@@ -2,6 +2,7 @@
 // Created by alon on 04/12/18.
 //
 
+
 #ifndef AP1_SEMETSER_PROJECT_SMARTPTR_H
 #define AP1_SEMETSER_PROJECT_SMARTPTR_H
 
@@ -28,7 +29,7 @@ public:
             , m_ReferenceCount{ new ReferenceCount() }
     {
         m_ReferenceCount->Increment();
-        cout << "Created smart_ptr! Ref count is " << m_ReferenceCount->GetCount() << endl;
+        LOG(INFO) << "Created smart_ptr! Ref count is " << m_ReferenceCount->GetCount();
     }
     //Destructor
     virtual ~smart_ptr()
@@ -36,7 +37,7 @@ public:
         if (m_ReferenceCount)
         {
             int decrementedCount = m_ReferenceCount->Decrement();
-            cout << "Destroyed smart_ptr! Ref count is " << decrementedCount << "\n";
+            LOG(INFO)  << "Destroyed smart_ptr! Ref count is " << decrementedCount;
             if (decrementedCount <= 0)
             {
                 delete m_ReferenceCount;
@@ -51,8 +52,8 @@ public:
             m_Object{ other.m_Object },
             m_ReferenceCount{ other.m_ReferenceCount } {
         m_ReferenceCount->Increment();
-        cout << "Copied smart_ptr! Ref count is "
-             << m_ReferenceCount->GetCount() << "\n";
+        LOG(INFO)  << "Copied smart_ptr! Ref count is "
+             << m_ReferenceCount->GetCount();
     }
 
     // Overloaded Assignment Operator
@@ -69,7 +70,7 @@ public:
             m_ReferenceCount = other.m_ReferenceCount;
             m_ReferenceCount->Increment();
         }
-        cout << "Assigning smart_ptr! Ref count is " << m_ReferenceCount->GetCount() << "\n";
+        LOG(INFO)  << "Assigning smart_ptr! Ref count is " << m_ReferenceCount->GetCount() << "\n";
         return *this;
     }
 

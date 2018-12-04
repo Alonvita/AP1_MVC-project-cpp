@@ -12,9 +12,11 @@ using namespace std;
 
 class TestPrintCommand : public Command {
 public:
+    /// ---------- CONSTRUCTOR & DESTRUCTOR ----------
     explicit TestPrintCommand(string str) : str(str) {};
 
-    void execute() { cout << "My Command is: " << str << "\n"; }
+    /// ---------- VIRTUAL FUNCTIONS IMPLEMENTATION ---------
+    void execute() override { cout << "\n" << "My Command is: " << str << "\n\n"; }
 private:
     string str;
 };
