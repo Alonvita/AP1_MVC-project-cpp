@@ -7,7 +7,8 @@
 
 
 #include "Command.h"
-#include "../File_Parsing/Variables/Variable.h"
+#include "Variables/Variable.h"
+#include "../Utilities/Reference_Counting/SmartPtr.h"
 
 /**
  * CreateVariableCommand.
@@ -16,19 +17,19 @@
 class CreateVariableCommand : public Command {
 public:
     /// ---------- CONSTRUCTOR & DESTRUCTOR ---------
-    CreateVariableCommand(smart_ptr<Command> cmd) : cmd(cmd) {};
+    CreateVariableCommand(smart_ptr<Command> cmd) : m_Cmd(cmd) {};
     ~CreateVariableCommand() = default;
 
     /// ---------- VIRTUAL FUNCTIONS IMPLEMENTATION ---------
     void execute() {
         // create a new smartPtr for a new Variable with the given command
-        smart_ptr<Variable> smartPtr(new Variable(cmd));
-        this->variable = smartPtr;
+        smart_ptr<Variable<Command>> smartPtr(new Variable<Command>(m_Cmd));
+        this->m_Var = smartPtr;
     };
 
 private:
-    smart_ptr<Command> cmd;
-    smart_ptr<Variable> variable = nullptr;
+    smart_ptr<Command> m_Cmd;
+    smart_ptr<Variable<Command>> m_Var = nullptr;
 };
 
 

@@ -16,7 +16,10 @@ int main() {
     LOG(INFO) << "WHAT....\n";
 
     smart_ptr<Command> cmdSmrtPtr(new TestPrintCommand("Test one"));
+    smart_ptr<Command> cmdSmrtPtr2(new TestPrintCommand("Test two"));
     Variable<Command> v = cmdSmrtPtr;
+
+    v = cmdSmrtPtr2;
 
     v.get_object().operator->()->execute();
 }

@@ -13,12 +13,12 @@ using namespace std;
 class TestPrintCommand : public Command {
 public:
     /// ---------- CONSTRUCTOR & DESTRUCTOR ----------
-    explicit TestPrintCommand(string str) : str(str) {};
+    explicit TestPrintCommand(string str) : m_Str(str) {};
 
     /// ---------- VIRTUAL FUNCTIONS IMPLEMENTATION ---------
-    void execute() override { cout << "\n" << "My Command is: " << str << "\n\n"; }
+    void execute() override { cout << "\n" << "My Command is: " << m_Str << "\n\n"; }
 private:
-    string str;
+    string m_Str;
 };
 
 #endif //AP1_SEMETSER_PROJECT_TESTPRINTCOMMAND_H

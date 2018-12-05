@@ -1034,8 +1034,8 @@ char* Str::wcharPtrToCharPtr(const wchar_t* line) {
 #if ELPP_OS_WINDOWS
 /// @brief Gets environment variables for Windows based OS.
 ///        We are not using <code>getenv(const char*)</code> because of CRT deprecation
-/// @param varname Variable name to get environment variable value for
-/// @return If variable exist the value of it otherwise nullptr
+/// @param varname Variable name to get environment m_Var value for
+/// @return If m_Var exist the value of it otherwise nullptr
 const char* OS::getWindowsEnvironmentVariable(const char* varname) {
   const DWORD bufferLen = 50;
   static char buffer[bufferLen];

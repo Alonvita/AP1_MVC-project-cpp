@@ -20,9 +20,7 @@ private:
     T* m_Object{ nullptr };
     ReferenceCount* m_ReferenceCount{ nullptr };
 public:
-    smart_ptr()
-    {
-    }
+    smart_ptr() {}
     //Constructor
     smart_ptr(T* object)
             : m_Object{ object }
@@ -32,8 +30,7 @@ public:
         LOG(INFO) << "Created smart_ptr! Ref count is " << m_ReferenceCount->GetCount();
     }
     //Destructor
-    virtual ~smart_ptr()
-    {
+    virtual ~smart_ptr() {
         if (m_ReferenceCount)
         {
             int decrementedCount = m_ReferenceCount->Decrement();
@@ -57,12 +54,9 @@ public:
     }
 
     // Overloaded Assignment Operator
-    smart_ptr<T>& operator=(const smart_ptr<T>& other)
-    {
-        if (this != &other)
-        {
-            if (m_ReferenceCount && m_ReferenceCount->Decrement() == 0)
-            {
+    smart_ptr<T>& operator=(const smart_ptr<T>& other) {
+        if (this != &other) {
+            if (m_ReferenceCount && m_ReferenceCount->Decrement() == 0) {
                 delete m_ReferenceCount;
                 delete m_Object;
             }
@@ -70,6 +64,7 @@ public:
             m_ReferenceCount = other.m_ReferenceCount;
             m_ReferenceCount->Increment();
         }
+
         LOG(INFO)  << "Assigning smart_ptr! Ref count is " << m_ReferenceCount->GetCount() << "\n";
         return *this;
     }

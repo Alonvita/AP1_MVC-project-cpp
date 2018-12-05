@@ -20,7 +20,7 @@ set(FILE_PARSING
         # Strings Validator
         File_Parsing/Parsing/StringValidator.cpp File_Parsing/Parsing/StringValidator.h
         # Variables
-        Commands/Variables/Variable.cpp Commands/Variables/Variable.h
+        Commands/Variables/Variable.h
         )
 
 set(COMMANDS

@@ -1138,8 +1138,8 @@ class OS : base::StaticClass {
 #if ELPP_OS_WINDOWS
   /// @brief Gets environment variables for Windows based OS.
   ///        We are not using <code>getenv(const char*)</code> because of CRT deprecation
-  /// @param varname Variable name to get environment variable value for
-  /// @return If variable exist the value of it otherwise nullptr
+  /// @param varname Variable name to get environment m_Var value for
+  /// @return If m_Var exist the value of it otherwise nullptr
   static const char* getWindowsEnvironmentVariable(const char* varname);
 #endif  // ELPP_OS_WINDOWS
 #if ELPP_OS_ANDROID
@@ -3917,7 +3917,7 @@ class VersionInfo : base::StaticClass {
 /// @detail Please note in order to check the performance at a certain time you can use obj->checkpoint();
 /// @see el::base::PerformanceTracker
 /// @see el::base::PerformanceTracker::checkpoint
-// Note: Do not surround this definition with null macro because of obj instance
+// Note: Do not surround this definition with null macro because of m_Obj instance
 #define TIMED_SCOPE_IF(obj, blockname, condition) el::base::type::PerformanceTrackerPtr obj( condition ? \
   new el::base::PerformanceTracker(blockname, ELPP_MIN_UNIT) : nullptr )
 #define TIMED_SCOPE(obj, blockname) TIMED_SCOPE_IF(obj, blockname, true)

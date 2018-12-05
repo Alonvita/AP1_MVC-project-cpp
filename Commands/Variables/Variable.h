@@ -20,14 +20,21 @@ template <typename T>
 class Variable {
 public:
     /// ---------- CONSTRUCTOR & DESTRUCTOR ----------
-    Variable(smart_ptr<T>& cmd) : cmd(cmd) {};
+    Variable(smart_ptr<T>& obj) : m_Obj(obj) {};
 
     /// ---------- GETTERS & SETTERS ----------
     // Executes the command
-    smart_ptr<T> get_object() { return this->cmd; }
+    smart_ptr<T> get_object() { return this->m_Obj; }
+
+    /// ---------- OPERATORS OVERRIDING ----------
+    Variable<T>& operator=(const smart_ptr<T>& other) {
+        this->m_Obj = other;
+
+        return *this;
+    }
 
 private:
-    smart_ptr<T> cmd;
+    smart_ptr<T> m_Obj;
 };
 
 
