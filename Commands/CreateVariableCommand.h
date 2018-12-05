@@ -9,6 +9,10 @@
 #include "Command.h"
 #include "../File_Parsing/Variables/Variable.h"
 
+/**
+ * CreateVariableCommand.
+ *  Will create a Variable, given a command to set the variable with.
+ */
 class CreateVariableCommand : public Command {
 public:
     /// ---------- CONSTRUCTOR & DESTRUCTOR ---------

@@ -5,27 +5,29 @@
 #ifndef AP1_SEMETSER_PROJECT_VARIABLE_H
 #define AP1_SEMETSER_PROJECT_VARIABLE_H
 
-#include "../../Commands/Command.h"
+#include "../Command.h"
 #include "../../Utilities/Reference_Counting/SmartPtr.h"
 
 using namespace std;
 
 /**
  * Variable.
- *  A variable will hold a unique command pointerCommand in it.
+ *  A variable will hold a smart_ptr to a typename T.
  *
+ * @tparam T template <typename T> -- an object of type T.
  */
+template <typename T>
 class Variable {
 public:
     /// ---------- CONSTRUCTOR & DESTRUCTOR ----------
-    Variable(smart_ptr<Command>& cmd) : cmd(cmd) {};
+    Variable(smart_ptr<T>& cmd) : cmd(cmd) {};
 
     /// ---------- GETTERS & SETTERS ----------
     // Executes the command
-    void execute_command() { this->cmd->execute(); }
+    smart_ptr<T> get_object() { return this->cmd; }
 
 private:
-    smart_ptr<Command> cmd;
+    smart_ptr<T> cmd;
 };
 
 

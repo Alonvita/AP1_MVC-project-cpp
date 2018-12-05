@@ -5,7 +5,7 @@
 
 
 #include <iostream>
-#include "File_Parsing/Variables/Variable.h"
+#include "Commands/Variables/Variable.h"
 #include "Commands/TestPrintCommand.h"
 
 using namespace std;
@@ -16,7 +16,7 @@ int main() {
     LOG(INFO) << "WHAT....\n";
 
     smart_ptr<Command> cmdSmrtPtr(new TestPrintCommand("Test one"));
-    Variable v = cmdSmrtPtr;
+    Variable<Command> v = cmdSmrtPtr;
 
-    v.execute_command();
+    v.get_object().operator->()->execute();
 }

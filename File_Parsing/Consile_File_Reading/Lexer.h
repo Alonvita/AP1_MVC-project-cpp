@@ -5,6 +5,7 @@
 #ifndef AP1_SEMETSER_PROJECT_LEXER_H
 #define AP1_SEMETSER_PROJECT_LEXER_H
 
+#include "../../Utilities/easylogging++.h"
 
 class Lexer {
 public:
