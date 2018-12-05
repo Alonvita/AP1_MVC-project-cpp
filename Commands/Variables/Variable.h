@@ -33,6 +33,11 @@ public:
         return *this;
     }
 
+    Variable<T>& operator=(const T& other) {
+        smart_ptr<T> other_prt = other;
+        this->m_Obj = other_prt;
+    }
+
 private:
     smart_ptr<T> m_Obj;
 };

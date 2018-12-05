@@ -20,6 +20,7 @@ int main() {
     Variable<Command> v = cmdSmrtPtr;
 
     v = cmdSmrtPtr2;
+    v = new TestPrintCommand("Test Three");
 
     v.get_object().operator->()->execute();
 }
