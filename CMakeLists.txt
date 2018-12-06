@@ -5,12 +5,11 @@ set(CMAKE_CXX_STANDARD 14)
 
 set(MAIN main.cpp)
 
-set(EASY_LOGGING Utilities/easylogging++.cc Utilities/easylogging++.h)
-
 set(UTILITIES
-        #Reference Count
+        # Initialize EasyLogging
+        # Reference Count
         Utilities/Reference_Counting/ReferenceCount.h
-        #Smart Pointers
+        # Smart Pointers
         Utilities/Reference_Counting/SmartPtr.h
         )
 
@@ -32,4 +31,4 @@ set(COMMANDS
         Commands/CreateVariableCommand.cpp Commands/CreateVariableCommand.h
         )
 
-add_executable(projectExecutable ${MAIN} ${FILE_PARSING} ${COMMANDS} ${UTILITIES} ${EASY_LOGGING})
+add_executable(projectExecutable ${MAIN} ${FILE_PARSING} ${COMMANDS} ${UTILITIES})
