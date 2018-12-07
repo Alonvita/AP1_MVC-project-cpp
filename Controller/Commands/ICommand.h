@@ -10,11 +10,11 @@
  *  Commands must be able to execute().
  */
 
-class Command {
+class ICommand {
 public:
     /// ---------- CONSTRUCTOR & DESTRUCTOR ----------
-    Command() = default;
-    ~Command() = default;
+    ICommand() = default;
+    virtual ~ICommand() = 0;
 
     /// ---------- PURE VIRTUAL METHODS ----------
     virtual void execute() = 0;

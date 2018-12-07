@@ -5,8 +5,8 @@
 #ifndef AP1_SEMETSER_PROJECT_VARIABLE_H
 #define AP1_SEMETSER_PROJECT_VARIABLE_H
 
-#include "../Command.h"
-#include "../../Utilities/Reference_Counting/SmartPtr.h"
+#include "../ICommand.h"
+#include "../../../Utilities/Reference_Counting/SmartPtr.h"
 
 using namespace std;
 
@@ -23,7 +23,7 @@ public:
     Variable(smart_ptr<T>& obj) : m_Obj(obj) {};
 
     /// ---------- GETTERS & SETTERS ----------
-    // Executes the command
+    // Executes the m_command
     smart_ptr<T> get_object() { return this->m_Obj; }
 
     /// ---------- OPERATORS OVERRIDING ----------

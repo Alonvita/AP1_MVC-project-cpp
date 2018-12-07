@@ -13,22 +13,32 @@ set(UTILITIES
         Utilities/Reference_Counting/SmartPtr.h
         )
 
-set(FILE_PARSING
-        # Lexer
-        File_Parsing/Consile_File_Reading/Lexer.cpp File_Parsing/Consile_File_Reading/Lexer.h
-        # Strings Validator
-        File_Parsing/Parsing/StringValidator.cpp File_Parsing/Parsing/StringValidator.h
-        # Variables
-        Commands/Variables/Variable.h
+set(SHARED_DATA
+        #Message
+        Shared_Data/Message.h
+        #Command Result
+        Shared_Data/CommandResult.h
+        #Notification
+        Shared_Data/Notification.h
         )
 
-set(COMMANDS
-        # Test Printing Command -- will be used for testing stuff
-        Commands/TestPrintCommand.h
+set(CONTROLLER
+        #Controller
+        Controller/Controller.cpp Controller/Controller.h
+
+        # Test Printing ICommand -- will be used for testing stuff
+        Controller/Commands/TestPrintCommand.h
         # Interface
-        Commands/Command.h
+        Controller/Commands/ICommand.h
         # CreateVariableCommand
-        Commands/CreateVariableCommand.cpp Commands/CreateVariableCommand.h
+        Controller/Commands/CreateVariableCommand.cpp Controller/Commands/CreateVariableCommand.h
         )
 
-add_executable(projectExecutable ${MAIN} ${FILE_PARSING} ${COMMANDS} ${UTILITIES})
+set(CLIENTS
+        #Interface
+        View/IClient.h
+        #Client
+        View/Client.cpp View/Client.h
+        )
+
+add_executable(projectExecutable ${MAIN} ${SHARED_DATA} ${CONTROLLER} ${UTILITIES} ${CLIENTS})
