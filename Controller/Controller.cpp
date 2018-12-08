@@ -17,7 +17,7 @@ Controller::Controller() {
     this->m_mathExpressionsParser = new MathExpressionsParser();
 
     // Initialize Commands Map
-    this->m_commandsList.insert(make_pair(MAKE_VAR_STR, new CreateVariableCommand(*m_mathExpressionsParser))); // Create Var
+    this->m_commandsList.insert(make_pair(MAKE_VAR_STR, new CreateVariableCommand(m_mathExpressionsParser))); // Create Var
 }
 
 /**
@@ -31,9 +31,6 @@ Controller::~Controller() {
     for(std::pair<std::string, ICommand*> p : this->m_commandsList) {
         delete p.second;
     }
-
-    for(void* place : m_placeHolder)
-        delete place;
 }
 
 ///---------- EXECUTION ----------
@@ -67,6 +64,10 @@ CommandResult Controller::executeCommand(std::queue<std::string>& commandsQueue,
             return CommandResult(false, UNDEFINED, "Unknown Command\n", true); // return unknown commandsQueue
 
         commandResult = (*it).second->execute(nullptr, "nada", m_placeHolder[m_placeHolderCount - 1]);
+        if(commandsQueue.empty()) {
+            break;
+        }
     }
+
     return commandResult;
 }

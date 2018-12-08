@@ -24,13 +24,13 @@ class CreateVariableCommand : public ICommand {
 public:
     /// ---------- CONSTRUCTOR & DESTRUCTOR ---------
     ~CreateVariableCommand() = default;
-    explicit CreateVariableCommand(MathExpressionsParser& parser) : m_parser(parser) {};
+    explicit CreateVariableCommand(MathExpressionsParser* parser) : m_parser(parser) {};
 
     /// ---------- VIRTUAL FUNCTIONS IMPLEMENTATION ---------
     CommandResult execute(IClient* sender, const std::string& command, void* placeHolder) override;
 
 private:
-    MathExpressionsParser m_parser;
+    MathExpressionsParser* m_parser;
 };
 
 
