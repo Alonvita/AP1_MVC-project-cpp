@@ -8,24 +8,31 @@
 #include <map>
 #include <queue>
 
-#include "../Shared_Data/CommandResult.h"
 #include "Commands/ICommand.h"
+#include "../Shared_Data/CommandResult.h"
+#include "Commands/CreateVariableCommand.h"
+#include "Math_Expressions_Parsing/MathExpressionsParser.h"
+
+#define MAKE_VAR_STR "make_var"
 
 class Controller {
 public:
     /// -------- CONSTRUCTORS & DESTRUCTORS --------
     // TODO: Controller should receive a ClientHandler* to the constructor after creating ClientHandler
     Controller();
-    ~Controller() { for(std::pair<std::string, ICommand*> p : this->commandsList) { delete p.second;} };
+    ~Controller();
 
     /// -------- EXECUTION --------
 
     // TODO: after creating the client, this function should receive IClient* client and not an integer
-    CommandResult executeCommand(const std::string& command, int client);
+    CommandResult executeCommand(std::queue<std::string>& commandsQueue, IClient* sender);
 
 
 private:
-    std::map<std::string, ICommand*> commandsList;
+    unsigned long m_placeHolderCount;
+    vector<void*> m_placeHolder;
+    MathExpressionsParser* m_mathExpressionsParser;
+    std::map<std::string, ICommand*> m_commandsList;
 };
 
 

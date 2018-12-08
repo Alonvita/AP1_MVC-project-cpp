@@ -11,7 +11,8 @@
  * Defines the types of commands that the user can use.
  */
 enum Command {
-    UNDEFINED = -1,
+    EXECUTION_FAILURE = -1,
+    UNDEFINED,
     CREATE_VAR,
     CALCULATE_EXPRESSION,
     LOOP_ENDS,

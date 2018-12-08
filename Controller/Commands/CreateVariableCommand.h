@@ -6,9 +6,15 @@
 #define AP1_SEMETSER_PROJECT_CREATEVARIABLECOMMAND_H
 
 
+#include <map>
+
+#include <typeinfo>
+#include <sstream>
+
 #include "ICommand.h"
 #include "Variables/Variable.h"
 #include "../../Utilities/Reference_Counting/SmartPtr.h"
+#include "../Math_Expressions_Parsing/MathExpressionsParser.h"
 
 /**
  * CreateVariableCommand.
@@ -17,18 +23,14 @@
 class CreateVariableCommand : public ICommand {
 public:
     /// ---------- CONSTRUCTOR & DESTRUCTOR ---------
-    CreateVariableCommand(smart_ptr<ICommand> cmd) : m_Cmd(cmd) {};
     ~CreateVariableCommand() = default;
+    explicit CreateVariableCommand(MathExpressionsParser& parser) : m_parser(parser) {};
 
     /// ---------- VIRTUAL FUNCTIONS IMPLEMENTATION ---------
-    CommandResult execute(IClient* sender, const std::string& command) {
-        // create a new smartPtr for a new Variable with the given m_command
-        this->m_Var = smart_ptr<Variable<ICommand>>(new Variable<ICommand>(m_Cmd));
-    };
+    CommandResult execute(IClient* sender, const std::string& command, void* placeHolder) override;
 
 private:
-    smart_ptr<ICommand> m_Cmd;
-    smart_ptr<Variable<ICommand>> m_Var;
+    MathExpressionsParser m_parser;
 };
 
 

@@ -17,7 +17,7 @@ public:
     ~TestPrintCommand() = default;
 
     /// ---------- VIRTUAL FUNCTIONS IMPLEMENTATION ---------
-    CommandResult execute(IClient* sender, const std::string& command) override {
+    CommandResult execute(IClient* sender, const std::string& command, void* placeHolder) override {
         cout << "\n" << "My ICommand is: " << m_Str << "\n\n";
 
         return CommandResult(true, PRINT, "data", true);
