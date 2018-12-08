@@ -6,6 +6,7 @@
 #define AP1_SEMETSER_PROJECT_CONTROLLER_H
 
 #include <map>
+#include <queue>
 
 #include "../Shared_Data/CommandResult.h"
 #include "Commands/ICommand.h"
@@ -20,7 +21,7 @@ public:
     /// -------- EXECUTION --------
 
     // TODO: after creating the client, this function should receive IClient* client and not an integer
-    CommandResult executeCommand(std::string command, int client);
+    CommandResult executeCommand(const std::string& command, int client);
 
 
 private:

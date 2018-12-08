@@ -22,6 +22,14 @@ set(SHARED_DATA
         Shared_Data/Notification.h
         )
 
+set(MATH_EXP_PARSING
+        #MathExpressionsParser
+        Controller/Math_Expressions_Parsing/MathExpressionsParser.cpp Controller/Math_Expressions_Parsing/MathExpressionsParser.h)
+
+set(MATH_EXP_PARSING_UTIL
+        #Utility
+        Controller/Math_Expressions_Parsing/Utility/UtilityFunctions.cpp Controller/Math_Expressions_Parsing/Utility/UtilityFunctions.h)
+
 set(CONTROLLER
         #Controller
         Controller/Controller.cpp Controller/Controller.h
@@ -41,4 +49,4 @@ set(CLIENTS
         View/Client.cpp View/Client.h
         )
 
-add_executable(projectExecutable ${MAIN} ${SHARED_DATA} ${CONTROLLER} ${UTILITIES} ${CLIENTS})
+add_executable(projectExecutable ${MAIN} ${SHARED_DATA} ${CONTROLLER} ${UTILITIES} ${CLIENTS} ${MATH_EXP_PARSING} ${MATH_EXP_PARSING_UTIL})

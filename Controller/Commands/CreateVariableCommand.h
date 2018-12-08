@@ -21,15 +21,14 @@ public:
     ~CreateVariableCommand() = default;
 
     /// ---------- VIRTUAL FUNCTIONS IMPLEMENTATION ---------
-    void execute() {
+    CommandResult execute(IClient* sender, const std::string& command) {
         // create a new smartPtr for a new Variable with the given m_command
-        smart_ptr<Variable<ICommand>> smartPtr(new Variable<ICommand>(m_Cmd));
-        this->m_Var = smartPtr;
+        this->m_Var = smart_ptr<Variable<ICommand>>(new Variable<ICommand>(m_Cmd));
     };
 
 private:
     smart_ptr<ICommand> m_Cmd;
-    smart_ptr<Variable<ICommand>> m_Var = nullptr;
+    smart_ptr<Variable<ICommand>> m_Var;
 };
 
 

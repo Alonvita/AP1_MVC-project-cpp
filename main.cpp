@@ -19,15 +19,14 @@ int main() {
     v = cmdSmrtPtr2;
     v = new TestPrintCommand("Test Three");
 
-    v.get_object().operator->()->execute();
+    CommandResult r = v.get_object().operator->()->execute(nullptr, "NOTHING");
 
     bool keepCom = true;
 
     // In the future, this will done inside the "CliendHandler"
     do {
 
-
-        CommandResult result;
+        //CommandResult result;
 
     } while(false);
 

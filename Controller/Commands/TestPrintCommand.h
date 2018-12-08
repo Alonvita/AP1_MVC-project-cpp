@@ -13,10 +13,15 @@ using namespace std;
 class TestPrintCommand : public ICommand {
 public:
     /// ---------- CONSTRUCTOR & DESTRUCTOR ----------
-    explicit TestPrintCommand(string str) : m_Str(str) {};
+    explicit TestPrintCommand(std::string str) : m_Str(std::move(str)) {};
+    ~TestPrintCommand() = default;
 
     /// ---------- VIRTUAL FUNCTIONS IMPLEMENTATION ---------
-    void execute() override { cout << "\n" << "My ICommand is: " << m_Str << "\n\n"; }
+    CommandResult execute(IClient* sender, const std::string& command) override {
+        cout << "\n" << "My ICommand is: " << m_Str << "\n\n";
+
+        return CommandResult(true, PRINT, "data", true);
+    }
 private:
     string m_Str;
 };

@@ -13,10 +13,10 @@
 enum Command {
     UNDEFINED = -1,
     CREATE_VAR,
-    BIND,
     CALCULATE_EXPRESSION,
     LOOP_ENDS,
     SLEEP,
+    PRINT,
     CLOSE
 };
 

@@ -8,9 +8,9 @@
 #include <string>
 
 enum NotificationType {
-    GAME_STARTED,
-    GAME_OVER,
+    SERVER_DATA_OPENED,
     VARIABLE_CREATED,
+    CONNECTED_TO_SERVER,
     EXPRESSION_CALCULATED
     };
 
