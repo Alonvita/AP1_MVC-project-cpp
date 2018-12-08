@@ -10,8 +10,6 @@
  * Controller().
  */
 Controller::Controller() {
-    // initialzie placeholder count
-    m_placeHolderCount = 1;
 
     // initialize Math Parser
     this->m_mathExpressionsParser = new MathExpressionsParser();
@@ -28,9 +26,8 @@ Controller::~Controller() {
     delete this->m_mathExpressionsParser;
 
     // delete every command on the command list
-    for(std::pair<std::string, ICommand*> p : this->m_commandsList) {
+    for(std::pair<std::string, ICommand*> p : this->m_commandsList)
         delete p.second;
-    }
 }
 
 ///---------- EXECUTION ----------
@@ -44,12 +41,12 @@ Controller::~Controller() {
  * @return a command result created by the command's execution.
  */
 CommandResult Controller::executeCommand(std::queue<std::string>& commandsQueue, IClient* sender) {
+    // Local Variables
+    vector<void*> m_placeHolder;
+    unsigned long m_placeHolderCount = 1;
 
-    // HARD TRIAL
-    double d = 17;
-    this->m_placeHolder.push_back(&d);
-
-    CommandResult commandResult(false, UNDEFINED, "Unknown Command\n", true);
+    // Undefined command
+    CommandResult commandResult(false, EMPTY_QUEUE, "commandsQueue passed empty.\n", true);
 
     while(!commandsQueue.empty()) {
         // take front
@@ -63,10 +60,8 @@ CommandResult Controller::executeCommand(std::queue<std::string>& commandsQueue,
         if (it == m_commandsList.end())
             return CommandResult(false, UNDEFINED, "Unknown Command\n", true); // return unknown commandsQueue
 
-        commandResult = (*it).second->execute(nullptr, "nada", m_placeHolder[m_placeHolderCount - 1]);
-        if(commandsQueue.empty()) {
-            break;
-        }
+        commandResult = (*it).second->execute(nullptr, "nada", nullptr);
+        m_placeHolderCount++;
     }
 
     return commandResult;

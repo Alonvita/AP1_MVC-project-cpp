@@ -29,8 +29,6 @@ public:
 
 
 private:
-    unsigned long m_placeHolderCount;
-    vector<void*> m_placeHolder;
     MathExpressionsParser* m_mathExpressionsParser;
     std::map<std::string, ICommand*> m_commandsList;
 };

@@ -14,17 +14,6 @@ using namespace std;
 int main() {
     cout << "MAIN\n";
 
-    smart_ptr<ICommand> cmdSmrtPtr(new TestPrintCommand("Test one"));
-    smart_ptr<ICommand> cmdSmrtPtr2(new TestPrintCommand("Test two"));
-    Variable<ICommand> v = cmdSmrtPtr;
-
-    v = cmdSmrtPtr2;
-    v = new TestPrintCommand("Test Three");
-
-    CommandResult r = v.get_object().operator->()->execute(nullptr, "NOTHING", nullptr);
-
-    bool keepCom = true;
-
 
     // TESTING CONTROLLER EXECUTION WITH CREATE VARIABLE COMMAND
     Client client(199);
