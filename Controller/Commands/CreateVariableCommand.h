@@ -23,13 +23,13 @@ class CreateVariableCommand : public ICommand {
 public:
     /// ---------- CONSTRUCTOR & DESTRUCTOR ---------
     ~CreateVariableCommand() = default;
-    explicit CreateVariableCommand(MathExpressionsHandler* math_exp_handler) : m_handler(math_exp_handler) {};
+    explicit CreateVariableCommand(VariablesMapContainer* variablesMapContainer) : m_vContainer(variablesMapContainer) {};
 
     /// ---------- VIRTUAL FUNCTIONS IMPLEMENTATION ---------
     CommandResult execute(IClient* sender, const std::string& command, var_data* placeHolder) override;
 
 private:
-    MathExpressionsHandler* m_handler;
+    VariablesMapContainer* m_vContainer;
 };
 
 

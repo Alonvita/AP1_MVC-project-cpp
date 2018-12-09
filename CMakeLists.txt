@@ -21,9 +21,14 @@ set(SHARED_DATA
         Shared_Data/Notification.h
         )
 
-set(MATH_EXP_PARSING
+set(OUTER_HANDLERS
+        #VariableMapContainer
+        Controller/VariablesMapContainer.cpp Controller/VariablesMapContainer.h
         #MathExpressionsHandler
-        Controller/Math_Expressions_Handling/MathExpressionsHandler.cpp Controller/Math_Expressions_Handling/MathExpressionsHandler.h)
+        Controller/Math_Expressions_Handling/MathExpressionsHandler.cpp Controller/Math_Expressions_Handling/MathExpressionsHandler.h
+        #OperatorsHandler
+        Controller/Operators_Handler/OperatorsHandler.cpp Controller/Operators_Handler/OperatorsHandler.h
+        )
 
 set(MATH_EXP_PARSING_UTIL
         #Utility
@@ -40,6 +45,8 @@ set(CONTROLLER
         Controller/Commands/CreateVariableCommand.cpp Controller/Commands/CreateVariableCommand.h
         # BindCommand
         Controller/Commands/BindCommand.cpp Controller/Commands/BindCommand.h
+        #OperatorCommand
+        Controller/Commands/OperatorCommand.cpp Controller/Commands/OperatorCommand.h
         )
 
 set(CLIENTS
@@ -49,4 +56,4 @@ set(CLIENTS
         View/Client.cpp View/Client.h
         )
 
-add_executable(projectExecutable ${MAIN} ${SHARED_DATA} ${CONTROLLER} ${UTILITIES} ${CLIENTS} ${MATH_EXP_PARSING} ${MATH_EXP_PARSING_UTIL})
+add_executable(projectExecutable ${MAIN} ${SHARED_DATA} ${CONTROLLER} ${UTILITIES} ${CLIENTS} ${OUTER_HANDLERS} ${MATH_EXP_PARSING_UTIL})

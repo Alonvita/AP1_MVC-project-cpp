@@ -187,10 +187,10 @@ bool MathExpressionsHandler::isRightParentheses(const std::string &str) {
  *
  * @param str const std::string & -- a reference to a constant string.
  *
- * @return the iterator location to the string in the map (map.end() if doesn't exist).
+ * @return the pair given by this map. NOTE: map may also return nullptr if it hasn't found anything.
  */
-map<std::string, var_data*>::iterator MathExpressionsHandler::getStrLocationInMap(const std::string &str) {
-    return m_variablesMap.find(str);
+var_data* MathExpressionsHandler::getVarDataFromMap(const std::string &str) {
+    return this->m_vMap->getVarData(str);
 }
 
 /**
@@ -310,8 +310,14 @@ double MathExpressionsHandler::getVariableValFromMapOrCreateDoubleForNumericVals
     }
 
     try {
+        var_data* p = getVarDataFromMap(str);
+
+        if(p == nullptr)
+            // TODO: need to throw
+
+
         // try to return the variable from the map
-        return evaluate((*getStrLocationInMap(str)).second);
+        return evaluate(p);
         // this would throw an error in case the returned it is at variablesMap.end()
         // then we know that the variable does not exists.
         // This might be handles differently, but for this program's purposes this will do...
@@ -389,18 +395,6 @@ void MathExpressionsHandler::addDummyZeroesBeforeNegationMinus(std::list<std::st
 }
 
 /**
- * addToMap(std::string varName, double value).
- *
- * @param varName const std::string& -- a constatnt reference to a string representing a varialbe name.
- * @param value double -- a value
- */
-void MathExpressionsHandler::addToMap(const std::string& varName, var_data* varData) {
-    this->m_variablesMap.insert(make_pair(varName, varData));
-
-    std::cout << evaluate(this->m_variablesMap.at(varName)) << "\n";
-}
-
-/**
  * evaluate(var_data *varData).
  *
  * @param varData var_data* -- a pointer to var_data.
@@ -422,11 +416,16 @@ double MathExpressionsHandler::evaluate(var_data *varData) {
     }
 }
 
+///---------- OPERATIONS ----------
+
+
+
 ///---------- DEBUGGING ----------
 /**
  * printExpression(const std::list<std::string> &exp).
  *
- * @param exp const std::list<std::string> & -- a list<string. representing a mathematical expression
+ * @param exp const std::list<std::string> & -- a list<string. representing a mathematical expression.
+ *
  */
 void MathExpressionsHandler::printExpression(const std::list<std::string> &exp) {
     cout << "\n\n---- Expression Print Check BEGIN ---- \n";

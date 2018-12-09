@@ -20,7 +20,7 @@ int main() {
 
     std::queue<pair<std::string, std::string>> commandsQueue; // initialize a commands queue
 
-    commandsQueue.push(make_pair(BIND_COMMAND_STR, "/home/alon/Desktop/Untitled Folder/test.txt"));
+    commandsQueue.push(make_pair(MAKE_VAR_COMMAND_STR, "MA VAR"));
 
     CommandResult cRslt = controller.executeCommand(commandsQueue, &client);
 

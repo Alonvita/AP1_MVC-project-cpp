@@ -30,9 +30,10 @@ public:
 
 private:
     vector<var_data*> m_placeHolder;
+    VariablesMapContainer* m_vContainer;
     unsigned long m_placeHolderCount = 1;
-    MathExpressionsHandler* m_mathExpressionsHandler;
     std::map<std::string, ICommand*> m_commandsList;
+    MathExpressionsHandler* m_mathExpressionsHandler;
 };
 
 

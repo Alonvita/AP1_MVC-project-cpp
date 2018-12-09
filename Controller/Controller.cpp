@@ -10,21 +10,23 @@
  * Controller().
  */
 Controller::Controller() {
+    this->m_vContainer = new VariablesMapContainer();
 
     // initialize Math Parser
-    this->m_mathExpressionsHandler = new MathExpressionsHandler();
+    this->m_mathExpressionsHandler = new MathExpressionsHandler(m_vContainer);
 
     // Initialize Commands Map
     this->m_commandsList.insert(make_pair(BIND_COMMAND_STR, new BindCommand())); // Create Var
-    this->m_commandsList.insert(make_pair(MAKE_VAR_COMMAND_STR, new CreateVariableCommand(m_mathExpressionsHandler))); // Create Var
+    this->m_commandsList.insert(make_pair(MAKE_VAR_COMMAND_STR, new CreateVariableCommand(m_vContainer))); // Create Var
 }
 
 /**
  * ~Controller().
  */
 Controller::~Controller() {
-    // delete the math expressions parser
+    // delete the math handler
     delete this->m_mathExpressionsHandler;
+    delete this->m_vContainer;
 
     // delete every command on the command list
     for(std::pair<std::string, ICommand*> p : this->m_commandsList)
@@ -58,7 +60,7 @@ CommandResult Controller::executeCommand(std::queue<std::pair<std::string, std::
     m_placeHolder.push_back(temp);
      */
 
-    var_data temp;
+    var_data* temp = nullptr;
 
     // Undefined command
     CommandResult commandResult(false, EMPTY_QUEUE, "commandsQueue passed empty.\n", true);
@@ -74,7 +76,7 @@ CommandResult Controller::executeCommand(std::queue<std::pair<std::string, std::
         if (it == m_commandsList.end())
             return CommandResult(false, UNDEFINED, "Unknown Command\n", true); // return unknown commandsQueue
 
-        commandResult = (*it).second->execute(nullptr, command.second, &temp);
+        commandResult = (*it).second->execute(nullptr, command.second, temp);
 
         m_placeHolderCount++;
         commandsQueue.pop(); // pop the used command

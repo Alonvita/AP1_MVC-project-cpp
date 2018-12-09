@@ -14,6 +14,7 @@
 #include <iterator>
 #include <sys/stat.h> // open
 
+#include "../VariablesMapContainer.h"
 #include "../Utility/UtilityFunctions.h"
 #include "../../Utilities/Reference_Counting/SmartPtr.h"
 
@@ -38,21 +39,15 @@
 
 class MathExpressionsHandler {
 public:
-    MathExpressionsHandler() {
+    MathExpressionsHandler(VariablesMapContainer* vMapContainer) : m_vMap(vMapContainer) {};
 
-        // map<std::string, var_data*>
-        this->m_variablesMap = map<std::string, var_data*>();
-    };
+    ~MathExpressionsHandler() { m_vMap = nullptr; };
 
-    ~MathExpressionsHandler() { for(std::pair<std::string, var_data*> p : this->m_variablesMap) p.second = nullptr; };
-
-    void addToMap(const std::string& varName, var_data*varData);
     double parse_mathematical_expression(const std::string &rawExpression);
-
 
 private:
     ///---------- LOCAL VARIABLES ----------
-    map<std::string, var_data*> m_variablesMap;
+    VariablesMapContainer* m_vMap;
 
     ///---------- UTILITY FUNCTIONS ----------
     double evaluate(var_data* varData);
@@ -61,8 +56,8 @@ private:
     bool isOperator(const std::string& str);
     bool isLeftParentheses(const std::string &str);
     bool isRightParentheses(const std::string &str);
+    var_data* getVarDataFromMap(const std::string &str);
     double evaluatePostfixList(const std::list<std::string> &postfixExpression);
-    map<std::string, var_data*>::iterator getStrLocationInMap(const std::string &str);
     double getVariableValFromMapOrCreateDoubleForNumericVals(const std::string &str);
     void addDummyZeroesBeforeNegationMinus(std::list<std::string> & expressionAsList);
     double operateBinaryExpression(const std::string &operation, double lhs, double rhs);
