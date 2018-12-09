@@ -1,0 +1,14 @@
+//
+// Created by alon on 09/12/18.
+//
+
+#ifndef AP1_SEMETSER_PROJECT_OPERATORCOMMAND_H
+#define AP1_SEMETSER_PROJECT_OPERATORCOMMAND_H
+
+
+class OperatorCommand {
+
+};
+
+
+#endif //AP1_SEMETSER_PROJECT_OPERATORCOMMAND_H

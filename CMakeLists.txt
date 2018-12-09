@@ -22,8 +22,8 @@ set(SHARED_DATA
         )
 
 set(MATH_EXP_PARSING
-        #MathExpressionsParser
-        Controller/Math_Expressions_Parsing/MathExpressionsParser.cpp Controller/Math_Expressions_Parsing/MathExpressionsParser.h)
+        #MathExpressionsHandler
+        Controller/Math_Expressions_Handling/MathExpressionsHandler.cpp Controller/Math_Expressions_Handling/MathExpressionsHandler.h)
 
 set(MATH_EXP_PARSING_UTIL
         #Utility

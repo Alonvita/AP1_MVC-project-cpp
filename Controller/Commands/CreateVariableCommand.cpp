@@ -23,7 +23,7 @@ CommandResult CreateVariableCommand::execute(IClient *sender, const std::string 
     
     try {
         // add it to the map
-        this->m_parser->addToMap(command, placeHolder);
+        this->m_handler->addToMap(command, placeHolder);
 
         // create the message
         returnMessage << "SUCCESS: creating new variable: " << command << "\n";

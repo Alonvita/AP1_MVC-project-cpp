@@ -36,15 +36,15 @@
 #define HIGH_PRECEDENCE 5
 
 
-class MathExpressionsParser {
+class MathExpressionsHandler {
 public:
-    MathExpressionsParser() {
+    MathExpressionsHandler() {
 
         // map<std::string, var_data*>
         this->m_variablesMap = map<std::string, var_data*>();
     };
 
-    ~MathExpressionsParser() { for(std::pair<std::string, var_data*> p : this->m_variablesMap) p.second = nullptr; };
+    ~MathExpressionsHandler() { for(std::pair<std::string, var_data*> p : this->m_variablesMap) p.second = nullptr; };
 
     void addToMap(const std::string& varName, var_data*varData);
     double parse_mathematical_expression(const std::string &rawExpression);

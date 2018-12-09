@@ -4,7 +4,7 @@
 
 #include <vector>
 #include <algorithm>
-#include "MathExpressionsParser.h"
+#include "MathExpressionsHandler.h"
 
 /**
  * parse(std::string rawExpression).
@@ -13,7 +13,7 @@
  *
  * @return the evaluated expression as a double.
  */
-double MathExpressionsParser::parse_mathematical_expression(const std::string &rawExpression) {
+double MathExpressionsHandler::parse_mathematical_expression(const std::string &rawExpression) {
 
     // split the string into a list w/o spaces and keep delimiters (see function documentation for more info)
     std::list<std::string> expressionAsList =
@@ -51,7 +51,7 @@ double MathExpressionsParser::parse_mathematical_expression(const std::string &r
  *
  * Pseudo source: http://faculty.cs.niu.edu/~hutchins/csci241/eval.htm
  */
-void MathExpressionsParser::prefixToPostFix(
+void MathExpressionsHandler::prefixToPostFix(
         const std::list<std::string>& mathExpressionAsList,
         std::list<std::string>& postfix) {
     stack<std::string> stack;
@@ -114,7 +114,7 @@ void MathExpressionsParser::prefixToPostFix(
  *      pow,root,abs : HIGH_PRECEDENCE
  *      other        : PRECEDENCE_ERROR
  */
-int MathExpressionsParser::precedence(const std::string &op) {
+int MathExpressionsHandler::precedence(const std::string &op) {
     if(op == MINUS_STR || op == PLUS_STR)
         return LOW_PRECEDENCE;
 
@@ -136,7 +136,7 @@ int MathExpressionsParser::precedence(const std::string &op) {
  *
  * Source: https://stackoverflow.com/questions/7616867/how-to-test-a-string-for-letters-only
  */
-bool MathExpressionsParser::isNumeric(const std::string &str) {
+bool MathExpressionsHandler::isNumeric(const std::string &str) {
     bool contains_non_alpha;
     // check negative number
     if(str.size() > 1 && str[0] == '-') {
@@ -156,7 +156,7 @@ bool MathExpressionsParser::isNumeric(const std::string &str) {
  *
  * @return true if the string is an operand, or false otherwise.
  */
-bool MathExpressionsParser::isOperator(const std::string &str) {
+bool MathExpressionsHandler::isOperator(const std::string &str) {
    return(str.find_first_of(OPERATORS) != str.npos);
 }
 
@@ -167,7 +167,7 @@ bool MathExpressionsParser::isOperator(const std::string &str) {
  *
  * @return true if the string is "(", or false oterwise.
  */
-bool MathExpressionsParser::isLeftParentheses(const std::string &str) {
+bool MathExpressionsHandler::isLeftParentheses(const std::string &str) {
     return (str == "(");
 }
 
@@ -178,7 +178,7 @@ bool MathExpressionsParser::isLeftParentheses(const std::string &str) {
  *
  * @return true if the string is ")", or false oterwise.
  */
-bool MathExpressionsParser::isRightParentheses(const std::string &str) {
+bool MathExpressionsHandler::isRightParentheses(const std::string &str) {
     return (str == ")");
 }
 
@@ -189,7 +189,7 @@ bool MathExpressionsParser::isRightParentheses(const std::string &str) {
  *
  * @return the iterator location to the string in the map (map.end() if doesn't exist).
  */
-map<std::string, var_data*>::iterator MathExpressionsParser::getStrLocationInMap(const std::string &str) {
+map<std::string, var_data*>::iterator MathExpressionsHandler::getStrLocationInMap(const std::string &str) {
     return m_variablesMap.find(str);
 }
 
@@ -202,7 +202,7 @@ map<std::string, var_data*>::iterator MathExpressionsParser::getStrLocationInMap
  * @param keepDelimiters bool -- true return a list with the delimiters, or false otherwise.
  *
  */
-void MathExpressionsParser::splitStringToList(const std::string &input, const std::string& delimiterStr, std::list<std::string> &outList, bool keepDelimiters) {
+void MathExpressionsHandler::splitStringToList(const std::string &input, const std::string& delimiterStr, std::list<std::string> &outList, bool keepDelimiters) {
     // Local Variables
     size_t found, token = 0;
     found = input.find_first_of(delimiterStr); // find the first char in the string that meats any of the separators
@@ -233,7 +233,7 @@ void MathExpressionsParser::splitStringToList(const std::string &input, const st
  *
  * @return the parsed string as list, with or withour white spaces.
  */
-std::list<std::string> MathExpressionsParser::splitString(const std::string &input, const std::string &delimiterStr, bool keepSpaces, bool keepDelimiters) {
+std::list<std::string> MathExpressionsHandler::splitString(const std::string &input, const std::string &delimiterStr, bool keepSpaces, bool keepDelimiters) {
     // Local Variables
     std::list<std::string> output, splitOutput;
 
@@ -262,7 +262,7 @@ std::list<std::string> MathExpressionsParser::splitString(const std::string &inp
  *
  * Pseudo source: http://faculty.cs.niu.edu/~hutchins/csci241/eval.htm
  */
-double MathExpressionsParser::evaluatePostfixList(const std::list<std::string> &postfixExpression) {
+double MathExpressionsHandler::evaluatePostfixList(const std::list<std::string> &postfixExpression) {
     stack<std::string> stack;
 
     // iterate on every string
@@ -303,7 +303,7 @@ double MathExpressionsParser::evaluatePostfixList(const std::list<std::string> &
  *      else, try to get it from map. an exception should be thrown should we try to reach variablesMap.end()
  *       when the given str does not exist in the variables map.
  */
-double MathExpressionsParser::getVariableValFromMapOrCreateDoubleForNumericVals(const std::string &str) {
+double MathExpressionsHandler::getVariableValFromMapOrCreateDoubleForNumericVals(const std::string &str) {
     // check numeric
     if(isNumeric(str)) {
         return stod(str);
@@ -329,7 +329,7 @@ double MathExpressionsParser::getVariableValFromMapOrCreateDoubleForNumericVals(
  *
  * @return the result of (lhs OP rhs)
  */
-double MathExpressionsParser::operateBinaryExpression(const std::string &operation, double lhs, double rhs) {
+double MathExpressionsHandler::operateBinaryExpression(const std::string &operation, double lhs, double rhs) {
     if (operation == MINUS_STR)
         return lhs - rhs;
     if (operation == PLUS_STR)
@@ -355,7 +355,7 @@ double MathExpressionsParser::operateBinaryExpression(const std::string &operati
  *
  * @param str std::string & -- a reference to a string
  */
-void MathExpressionsParser::addDummyZeroesBeforeNegationMinus(std::list<std::string> & expressionAsList) {
+void MathExpressionsHandler::addDummyZeroesBeforeNegationMinus(std::list<std::string> & expressionAsList) {
     // Local Variables
     bool operandSeparatesTwoOperators = true;
     auto it = expressionAsList.begin();
@@ -394,7 +394,7 @@ void MathExpressionsParser::addDummyZeroesBeforeNegationMinus(std::list<std::str
  * @param varName const std::string& -- a constatnt reference to a string representing a varialbe name.
  * @param value double -- a value
  */
-void MathExpressionsParser::addToMap(const std::string& varName, var_data* varData) {
+void MathExpressionsHandler::addToMap(const std::string& varName, var_data* varData) {
     this->m_variablesMap.insert(make_pair(varName, varData));
 
     std::cout << evaluate(this->m_variablesMap.at(varName)) << "\n";
@@ -407,7 +407,7 @@ void MathExpressionsParser::addToMap(const std::string& varName, var_data* varDa
  *
  * @return the double value of the variable, considering it's type.
  */
-double MathExpressionsParser::evaluate(var_data *varData) {
+double MathExpressionsHandler::evaluate(var_data *varData) {
     switch(varData->get_type()) {
         case DOUBLE:
             return *(double*)(varData->get_data());
@@ -428,7 +428,7 @@ double MathExpressionsParser::evaluate(var_data *varData) {
  *
  * @param exp const std::list<std::string> & -- a list<string. representing a mathematical expression
  */
-void MathExpressionsParser::printExpression(const std::list<std::string> &exp) {
+void MathExpressionsHandler::printExpression(const std::list<std::string> &exp) {
     cout << "\n\n---- Expression Print Check BEGIN ---- \n";
     for(std::string s : exp)
         cout << s << " ";

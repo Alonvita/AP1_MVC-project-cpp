@@ -12,7 +12,7 @@
 #include "Commands/BindCommand.h"
 #include "../Shared_Data/CommandResult.h"
 #include "Commands/CreateVariableCommand.h"
-#include "Math_Expressions_Parsing/MathExpressionsParser.h"
+#include "Math_Expressions_Handling/MathExpressionsHandler.h"
 
 #define MAKE_VAR_COMMAND_STR "make_var_command"
 #define BIND_COMMAND_STR "bind_command"
@@ -31,7 +31,7 @@ public:
 private:
     vector<var_data*> m_placeHolder;
     unsigned long m_placeHolderCount = 1;
-    MathExpressionsParser* m_mathExpressionsParser;
+    MathExpressionsHandler* m_mathExpressionsHandler;
     std::map<std::string, ICommand*> m_commandsList;
 };
 

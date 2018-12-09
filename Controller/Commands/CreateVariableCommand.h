@@ -13,7 +13,7 @@
 
 #include "ICommand.h"
 #include "../../Utilities/Reference_Counting/SmartPtr.h"
-#include "../Math_Expressions_Parsing/MathExpressionsParser.h"
+#include "../Math_Expressions_Handling/MathExpressionsHandler.h"
 
 /**
  * CreateVariableCommand.
@@ -23,13 +23,13 @@ class CreateVariableCommand : public ICommand {
 public:
     /// ---------- CONSTRUCTOR & DESTRUCTOR ---------
     ~CreateVariableCommand() = default;
-    explicit CreateVariableCommand(MathExpressionsParser* parser) : m_parser(parser) {};
+    explicit CreateVariableCommand(MathExpressionsHandler* math_exp_handler) : m_handler(math_exp_handler) {};
 
     /// ---------- VIRTUAL FUNCTIONS IMPLEMENTATION ---------
     CommandResult execute(IClient* sender, const std::string& command, var_data* placeHolder) override;
 
 private:
-    MathExpressionsParser* m_parser;
+    MathExpressionsHandler* m_handler;
 };
 
 

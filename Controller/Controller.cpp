@@ -12,11 +12,11 @@
 Controller::Controller() {
 
     // initialize Math Parser
-    this->m_mathExpressionsParser = new MathExpressionsParser();
+    this->m_mathExpressionsHandler = new MathExpressionsHandler();
 
     // Initialize Commands Map
     this->m_commandsList.insert(make_pair(BIND_COMMAND_STR, new BindCommand())); // Create Var
-    this->m_commandsList.insert(make_pair(MAKE_VAR_COMMAND_STR, new CreateVariableCommand(m_mathExpressionsParser))); // Create Var
+    this->m_commandsList.insert(make_pair(MAKE_VAR_COMMAND_STR, new CreateVariableCommand(m_mathExpressionsHandler))); // Create Var
 }
 
 /**
@@ -24,7 +24,7 @@ Controller::Controller() {
  */
 Controller::~Controller() {
     // delete the math expressions parser
-    delete this->m_mathExpressionsParser;
+    delete this->m_mathExpressionsHandler;
 
     // delete every command on the command list
     for(std::pair<std::string, ICommand*> p : this->m_commandsList)
