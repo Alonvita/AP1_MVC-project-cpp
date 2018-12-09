@@ -11,7 +11,7 @@
  * @param placeHolder
  * @return
  */
-CommandResult CreateVariableCommand::execute(IClient *sender, const std::string &command, void *placeHolder) {
+CommandResult CreateVariableCommand::execute(IClient *sender, const std::string &command, var_data* placeHolder) {
     std::ostringstream returnMessage;
 
     // bad location for placeHolder or nullptr received
@@ -22,12 +22,8 @@ CommandResult CreateVariableCommand::execute(IClient *sender, const std::string 
     }
     
     try {
-
-        // try to cast the placeHolder to a type double
-        double value = *((double *) placeHolder);
-
         // add it to the map
-        this->m_parser->addToMap(command, value);
+        this->m_parser->addToMap(command, placeHolder);
 
         // create the message
         returnMessage << "SUCCESS: creating new variable: " << command << "\n";

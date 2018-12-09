@@ -189,7 +189,7 @@ bool MathExpressionsParser::isRightParentheses(const std::string &str) {
  *
  * @return the iterator location to the string in the map (map.end() if doesn't exist).
  */
-map<std::string, double>::iterator MathExpressionsParser::getStrLocationInMap(const std::string &str) {
+map<std::string, var_data*>::iterator MathExpressionsParser::getStrLocationInMap(const std::string &str) {
     return m_variablesMap.find(str);
 }
 
@@ -311,7 +311,7 @@ double MathExpressionsParser::getVariableValFromMapOrCreateDoubleForNumericVals(
 
     try {
         // try to return the variable from the map
-        return (*getStrLocationInMap(str)).second;
+        return evaluate((*getStrLocationInMap(str)).second);
         // this would throw an error in case the returned it is at variablesMap.end()
         // then we know that the variable does not exists.
         // This might be handles differently, but for this program's purposes this will do...
@@ -394,8 +394,32 @@ void MathExpressionsParser::addDummyZeroesBeforeNegationMinus(std::list<std::str
  * @param varName const std::string& -- a constatnt reference to a string representing a varialbe name.
  * @param value double -- a value
  */
-void MathExpressionsParser::addToMap(const std::string& varName, double value) {
-    this->m_variablesMap.insert(make_pair(varName, value));
+void MathExpressionsParser::addToMap(const std::string& varName, var_data* varData) {
+    this->m_variablesMap.insert(make_pair(varName, varData));
+
+    std::cout << evaluate(this->m_variablesMap.at(varName)) << "\n";
+}
+
+/**
+ * evaluate(var_data *varData).
+ *
+ * @param varData var_data* -- a pointer to var_data.
+ *
+ * @return the double value of the variable, considering it's type.
+ */
+double MathExpressionsParser::evaluate(var_data *varData) {
+    switch(varData->get_type()) {
+        case DOUBLE:
+            return *(double*)(varData->get_data());
+        case BIND: {
+            double value;
+
+            read(*(int*)varData->get_data(), &value, sizeof(double));
+
+            return value;
+        }
+
+    }
 }
 
 ///---------- DEBUGGING ----------

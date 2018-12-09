@@ -26,7 +26,7 @@ int main() {
 
     cout << cRslt.getData();
 
-    // In the future, this will done inside the "CliendHandler"
+    // In the future, this will done inside the "ClientHandler"
     do {
 
         //CommandResult result;

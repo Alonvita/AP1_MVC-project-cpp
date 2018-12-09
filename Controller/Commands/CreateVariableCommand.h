@@ -27,7 +27,7 @@ public:
     explicit CreateVariableCommand(MathExpressionsParser* parser) : m_parser(parser) {};
 
     /// ---------- VIRTUAL FUNCTIONS IMPLEMENTATION ---------
-    CommandResult execute(IClient* sender, const std::string& command, void* placeHolder) override;
+    CommandResult execute(IClient* sender, const std::string& command, var_data* placeHolder) override;
 
 private:
     MathExpressionsParser* m_parser;

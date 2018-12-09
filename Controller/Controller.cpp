@@ -28,6 +28,9 @@ Controller::~Controller() {
     // delete every command on the command list
     for(std::pair<std::string, ICommand*> p : this->m_commandsList)
         delete p.second;
+
+    for(var_data* vd : this->m_placeHolder)
+        free(vd);
 }
 
 ///---------- EXECUTION ----------
@@ -41,9 +44,17 @@ Controller::~Controller() {
  * @return a command result created by the command's execution.
  */
 CommandResult Controller::executeCommand(std::queue<std::string>& commandsQueue, IClient* sender) {
-    // Local Variables
-    vector<void*> m_placeHolder;
-    unsigned long m_placeHolderCount = 1;
+    // HARD CODED
+    auto temp = (var_data*) malloc(sizeof(var_data));
+    int fp = open("/home/alon/Desktop/Untitled Folder/test.txt" ,O_RDWR);
+    double d = 1234.124;
+    write(fp, &d, sizeof(double));
+    lseek(fp, 0, SEEK_SET);
+
+    temp->set_data(&fp);
+    temp->set_type(BIND);
+    m_placeHolder.push_back(temp);
+
 
     // Undefined command
     CommandResult commandResult(false, EMPTY_QUEUE, "commandsQueue passed empty.\n", true);
@@ -60,7 +71,7 @@ CommandResult Controller::executeCommand(std::queue<std::string>& commandsQueue,
         if (it == m_commandsList.end())
             return CommandResult(false, UNDEFINED, "Unknown Command\n", true); // return unknown commandsQueue
 
-        commandResult = (*it).second->execute(nullptr, "nada", nullptr);
+        commandResult = (*it).second->execute(nullptr, "nada", m_placeHolder[m_placeHolderCount - 1]);
         m_placeHolderCount++;
     }
 

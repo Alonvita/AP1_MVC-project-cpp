@@ -23,12 +23,12 @@ public:
     ~Controller();
 
     /// -------- EXECUTION --------
-
-    // TODO: after creating the client, this function should receive IClient* client and not an integer
     CommandResult executeCommand(std::queue<std::string>& commandsQueue, IClient* sender);
 
 
 private:
+    vector<var_data*> m_placeHolder;
+    unsigned long m_placeHolderCount = 1;
     MathExpressionsParser* m_mathExpressionsParser;
     std::map<std::string, ICommand*> m_commandsList;
 };

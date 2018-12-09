@@ -29,7 +29,7 @@ set(MATH_EXP_PARSING
 
 set(MATH_EXP_PARSING_UTIL
         #Utility
-        Controller/Math_Expressions_Parsing/Utility/UtilityFunctions.cpp Controller/Math_Expressions_Parsing/Utility/UtilityFunctions.h)
+        Controller/Utility/UtilityFunctions.cpp Controller/Utility/UtilityFunctions.h)
 
 set(CONTROLLER
         #Controller

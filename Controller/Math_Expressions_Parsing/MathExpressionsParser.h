@@ -9,9 +9,12 @@
 #include <list>
 #include <stack>
 #include <string>
+#include <fcntl.h> // open
+#include <unistd.h> // write
 #include <iterator>
+#include <sys/stat.h> // open
 
-#include "Utility/UtilityFunctions.h"
+#include "../Utility/UtilityFunctions.h"
 #include "../../Utilities/Reference_Counting/SmartPtr.h"
 
 #define DIV_STR "/"
@@ -32,26 +35,34 @@
 #define MEDIUM_PRECEDENCE 4
 #define HIGH_PRECEDENCE 5
 
+
 class MathExpressionsParser {
 public:
-    MathExpressionsParser() { this->m_variablesMap = map<std::string, double>(); };
+    MathExpressionsParser() {
 
-    void addToMap(const std::string& varName, double value);
+        // map<std::string, var_data*>
+        this->m_variablesMap = map<std::string, var_data*>();
+    };
+
+    ~MathExpressionsParser() { for(std::pair<std::string, var_data*> p : this->m_variablesMap) p.second = nullptr; };
+
+    void addToMap(const std::string& varName, var_data*varData);
     double parse_mathematical_expression(const std::string &rawExpression);
 
 
 private:
     ///---------- LOCAL VARIABLES ----------
-    map<std::string, double> m_variablesMap;
+    map<std::string, var_data*> m_variablesMap;
 
     ///---------- UTILITY FUNCTIONS ----------
+    double evaluate(var_data* varData);
     int precedence(const std::string& opL);
     bool isNumeric(const std::string &str);
     bool isOperator(const std::string& str);
     bool isLeftParentheses(const std::string &str);
     bool isRightParentheses(const std::string &str);
     double evaluatePostfixList(const std::list<std::string> &postfixExpression);
-    map<std::string, double>::iterator getStrLocationInMap(const std::string &str);
+    map<std::string, var_data*>::iterator getStrLocationInMap(const std::string &str);
     double getVariableValFromMapOrCreateDoubleForNumericVals(const std::string &str);
     void addDummyZeroesBeforeNegationMinus(std::list<std::string> & expressionAsList);
     double operateBinaryExpression(const std::string &operation, double lhs, double rhs);
