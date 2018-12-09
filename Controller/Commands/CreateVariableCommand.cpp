@@ -18,7 +18,7 @@ CommandResult CreateVariableCommand::execute(IClient *sender, const std::string 
     if (placeHolder == nullptr) {
         returnMessage << "placeHolder is nullptr..." << "\n";
 
-        return CommandResult(true, UNDEFINED, returnMessage.str(), true);
+        return CommandResult(false, UNDEFINED, returnMessage.str(), true);
     }
     
     try {

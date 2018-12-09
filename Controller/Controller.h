@@ -9,11 +9,13 @@
 #include <queue>
 
 #include "Commands/ICommand.h"
+#include "Commands/BindCommand.h"
 #include "../Shared_Data/CommandResult.h"
 #include "Commands/CreateVariableCommand.h"
 #include "Math_Expressions_Parsing/MathExpressionsParser.h"
 
-#define MAKE_VAR_STR "make_var"
+#define MAKE_VAR_COMMAND_STR "make_var_command"
+#define BIND_COMMAND_STR "bind_command"
 
 class Controller {
 public:
@@ -23,7 +25,7 @@ public:
     ~Controller();
 
     /// -------- EXECUTION --------
-    CommandResult executeCommand(std::queue<std::string>& commandsQueue, IClient* sender);
+    CommandResult executeCommand(std::queue<std::pair<std::string, std::string>>& commandsQueue, IClient* sender);
 
 
 private:

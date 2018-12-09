@@ -6,7 +6,6 @@ set(CMAKE_CXX_STANDARD 14)
 set(MAIN main.cpp)
 
 set(UTILITIES
-        # Initialize EasyLogging
         # Reference Count
         Utilities/Reference_Counting/ReferenceCount.h
         # Smart Pointers
@@ -18,7 +17,6 @@ set(SHARED_DATA
         Shared_Data/Message.h
         #Command Result
         Shared_Data/CommandResult.h
-        #Container
         #Notification
         Shared_Data/Notification.h
         )
@@ -34,13 +32,14 @@ set(MATH_EXP_PARSING_UTIL
 set(CONTROLLER
         #Controller
         Controller/Controller.cpp Controller/Controller.h
-
         # Test Printing ICommand -- will be used for testing stuff
         Controller/Commands/TestPrintCommand.h
         # Interface
         Controller/Commands/ICommand.h
         # CreateVariableCommand
         Controller/Commands/CreateVariableCommand.cpp Controller/Commands/CreateVariableCommand.h
+        # BindCommand
+        Controller/Commands/BindCommand.cpp Controller/Commands/BindCommand.h
         )
 
 set(CLIENTS

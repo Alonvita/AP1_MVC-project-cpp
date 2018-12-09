@@ -19,8 +19,10 @@ int main() {
     Client client(199);
     Controller controller;
 
-    std::queue<std::string> commandsQueue; // initialize a commands queue
-    commandsQueue.push(MAKE_VAR_STR);
+    std::queue<pair<std::string, std::string>> commandsQueue; // initialize a commands queue
+
+    commandsQueue.push(make_pair(BIND_COMMAND_STR, "/home/alon/Desktop/Untitled Folder/test.txt"));
+
 
     CommandResult cRslt = controller.executeCommand(commandsQueue, &client);
 
