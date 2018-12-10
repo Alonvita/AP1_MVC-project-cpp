@@ -22,7 +22,7 @@ class OperatorsHandler {
 public:
     explicit OperatorsHandler(VariablesMapContainer* vMapContainer) : m_vMap(vMapContainer) {};
 
-    bool evaluate_opperation(const std::string &str);
+    bool evaluate_operation(const std::string &str);
     void giveNumericValueOrGetValFromMap(double&, const std::string&);
 
 private:

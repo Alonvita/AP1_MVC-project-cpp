@@ -52,7 +52,7 @@ VarDataType VariablesMapContainer::getType(const std::string &varName) {
  *
  * @return a pointer to the pair with this key, or nullptr otherwise.
  */
-var_data* VariablesMapContainer::getVarData(const std::string &str) {
+var_data* VariablesMapContainer::getVarData(ConstStringRef str) {
      auto it = this->m_variablesMap.find(str);
 
      if(it == this->m_variablesMap.end())

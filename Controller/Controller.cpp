@@ -3,8 +3,6 @@
 //
 
 #include "Controller.h"
-#include "Commands/CalculateMathExpressionCommand.h"
-#include "Commands/OperatorCommand.h"
 
 ///---------- CONSTRUCTORS & DESTRUCTORS ----------
 
@@ -13,6 +11,20 @@
  */
 Controller::Controller() {
     this->m_vContainer = new VariablesMapContainer();
+
+    // TODO: TEMP USEAGE -> REMOVE THIS
+    auto a = new var_data;
+    auto d = (double*) malloc(sizeof(double));
+    *d = 15;
+
+    a->set_type(DOUBLE);
+    a->set_data(&(*d));
+    d = nullptr;
+
+    m_vContainer->addToMap("a", a);
+
+
+    // TODO: UNTIL HERE
 
     // initialize opHandler
     this->m_opHandler = new OperatorsHandler(m_vContainer);
@@ -23,6 +35,7 @@ Controller::Controller() {
     // Initialize Commands Map
     this->m_commandsList.insert(make_pair(BIND_COMMAND_STR, new BindCommand())); // Create Var
     this->m_commandsList.insert(make_pair(OPERATOR_COMMAND_STR, new OperatorCommand(m_opHandler)));
+    this->m_commandsList.insert(make_pair(WHILE_LOOP_COMMAND_STR, new WhileLoopCommand(&m_commandsList)));
     this->m_commandsList.insert(make_pair(CREATE_VAR_COMMAND_STR, new CreateVariableCommand(m_vContainer))); // Create Var
     this->m_commandsList.insert(make_pair(CALCULATE_MATH_COMMAND_STR, new CalculateMathExpressionCommand(m_mathExpressionsHandler)));
 }
@@ -75,7 +88,7 @@ CommandResult Controller::executeCommand(std::queue<StringsPair>& commandsQueue,
     // Undefined command
     CommandResult commandResult(false, EMPTY_QUEUE, "commandsQueue passed empty.\n", true);
 
-    while(!commandsQueue.empty()) {
+    while(true) {
         // take front
         StringsPair command = commandsQueue.front();
 
@@ -90,6 +103,8 @@ CommandResult Controller::executeCommand(std::queue<StringsPair>& commandsQueue,
 
         m_placeHolderCount++;
         commandsQueue.pop(); // pop the used command
+        if(commandsQueue.empty())
+            break;
     }
 
     return commandResult;

@@ -20,7 +20,13 @@ int main() {
 
     std::queue<pair<std::string, std::string>> commandsQueue; // initialize a commands queue
 
-    commandsQueue.push(make_pair(CALCULATE_MATH_COMMAND_STR, "12 + 15 * 72"));
+    std::stringstream ss;
+
+    ss << "a < 50\n";
+    ss << CALCULATE_MATH_COMMAND_STR << "\n";
+    ss << "a + 10";
+
+    commandsQueue.push(make_pair(WHILE_LOOP_COMMAND_STR, ss.str()));
 
     CommandResult cRslt = controller.executeCommand(commandsQueue, &client);
 

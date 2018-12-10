@@ -16,7 +16,7 @@
 CommandResult OperatorCommand::execute(IClient* sender, ConstStringRef command, var_data* placeHolder) {
     //try to evaluate
     try {
-        bool result = this->m_opHandler->evaluate_opperation(command);
+        bool result = this->m_opHandler->evaluate_operation(command);
 
         // set into the place holder
         placeHolder->set_type(BOOL);

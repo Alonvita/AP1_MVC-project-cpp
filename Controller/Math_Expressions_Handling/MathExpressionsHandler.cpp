@@ -16,28 +16,17 @@ double MathExpressionsHandler::parse_mathematical_expression(ConstStringRef rawE
     // split the string into a list w/o spaces and keep delimiters (see function documentation for more info)
     StringsList expressionAsList = splitString(rawExpression, DELIMITERS, false, true);
 
-    // strip from trailing spaces
-    for(std::string& str : expressionAsList) {
-        std::string::iterator end_pos = std::remove(str.begin(), str.end(), ' ');
-        str.erase(end_pos, str.end());
-    }
+    stripStringsListFromSpaces(expressionAsList);
 
     // handle any negation indicating "-" -> see function documentation for more details
     addDummyZeroesBeforeNegationMinus(expressionAsList);
 
-    // TODO: DEBUG: print expression -> remove this
-    printExpression(expressionAsList);
-
     StringsList expressionAsPostFix;
     prefixToPostFix(expressionAsList, expressionAsPostFix);
-
-    // TODO: DEBUG: print expression -> remove this
-    printExpression(expressionAsPostFix);
-
     try {
         return evaluatePostfixList(expressionAsPostFix);
     } catch(std::exception& e) {
-        throw (e);
+        throw std::runtime_error(e.what());
     }
 }
 
@@ -208,10 +197,10 @@ double MathExpressionsHandler::evaluatePostfixList(const StringsList &postfixExp
                     // evaluate using the operand and push to the stack.
                     stack.push(std::to_string(operateBinaryExpression(str, lhsD, rhsD)));
                 } catch(std::exception& e) {
-                    throw(e);
+                    throw std::runtime_error(e.what());
                 }
             } catch(std::exception& e) {
-                throw(e);
+                throw std::runtime_error(e.what());
             }
             continue;
         }

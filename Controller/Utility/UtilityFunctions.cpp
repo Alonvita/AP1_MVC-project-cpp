@@ -87,3 +87,20 @@ void splitStringToList(const std::string &input, const std::string& delimiterStr
     // push the rest of the string
     outList.push_back(input.substr(token, found - token));
 }
+
+/**
+ * stripStringsListFromSpaced(StringsList& expressionAsList).
+ *
+ * @param expressionAsList StringsList& -- a reference to a list of strings
+ */
+void stripStringsListFromSpaces(StringsList& list) {
+    // strip from trailing spaces
+    for(std::string& str : list) {
+        stripStringFromSpaces(str);
+    }
+}
+
+void stripStringFromSpaces(std::string& str) {
+    std::string::iterator end_pos = std::remove_if(str.begin(), str.end(), isspace);
+    str.erase(end_pos, str.end());
+}

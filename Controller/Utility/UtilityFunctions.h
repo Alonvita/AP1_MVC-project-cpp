@@ -8,6 +8,8 @@
 #include <list>
 #include <string>
 #include <fstream>
+#include <algorithm>
+#include "../../DefinesAndTypedefs.h"
 
 enum VarDataType { DOUBLE, BIND, BOOL };
 
@@ -16,7 +18,15 @@ private:
     void* data;
     VarDataType type;
 public:
-    void set_data(void* data) { this->data = data; }
+    ~var_data() {
+        if(this->type != BOOL)
+            free(this->data);
+    }
+
+    void set_data(void* data) {
+        this->data = data;
+    }
+
     void set_type(VarDataType type) { this->type = type; }
 
     VarDataType get_type() { return this->type; }
@@ -24,7 +34,9 @@ public:
 };
 
 bool isNumeric(const std::string &str);
-std::list<std::string> splitString(const std::string &input, const std::string &delimiterStr, bool keepSpaces, bool keepDelimiters);
-void splitStringToList(const std::string &input, const std::string& delimiterStr, std::list<std::string> &outList, bool keepDelimiters);
+void stripStringFromSpaces(std::string& str);
+void stripStringsListFromSpaces(StringsList& list);
+std::list<std::string> splitString(ConstStringRef input, const std::string &delimiterStr, bool keepSpaces, bool keepDelimiters);
+void splitStringToList(ConstStringRef input, ConstStringRef delimiterStr, StringsList &outList, bool keepDelimiters);
 
 #endif //MATHEXPRESSIONS_UTILITYFUNCTIONS_H

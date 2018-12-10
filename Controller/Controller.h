@@ -11,16 +11,14 @@
 #include "Commands/ICommand.h"
 #include "Commands/BindCommand.h"
 #include "../DefinesAndTypedefs.h"
+#include "Commands/OperatorCommand.h"
+#include "Commands/WhileLoopCommand.h"
 #include "../Shared_Data/CommandResult.h"
 #include "Commands/CreateVariableCommand.h"
-#include "Math_Expressions_Handling/MathExpressionsHandler.h"
 #include "Operators_Handler/OperatorsHandler.h"
+#include "Commands/CalculateMathExpressionCommand.h"
+#include "Math_Expressions_Handling/MathExpressionsHandler.h"
 
-#define OPERATOR_COMMAND_STR "operator"
-#define BIND_COMMAND_STR "bind_command"
-#define CREATE_VAR_COMMAND_STR "make_var_command"
-#define WHILE_LOOP_COMMAND_STR "while_loop"
-#define CALCULATE_MATH_COMMAND_STR "calcuate_math_expression"
 
 class Controller {
 public:

@@ -11,41 +11,47 @@
  * @param string const std::string& -- a constant reference to a string.
  * @return a true or fale depending on the parameters and the operation.
  */
-bool OperatorsHandler::evaluate_opperation(const std::string &str) {
+bool OperatorsHandler::evaluate_operation(ConstStringRef str) {
     std::list<std::string> l;
     std::string delimiter = " ";
 
     splitStringToList(str, delimiter, l, false);
 
     // check if size is more than expected
-    if(l.size() > 3)
-        return false;
+    if(!l.size() == 3)
+        throw std::runtime_error("Wrong amount of arguments: " + std::to_string(l.size()) + " required 3.");
 
-    // create the variables needed forevaluation
+    // create the variables needed for evaluation
     double lhs;
     double rhs;
 
     auto it = l.begin();
-    const std::string& lhsStr = (*(it++)); // TODO: check ++ location...
-    const std::string& op = (*(it++)); // TODO: check ++ location...
-    const std::string& rhsStr = (*it);
-
+    ConstStringRef lhsStr = (*(it++));
+    ConstStringRef op = (*(it++));
+    ConstStringRef rhsStr = (*it);
 
     // try to give value to lhs
     try {
         giveNumericValueOrGetValFromMap(lhs, lhsStr);
     } catch(std::exception& e) {
-        throw e;
+        throw std::runtime_error(e.what());
     }
 
     // try to give value to rhs
     try {
         giveNumericValueOrGetValFromMap(rhs, rhsStr);
 
-        // both values were given properly -> evaluate
-        return evaluate(op, lhs, rhs);
+        try {
+            bool result = evaluate(op, lhs, rhs);
+
+            // both values were given properly -> evaluate
+            return result;
+        } catch(std::exception& e) {
+            throw std::runtime_error(e.what());
+        }
+
     } catch(std::exception& e) {
-        throw e;
+        throw std::runtime_error(e.what());
     }
 
 }
@@ -59,7 +65,7 @@ bool OperatorsHandler::evaluate_opperation(const std::string &str) {
  *
  * @return true of false, depending on the values and operation given.
  */
-bool OperatorsHandler::evaluate(const std::string& operation, double lhs, double rhs) {
+bool OperatorsHandler::evaluate(ConstStringRef operation, double lhs, double rhs) {
     if(operation == LT)
         return lhs < rhs;
     if(operation == GT)
@@ -71,7 +77,11 @@ bool OperatorsHandler::evaluate(const std::string& operation, double lhs, double
     if(operation == EQ)
         return lhs == rhs;
 
-    return false;
+    std::stringstream ss;
+
+    ss << "Unknown Operand: " + operation;
+
+    throw std::runtime_error(ss.str());
 }
 
 /**
@@ -88,11 +98,14 @@ void OperatorsHandler::giveNumericValueOrGetValFromMap(double& out, const std::s
     } else {
         var_data* vdata_ptr = this->m_vMap->getVarData(varName); // otherwise, get from map
 
-        if(vdata_ptr) {
-            std::stringstream msg("The requested variable does not exist: ");
+        if(vdata_ptr == nullptr) {
+            std::stringstream msg;
+            msg << "The requested variable does not exist: ";
             msg << varName << "\n";
 
             throw std::runtime_error(msg.str());
         }
+
+        out = *((double*) vdata_ptr->get_data());
     }
 }
