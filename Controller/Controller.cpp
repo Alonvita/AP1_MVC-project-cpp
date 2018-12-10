@@ -17,7 +17,7 @@ Controller::Controller() {
     auto d = (double*) malloc(sizeof(double));
     *d = 15;
 
-    a->set_data(&(*d), DOUBLE);
+    a->set_data(d, DOUBLE);
 
     m_vContainer->addToMap("a", a);
 

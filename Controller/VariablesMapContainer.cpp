@@ -12,7 +12,7 @@
 VariablesMapContainer::~VariablesMapContainer() {
     // clear the map.
     for(std::pair<std::string, VarData*> p : this->m_variablesMap)
-        free(p.second);
+        delete(p.second);
 }
 
 /**

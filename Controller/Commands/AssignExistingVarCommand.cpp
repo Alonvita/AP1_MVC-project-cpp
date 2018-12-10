@@ -28,11 +28,11 @@ CommandResult AssignExistingVarCommand::execute(IClient* sender, ConstStringRef 
         auto val = (double*) malloc(sizeof(double));
         *val = m_mathExpressionsHandler->parse_mathematical_expression(expression);
 
-        this->m_vMapContainer->setExistingVar(varName, val, BOOL);
+        this->m_vMapContainer->setExistingVar(varName, val, DOUBLE);
 
         std::stringstream ss;
-        ss << "Var: " << varName << " was assigned successfully from expression: " << \
-            expression << ",\n\t yielding the value: " << (*val);
+        ss << "Var: " << varName << " was assigned successfully from expression: \"" << \
+            expression << "\", yielding the value: " << (*val);
 
 
         return CommandResult(true, ASSIGN_VAR, ss.str(), true);

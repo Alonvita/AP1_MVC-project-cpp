@@ -5,7 +5,10 @@
 #include "VarData.h"
 
 VarData::~VarData() {
-    if (this->type != BOOL && m_assigned)
+    if(!m_assigned)
+        return;
+
+    if (this->type != BOOL)
         free(this->m_data);
 }
 
@@ -24,7 +27,7 @@ void VarData::set_data(void *data, VarDataType type)  {
     }
 
     // taken -> free data and retake value and type
-    free(data);
+    free(m_data);
     this->m_data = data;
     set_type(type);
 }
