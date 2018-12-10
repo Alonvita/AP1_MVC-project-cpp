@@ -14,7 +14,7 @@
      *
      * @return a command result, depending on the specific executed command and it's success/failure.
      */
-CommandResult BindCommand::execute(IClient *sender, const std::string &command, var_data *placeHolder) {
+CommandResult BindCommand::execute(IClient *sender, ConstStringRef command, var_data *placeHolder) {
     // create a new var_data to be held inside placeHolder
     const char* filePath = command.c_str();
 

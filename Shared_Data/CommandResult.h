@@ -20,7 +20,8 @@ enum Command {
     LOOP_ENDS,
     SLEEP,
     PRINT,
-    CLOSE
+    CLOSE,
+    OPERATION
 };
 
 class CommandResult {

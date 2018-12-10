@@ -7,11 +7,13 @@
 
 
 #include "ICommand.h"
+#include "../Operators_Handler/OperatorsHandler.h"
 #include "../Math_Expressions_Handling/MathExpressionsHandler.h"
 
-class OperatorCommand : ICommand {
-    OperatorCommand(MathExpressionsHandler* handler) : m_handler(handler) {};
-    ~OperatorCommand() { this->m_handler = nullptr; };
+class OperatorCommand : public ICommand {
+public:
+    explicit OperatorCommand(OperatorsHandler* opHandler) : m_opHandler(opHandler) {};
+    ~OperatorCommand() { this->m_opHandler = nullptr; };
 
     /**
      * execute(IClient* sender, const std::string& command, void* placeHolder).
@@ -22,10 +24,10 @@ class OperatorCommand : ICommand {
      *
      * @return a command result, depending on the specific executed command and it's success/failure.
      */
-    CommandResult execute(IClient* sender, const std::string& command, var_data* placeHolder) override;
+    CommandResult execute(IClient* sender, ConstStringRef command, var_data* placeHolder) override;
 
 private:
-    MathExpressionsHandler* m_handler;
+    OperatorsHandler* m_opHandler;
 };
 
 

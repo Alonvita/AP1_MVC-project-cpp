@@ -9,6 +9,7 @@
 #include <string>
 #include <iostream>
 
+#include "../DefinesAndTypedefs.h"
 #include "Utility/UtilityFunctions.h"
 
 class VariablesMapContainer {

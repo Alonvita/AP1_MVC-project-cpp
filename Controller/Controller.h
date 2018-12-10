@@ -10,12 +10,17 @@
 
 #include "Commands/ICommand.h"
 #include "Commands/BindCommand.h"
+#include "../DefinesAndTypedefs.h"
 #include "../Shared_Data/CommandResult.h"
 #include "Commands/CreateVariableCommand.h"
 #include "Math_Expressions_Handling/MathExpressionsHandler.h"
+#include "Operators_Handler/OperatorsHandler.h"
 
-#define MAKE_VAR_COMMAND_STR "make_var_command"
+#define OPERATOR_COMMAND_STR "operator"
 #define BIND_COMMAND_STR "bind_command"
+#define CREATE_VAR_COMMAND_STR "make_var_command"
+#define WHILE_LOOP_COMMAND_STR "while_loop"
+#define CALCULATE_MATH_COMMAND_STR "calcuate_math_expression"
 
 class Controller {
 public:
@@ -29,10 +34,11 @@ public:
 
 
 private:
-    vector<var_data*> m_placeHolder;
+    CommandsMap m_commandsList;
+    OperatorsHandler* m_opHandler;
+    vector<var_data*> m_placeHoldersContainer;
     VariablesMapContainer* m_vContainer;
     unsigned long m_placeHolderCount = 1;
-    std::map<std::string, ICommand*> m_commandsList;
     MathExpressionsHandler* m_mathExpressionsHandler;
 };
 

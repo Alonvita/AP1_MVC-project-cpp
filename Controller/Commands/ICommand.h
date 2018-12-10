@@ -9,8 +9,8 @@
 #include <iostream>
 
 #include "../../View/IClient.h"
+#include "../../DefinesAndTypedefs.h"
 #include "../Utility/UtilityFunctions.h"
-
 
 /**
  * Command will serve as a pure-virtual class for commands to inherit.
@@ -33,7 +33,10 @@ public:
      *
      * @return a command result, depending on the specific executed command and it's success/failure.
      */
-    virtual CommandResult execute(IClient* sender, const std::string& command, var_data* placeHolder) = 0;
+    virtual CommandResult execute(IClient* sender, ConstStringRef command, var_data* placeHolder) = 0;
 };
+
+typedef std::map<std::string, ICommand*> CommandsMap;
+typedef std::pair<std::string, ICommand*> CommandsMapPair;
 
 #endif //AP1_SEMETSER_PROJECT_COMMAND_H

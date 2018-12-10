@@ -5,13 +5,18 @@
 #ifndef MATHEXPRESSIONS_PARSER_H
 #define MATHEXPRESSIONS_PARSER_H
 
+
+
 #include <map>
 #include <list>
 #include <stack>
+#include <vector>
 #include <string>
+#include <sstream>
 #include <fcntl.h> // open
 #include <unistd.h> // write
 #include <iterator>
+#include <algorithm>
 #include <sys/stat.h> // open
 
 #include "../VariablesMapContainer.h"
@@ -39,11 +44,12 @@
 
 class MathExpressionsHandler {
 public:
+    /// ---------- CONSTRUCTORS & DESTRUCTORS ----------
     MathExpressionsHandler(VariablesMapContainer* vMapContainer) : m_vMap(vMapContainer) {};
-
     ~MathExpressionsHandler() { m_vMap = nullptr; };
 
-    double parse_mathematical_expression(const std::string &rawExpression);
+    /// ---------- OTHER PUBLIC METHODS ----------
+    double parse_mathematical_expression(ConstStringRef rawExpression);
 
 private:
     ///---------- LOCAL VARIABLES ----------
@@ -52,21 +58,18 @@ private:
     ///---------- UTILITY FUNCTIONS ----------
     double evaluate(var_data* varData);
     int precedence(const std::string& opL);
-    bool isNumeric(const std::string &str);
     bool isOperator(const std::string& str);
-    bool isLeftParentheses(const std::string &str);
-    bool isRightParentheses(const std::string &str);
-    var_data* getVarDataFromMap(const std::string &str);
-    double evaluatePostfixList(const std::list<std::string> &postfixExpression);
-    double getVariableValFromMapOrCreateDoubleForNumericVals(const std::string &str);
-    void addDummyZeroesBeforeNegationMinus(std::list<std::string> & expressionAsList);
-    double operateBinaryExpression(const std::string &operation, double lhs, double rhs);
-    void prefixToPostFix(const std::list<std::string>& mathExpressionAsList, std::list<std::string>& postfix);
-    std::list<std::string> splitString(const std::string &input, const std::string &delimiterStr, bool keepSpaces, bool keepDelimiters);
-    void splitStringToList(const std::string &input, const std::string& delimiterStr, std::list<std::string> &outList, bool keepDelimiters);
+    bool isLeftParentheses(ConstStringRef str);
+    bool isRightParentheses(ConstStringRef str);
+    var_data* getVarDataFromMap(ConstStringRef str);
+    double evaluatePostfixList(const StringsList& postfixExpression);
+    double getVariableValFromMapOrCreateDoubleForNumericVals(ConstStringRef str);
+    void addDummyZeroesBeforeNegationMinus(StringsList & expressionAsList);
+    double operateBinaryExpression(ConstStringRef operation, double lhs, double rhs);
+    void prefixToPostFix(const StringsList& mathExpressionAsList, StringsList& postfix);
 
     ///---------- DEBUGGING ----------
-    void printExpression(const std::list<std::string>& exp);
+    void printExpression(const StringsList& exp);
 };
 
 

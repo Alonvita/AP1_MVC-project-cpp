@@ -5,10 +5,11 @@
 #ifndef MATHEXPRESSIONS_UTILITYFUNCTIONS_H
 #define MATHEXPRESSIONS_UTILITYFUNCTIONS_H
 
+#include <list>
 #include <string>
 #include <fstream>
 
-enum VarDataType { DOUBLE, BIND };
+enum VarDataType { DOUBLE, BIND, BOOL };
 
 struct var_data {
 private:
@@ -22,6 +23,8 @@ public:
     void* get_data() { return this->data; }
 };
 
-template<typename T, typename P> T remove_if(T beg, T end, P pred);
+bool isNumeric(const std::string &str);
+std::list<std::string> splitString(const std::string &input, const std::string &delimiterStr, bool keepSpaces, bool keepDelimiters);
+void splitStringToList(const std::string &input, const std::string& delimiterStr, std::list<std::string> &outList, bool keepDelimiters);
 
 #endif //MATHEXPRESSIONS_UTILITYFUNCTIONS_H

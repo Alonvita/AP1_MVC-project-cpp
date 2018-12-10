@@ -3,6 +3,8 @@
 //
 
 #include "Controller.h"
+#include "Commands/CalculateMathExpressionCommand.h"
+#include "Commands/OperatorCommand.h"
 
 ///---------- CONSTRUCTORS & DESTRUCTORS ----------
 
@@ -12,12 +14,17 @@
 Controller::Controller() {
     this->m_vContainer = new VariablesMapContainer();
 
+    // initialize opHandler
+    this->m_opHandler = new OperatorsHandler(m_vContainer);
+
     // initialize Math Parser
     this->m_mathExpressionsHandler = new MathExpressionsHandler(m_vContainer);
 
     // Initialize Commands Map
     this->m_commandsList.insert(make_pair(BIND_COMMAND_STR, new BindCommand())); // Create Var
-    this->m_commandsList.insert(make_pair(MAKE_VAR_COMMAND_STR, new CreateVariableCommand(m_vContainer))); // Create Var
+    this->m_commandsList.insert(make_pair(OPERATOR_COMMAND_STR, new OperatorCommand(m_opHandler)));
+    this->m_commandsList.insert(make_pair(CREATE_VAR_COMMAND_STR, new CreateVariableCommand(m_vContainer))); // Create Var
+    this->m_commandsList.insert(make_pair(CALCULATE_MATH_COMMAND_STR, new CalculateMathExpressionCommand(m_mathExpressionsHandler)));
 }
 
 /**
@@ -26,14 +33,16 @@ Controller::Controller() {
 Controller::~Controller() {
     // delete the math handler
     delete this->m_mathExpressionsHandler;
+    delete this->m_opHandler;
     delete this->m_vContainer;
 
     // delete every command on the command list
-    for(std::pair<std::string, ICommand*> p : this->m_commandsList)
+    for(CommandsMapPair p : this->m_commandsList)
         delete p.second;
 
-    for(var_data* vd : this->m_placeHolder)
+    for(var_data* vd : this->m_placeHoldersContainer) {
         free(vd);
+    }
 }
 
 ///---------- EXECUTION ----------
@@ -46,7 +55,7 @@ Controller::~Controller() {
  *
  * @return a command result created by the command's execution.
  */
-CommandResult Controller::executeCommand(std::queue<std::pair<std::string, std::string>>& commandsQueue, IClient* sender) {
+CommandResult Controller::executeCommand(std::queue<StringsPair>& commandsQueue, IClient* sender) {
     // TODO: TEST CODE -> remove
     /*
     auto temp = (var_data*) malloc(sizeof(var_data));
@@ -58,16 +67,17 @@ CommandResult Controller::executeCommand(std::queue<std::pair<std::string, std::
     temp->set_data(&fp);
     temp->set_type(BIND_COMMAND);
     m_placeHolder.push_back(temp);
-     */
+    */
 
-    var_data* temp = nullptr;
+    // add temp to our placeHolder vector
+    m_placeHoldersContainer.push_back((var_data*) malloc(sizeof(var_data)));
 
     // Undefined command
     CommandResult commandResult(false, EMPTY_QUEUE, "commandsQueue passed empty.\n", true);
 
     while(!commandsQueue.empty()) {
         // take front
-        pair<std::string,std::string> command = commandsQueue.front();
+        StringsPair command = commandsQueue.front();
 
         // find commandsQueue in map
         auto it = m_commandsList.find(command.first);
@@ -76,7 +86,7 @@ CommandResult Controller::executeCommand(std::queue<std::pair<std::string, std::
         if (it == m_commandsList.end())
             return CommandResult(false, UNDEFINED, "Unknown Command\n", true); // return unknown commandsQueue
 
-        commandResult = (*it).second->execute(nullptr, command.second, temp);
+        commandResult = (*it).second->execute(nullptr, command.second, m_placeHoldersContainer[m_placeHolderCount - 1]);
 
         m_placeHolderCount++;
         commandsQueue.pop(); // pop the used command

@@ -6,6 +6,8 @@ set(CMAKE_CXX_STANDARD 14)
 set(MAIN main.cpp)
 
 set(UTILITIES
+        # Defines and Typedefs
+        DefinesAndTypedefs.h
         # Reference Count
         Utilities/Reference_Counting/ReferenceCount.h
         # Smart Pointers
@@ -47,6 +49,10 @@ set(CONTROLLER
         Controller/Commands/BindCommand.cpp Controller/Commands/BindCommand.h
         #OperatorCommand
         Controller/Commands/OperatorCommand.cpp Controller/Commands/OperatorCommand.h
+        #CalculateMathExpressionCommand
+        Controller/Commands/CalculateMathExpressionCommand.cpp Controller/Commands/CalculateMathExpressionCommand.h
+        # While Loop Command
+        Controller/Commands/WhileLoopCommand.cpp Controller/Commands/WhileLoopCommand.h
         )
 
 set(CLIENTS

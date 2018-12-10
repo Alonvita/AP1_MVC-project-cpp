@@ -13,6 +13,22 @@
  *
  * @return a command result, depending on the specific executed command and it's success/failure.
  */
-CommandResult execute(IClient* sender, const std::string& command, var_data* placeHolder) {
+CommandResult OperatorCommand::execute(IClient* sender, ConstStringRef command, var_data* placeHolder) {
+    //try to evaluate
+    try {
+        bool result = this->m_opHandler->evaluate_opperation(command);
 
+        // set into the place holder
+        placeHolder->set_type(BOOL);
+        placeHolder->set_data(&result);
+
+        // return CommandResult
+        std::stringstream ss;
+        ss << "Successfully evaluated the expression: " << command << "\n";
+
+        return CommandResult(true, OPERATION, ss.str(), true);
+    } catch(std::exception& e) {
+        return CommandResult(false, EXECUTION_FAILURE, e.what(), true);
+    }
 }
+
