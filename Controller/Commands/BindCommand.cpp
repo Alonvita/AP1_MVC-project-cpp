@@ -14,16 +14,15 @@
      *
      * @return a command result, depending on the specific executed command and it's success/failure.
      */
-CommandResult BindCommand::execute(IClient *sender, ConstStringRef command, var_data *placeHolder) {
-    // create a new var_data to be held inside placeHolder
+CommandResult BindCommand::execute(IClient *sender, ConstStringRef command, VarData *placeHolder) {
+    // create a new VarData to be held inside placeHolder
     const char* filePath = command.c_str();
 
     // get the file path
     int fp = open(filePath, O_RDWR);
 
     // set type and data
-    placeHolder->set_type(BIND);
-    placeHolder->set_data(&fp);
+    placeHolder->set_data(&fp, BIND);
 
     std::stringstream returnMessage;
     returnMessage << "Bind Successful" << "\n";

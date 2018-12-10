@@ -8,6 +8,8 @@ set(MAIN main.cpp)
 set(UTILITIES
         # Defines and Typedefs
         DefinesAndTypedefs.h
+        # Variable Data Class
+        Controller/Utility/VarData.cpp Controller/Utility/VarData.h
         # Reference Count
         Utilities/Reference_Counting/ReferenceCount.h
         # Smart Pointers
@@ -53,6 +55,8 @@ set(CONTROLLER
         Controller/Commands/CalculateMathExpressionCommand.cpp Controller/Commands/CalculateMathExpressionCommand.h
         # While Loop Command
         Controller/Commands/WhileLoopCommand.cpp Controller/Commands/WhileLoopCommand.h
+        # Assign Existing Var
+        Controller/Commands/AssignExistingVarCommand.cpp Controller/Commands/AssignExistingVarCommand.h
         )
 
 set(CLIENTS

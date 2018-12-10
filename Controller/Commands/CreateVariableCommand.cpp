@@ -11,7 +11,7 @@
  * @param placeHolder
  * @return
  */
-CommandResult CreateVariableCommand::execute(IClient *sender, ConstStringRef command, var_data* placeHolder) {
+CommandResult CreateVariableCommand::execute(IClient *sender, ConstStringRef command, VarData* placeHolder) {
     std::ostringstream returnMessage;
 
     // bad location for placeHolder or nullptr received

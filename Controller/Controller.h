@@ -15,6 +15,7 @@
 #include "Commands/WhileLoopCommand.h"
 #include "../Shared_Data/CommandResult.h"
 #include "Commands/CreateVariableCommand.h"
+#include "Commands/AssignExistingVarCommand.h"
 #include "Operators_Handler/OperatorsHandler.h"
 #include "Commands/CalculateMathExpressionCommand.h"
 #include "Math_Expressions_Handling/MathExpressionsHandler.h"
@@ -34,7 +35,7 @@ public:
 private:
     CommandsMap m_commandsList;
     OperatorsHandler* m_opHandler;
-    vector<var_data*> m_placeHoldersContainer;
+    vector<VarData*> m_placeHoldersContainer;
     VariablesMapContainer* m_vContainer;
     unsigned long m_placeHolderCount = 1;
     MathExpressionsHandler* m_mathExpressionsHandler;

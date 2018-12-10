@@ -158,7 +158,7 @@ bool MathExpressionsHandler::isRightParentheses(ConstStringRef str) {
  *
  * @return the pair given by this map. NOTE: map may also return nullptr if it hasn't found anything.
  */
-var_data* MathExpressionsHandler::getVarDataFromMap(ConstStringRef str) {
+VarData* MathExpressionsHandler::getVarDataFromMap(ConstStringRef str) {
     return this->m_vMap->getVarData(str);
 }
 
@@ -228,7 +228,7 @@ double MathExpressionsHandler::getVariableValFromMapOrCreateDoubleForNumericVals
         return stod(str);
     }
 
-    var_data* p = getVarDataFromMap(str);
+    VarData* p = getVarDataFromMap(str);
 
     if(p == nullptr) {
         std::stringstream ss;
@@ -317,7 +317,7 @@ void MathExpressionsHandler::addDummyZeroesBeforeNegationMinus(StringsList& expr
  *
  * @return the double value of the variable, considering it's type.
  */
-double MathExpressionsHandler::evaluate(var_data *varData) {
+double MathExpressionsHandler::evaluate(VarData *varData) {
     switch(varData->get_type()) {
         case DOUBLE:
             return *(double*)(varData->get_data());

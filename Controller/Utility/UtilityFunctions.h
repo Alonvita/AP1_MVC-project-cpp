@@ -11,28 +11,6 @@
 #include <algorithm>
 #include "../../DefinesAndTypedefs.h"
 
-enum VarDataType { DOUBLE, BIND, BOOL };
-
-struct var_data {
-private:
-    void* data;
-    VarDataType type;
-public:
-    ~var_data() {
-        if(this->type != BOOL)
-            free(this->data);
-    }
-
-    void set_data(void* data) {
-        this->data = data;
-    }
-
-    void set_type(VarDataType type) { this->type = type; }
-
-    VarDataType get_type() { return this->type; }
-    void* get_data() { return this->data; }
-};
-
 bool isNumeric(const std::string &str);
 void stripStringFromSpaces(std::string& str);
 void stripStringsListFromSpaces(StringsList& list);

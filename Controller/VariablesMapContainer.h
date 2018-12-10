@@ -11,20 +11,22 @@
 
 #include "../DefinesAndTypedefs.h"
 #include "Utility/UtilityFunctions.h"
+#include "Utility/VarData.h"
 
 class VariablesMapContainer {
 public:
-    VariablesMapContainer() { this->m_variablesMap = std::map<std::string, var_data*>(); };
+    VariablesMapContainer() { this->m_variablesMap = std::map<std::string, VarData*>(); };
     ~VariablesMapContainer();
 
     /// ---------- GETTERS & SETTERS ----------
     double getData(const std::string& varName);
-    var_data* getVarData(const std::string &str);
+    VarData* getVarData(const std::string &str);
     VarDataType getType(const std::string& varName);
-    void addToMap(const std::string& varName, var_data*varData);
+    void addToMap(const std::string& varName, VarData*varData);
+    void setExistingVar(ConstStringRef str, void* data, VarDataType type);
 
 private:
-    std::map<std::string, var_data*> m_variablesMap;
+    std::map<std::string, VarData*> m_variablesMap;
 };
 
 #endif //AP1_SEMETSER_PROJECT_VARIABLESMAPCONTAINER_H

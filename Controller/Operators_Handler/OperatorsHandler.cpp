@@ -96,7 +96,7 @@ void OperatorsHandler::giveNumericValueOrGetValFromMap(double& out, const std::s
     if(isNumeric(varName)) {
         out = stod(varName); // turn to double
     } else {
-        var_data* vdata_ptr = this->m_vMap->getVarData(varName); // otherwise, get from map
+        VarData* vdata_ptr = this->m_vMap->getVarData(varName); // otherwise, get from map
 
         if(vdata_ptr == nullptr) {
             std::stringstream msg;

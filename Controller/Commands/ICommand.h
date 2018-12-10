@@ -8,6 +8,7 @@
 #include <queue>
 #include <iostream>
 
+#include "../Utility/VarData.h"
 #include "../../View/IClient.h"
 #include "../../DefinesAndTypedefs.h"
 #include "../Utility/UtilityFunctions.h"
@@ -33,7 +34,7 @@ public:
      *
      * @return a command result, depending on the specific executed command and it's success/failure.
      */
-    virtual CommandResult execute(IClient* sender, ConstStringRef command, var_data* placeHolder) = 0;
+    virtual CommandResult execute(IClient* sender, ConstStringRef command, VarData* placeHolder) = 0;
 };
 
 typedef std::map<std::string, ICommand*> CommandsMap;

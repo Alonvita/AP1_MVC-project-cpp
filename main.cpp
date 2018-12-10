@@ -26,7 +26,7 @@ int main() {
     ss << CALCULATE_MATH_COMMAND_STR << "\n";
     ss << "a + 10";
 
-    commandsQueue.push(make_pair(WHILE_LOOP_COMMAND_STR, ss.str()));
+    commandsQueue.push(make_pair(ASSIGN_EXISTING_COMMAND_STR, "a 15+25*15/3"));
 
     CommandResult cRslt = controller.executeCommand(commandsQueue, &client);
 

@@ -18,6 +18,7 @@ enum Command {
     CREATE_VAR,
     CALCULATE_EXPRESSION,
     LOOP_ENDS,
+    ASSIGN_VAR,
     SLEEP,
     PRINT,
     CLOSE,
@@ -26,6 +27,7 @@ enum Command {
 
 class CommandResult {
 public:
+    explicit CommandResult() : m_success(false), m_command(UNDEFINED), m_data("No data\n"), m_keepConnection(true) {};
     CommandResult(bool success, Command cmd, std::string data, bool keepConnection) :
     m_success(success), m_command(cmd), m_data(std::move(data)), m_keepConnection(keepConnection) {};
 

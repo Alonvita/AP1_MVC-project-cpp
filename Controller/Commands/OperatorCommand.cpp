@@ -9,18 +9,17 @@
  *
  * @param sender IClient* -- a pointer to the sending cliend.
  * @param command const std::string& -- a constant reference to a string representing the command.
- * @param placeHolder coid* -- a placeholder.
+ * @param placeHolder VarData* -- a placeholder.
  *
  * @return a command result, depending on the specific executed command and it's success/failure.
  */
-CommandResult OperatorCommand::execute(IClient* sender, ConstStringRef command, var_data* placeHolder) {
+CommandResult OperatorCommand::execute(IClient* sender, ConstStringRef command, VarData* placeHolder) {
     //try to evaluate
     try {
         bool result = this->m_opHandler->evaluate_operation(command);
 
         // set into the place holder
-        placeHolder->set_type(BOOL);
-        placeHolder->set_data(&result);
+        placeHolder->set_data(&result, BOOL);
 
         // return CommandResult
         std::stringstream ss;

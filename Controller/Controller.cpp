@@ -13,13 +13,11 @@ Controller::Controller() {
     this->m_vContainer = new VariablesMapContainer();
 
     // TODO: TEMP USEAGE -> REMOVE THIS
-    auto a = new var_data;
+    auto a = new VarData;
     auto d = (double*) malloc(sizeof(double));
     *d = 15;
 
-    a->set_type(DOUBLE);
-    a->set_data(&(*d));
-    d = nullptr;
+    a->set_data(&(*d), DOUBLE);
 
     m_vContainer->addToMap("a", a);
 
@@ -38,6 +36,7 @@ Controller::Controller() {
     this->m_commandsList.insert(make_pair(WHILE_LOOP_COMMAND_STR, new WhileLoopCommand(&m_commandsList)));
     this->m_commandsList.insert(make_pair(CREATE_VAR_COMMAND_STR, new CreateVariableCommand(m_vContainer))); // Create Var
     this->m_commandsList.insert(make_pair(CALCULATE_MATH_COMMAND_STR, new CalculateMathExpressionCommand(m_mathExpressionsHandler)));
+    this->m_commandsList.insert(make_pair(ASSIGN_EXISTING_COMMAND_STR, new AssignExistingVarCommand(m_vContainer ,m_mathExpressionsHandler)));
 }
 
 /**
@@ -53,7 +52,7 @@ Controller::~Controller() {
     for(CommandsMapPair p : this->m_commandsList)
         delete p.second;
 
-    for(var_data* vd : this->m_placeHoldersContainer) {
+    for(VarData* vd : this->m_placeHoldersContainer) {
         free(vd);
     }
 }
@@ -71,7 +70,7 @@ Controller::~Controller() {
 CommandResult Controller::executeCommand(std::queue<StringsPair>& commandsQueue, IClient* sender) {
     // TODO: TEST CODE -> remove
     /*
-    auto temp = (var_data*) malloc(sizeof(var_data));
+    auto temp = (VarData*) malloc(sizeof(VarData));
     int fp = open("/home/alon/Desktop/Untitled Folder/test.txt" ,O_RDWR);
     double d = 1234.124;
     write(fp, &d, sizeof(double));
@@ -83,10 +82,10 @@ CommandResult Controller::executeCommand(std::queue<StringsPair>& commandsQueue,
     */
 
     // add temp to our placeHolder vector
-    m_placeHoldersContainer.push_back((var_data*) malloc(sizeof(var_data)));
+    m_placeHoldersContainer.push_back((VarData*) malloc(sizeof(VarData)));
 
     // Undefined command
-    CommandResult commandResult(false, EMPTY_QUEUE, "commandsQueue passed empty.\n", true);
+    CommandResult commandResult;
 
     while(true) {
         // take front
