@@ -5,8 +5,6 @@
 #ifndef MATHEXPRESSIONS_PARSER_H
 #define MATHEXPRESSIONS_PARSER_H
 
-
-
 #include <map>
 #include <list>
 #include <stack>

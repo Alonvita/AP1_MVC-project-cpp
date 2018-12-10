@@ -14,7 +14,7 @@ class TestPrintCommand : public ICommand {
 public:
     /// ---------- CONSTRUCTOR & DESTRUCTOR ----------
     explicit TestPrintCommand(std::string str) : m_Str(std::move(str)) {};
-    ~TestPrintCommand() = default;
+    ~TestPrintCommand() override = default;
 
     /// ---------- VIRTUAL FUNCTIONS IMPLEMENTATION ---------
     CommandResult execute(IClient* sender, const std::string& command, VarData* placeHolder) override {

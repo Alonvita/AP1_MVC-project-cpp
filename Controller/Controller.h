@@ -11,6 +11,7 @@
 #include "Commands/ICommand.h"
 #include "Commands/BindCommand.h"
 #include "../DefinesAndTypedefs.h"
+#include "Commands/SleepCommand.h"
 #include "Commands/OperatorCommand.h"
 #include "Commands/WhileLoopCommand.h"
 #include "../Shared_Data/CommandResult.h"
@@ -37,7 +38,7 @@ private:
     OperatorsHandler* m_opHandler;
     vector<VarData*> m_placeHoldersContainer;
     VariablesMapContainer* m_vContainer;
-    unsigned long m_placeHolderCount = 1;
+    unsigned long m_placeHolderCount = 0;
     MathExpressionsHandler* m_mathExpressionsHandler;
 };
 

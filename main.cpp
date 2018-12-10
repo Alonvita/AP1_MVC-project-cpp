@@ -23,10 +23,10 @@ int main() {
     std::stringstream ss;
 
     ss << "a < 50\n";
-    ss << CALCULATE_MATH_COMMAND_STR << "\n";
-    ss << "a + 10";
+    ss << ASSIGN_EXISTING_COMMAND_STR << "\n";
+    ss << "a a+10";
 
-    commandsQueue.push(make_pair(ASSIGN_EXISTING_COMMAND_STR, "a 15+25*15/3"));
+    commandsQueue.push(make_pair(WHILE_LOOP_COMMAND_STR, ss.str()));
 
     CommandResult cRslt = controller.executeCommand(commandsQueue, &client);
 

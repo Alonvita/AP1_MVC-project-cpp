@@ -13,7 +13,7 @@
 class OperatorCommand : public ICommand {
 public:
     explicit OperatorCommand(OperatorsHandler* opHandler) : m_opHandler(opHandler) {};
-    ~OperatorCommand() { this->m_opHandler = nullptr; };
+    ~OperatorCommand() override;
 
     /**
      * execute(IClient* sender, const std::string& command, void* placeHolder).

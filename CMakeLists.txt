@@ -57,6 +57,8 @@ set(CONTROLLER
         Controller/Commands/WhileLoopCommand.cpp Controller/Commands/WhileLoopCommand.h
         # Assign Existing Var
         Controller/Commands/AssignExistingVarCommand.cpp Controller/Commands/AssignExistingVarCommand.h
+        # Sleep Command
+        Controller/Commands/SleepCommand.cpp Controller/Commands/SleepCommand.h
         )
 
 set(CLIENTS

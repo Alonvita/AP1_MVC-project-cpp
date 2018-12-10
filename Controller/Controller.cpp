@@ -31,6 +31,7 @@ Controller::Controller() {
     this->m_mathExpressionsHandler = new MathExpressionsHandler(m_vContainer);
 
     // Initialize Commands Map
+    this->m_commandsList.insert(make_pair(SLEEP_COMMAND_STR, new SleepCommand()));
     this->m_commandsList.insert(make_pair(BIND_COMMAND_STR, new BindCommand())); // Create Var
     this->m_commandsList.insert(make_pair(OPERATOR_COMMAND_STR, new OperatorCommand(m_opHandler)));
     this->m_commandsList.insert(make_pair(WHILE_LOOP_COMMAND_STR, new WhileLoopCommand(&m_commandsList)));
@@ -53,7 +54,7 @@ Controller::~Controller() {
         delete p.second;
 
     for(VarData* vd : this->m_placeHoldersContainer) {
-        free(vd);
+        delete(vd);
     }
 }
 
@@ -82,12 +83,14 @@ CommandResult Controller::executeCommand(std::queue<StringsPair>& commandsQueue,
     */
 
     // add temp to our placeHolder vector
-    m_placeHoldersContainer.push_back((VarData*) malloc(sizeof(VarData)));
 
     // Undefined command
     CommandResult commandResult;
 
     while(true) {
+        m_placeHoldersContainer.push_back(new VarData());
+        m_placeHolderCount++;
+
         // take front
         StringsPair command = commandsQueue.front();
 
@@ -95,12 +98,15 @@ CommandResult Controller::executeCommand(std::queue<StringsPair>& commandsQueue,
         auto it = m_commandsList.find(command.first);
 
         // if not contains
-        if (it == m_commandsList.end())
+        if (it == m_commandsList.end()) {
             return CommandResult(false, UNDEFINED, "Unknown Command\n", true); // return unknown commandsQueue
+        }
 
-        commandResult = (*it).second->execute(nullptr, command.second, m_placeHoldersContainer[m_placeHolderCount - 1]);
 
-        m_placeHolderCount++;
+        VarData* lastPH = m_placeHoldersContainer[m_placeHolderCount - 1];
+
+        commandResult = (*it).second->execute(nullptr, command.second, lastPH);
+
         commandsQueue.pop(); // pop the used command
         if(commandsQueue.empty())
             break;

@@ -4,6 +4,10 @@
 
 #include "BindCommand.h"
 
+/**
+ * Default Destructor.
+ */
+BindCommand::~BindCommand() = default;
 
 /**
      * execute(IClient* sender, const std::string& command, void* placeHolder).

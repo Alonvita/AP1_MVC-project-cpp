@@ -13,7 +13,7 @@
 class BindCommand : public ICommand {
 public:
     BindCommand() = default;
-    ~BindCommand() = default;
+    ~BindCommand() override;
 
     /**
      * execute(IClient* sender, const std::string& command, void* placeHolder).

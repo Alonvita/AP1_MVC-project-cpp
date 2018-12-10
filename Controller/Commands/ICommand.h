@@ -21,8 +21,7 @@
 class ICommand {
 public:
     /// ---------- CONSTRUCTOR & DESTRUCTOR ----------
-    ICommand() = default;
-    ~ICommand() = default;
+    virtual ~ICommand() = default;
 
     /// ---------- PURE VIRTUAL METHODS ----------
     /**

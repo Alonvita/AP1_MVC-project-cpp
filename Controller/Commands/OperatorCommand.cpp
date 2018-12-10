@@ -5,6 +5,12 @@
 #include "OperatorCommand.h"
 
 /**
+ * Default destructor.
+ */
+
+OperatorCommand::~OperatorCommand() { this->m_opHandler = nullptr; }
+
+/**
  * execute(IClient* sender, const std::string& command, void* placeHolder).
  *
  * @param sender IClient* -- a pointer to the sending cliend.

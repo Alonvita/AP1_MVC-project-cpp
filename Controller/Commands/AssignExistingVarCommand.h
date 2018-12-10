@@ -12,6 +12,8 @@
 
 class AssignExistingVarCommand : public ICommand {
 public:
+    ~AssignExistingVarCommand() override { this->m_mathExpressionsHandler = nullptr; this->m_vMapContainer = nullptr; }
+
     explicit AssignExistingVarCommand(VariablesMapContainer* vMapContainer, MathExpressionsHandler* handler) :
             m_vMapContainer(vMapContainer), m_mathExpressionsHandler(handler) {};
 

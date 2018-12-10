@@ -22,7 +22,7 @@
 class CreateVariableCommand : public ICommand {
 public:
     /// ---------- CONSTRUCTOR & DESTRUCTOR ---------
-    ~CreateVariableCommand() = default;
+    ~CreateVariableCommand() override = default;
     explicit CreateVariableCommand(VariablesMapContainer* variablesMapContainer) : m_vContainer(variablesMapContainer) {};
 
     /// ---------- VIRTUAL FUNCTIONS IMPLEMENTATION ---------
