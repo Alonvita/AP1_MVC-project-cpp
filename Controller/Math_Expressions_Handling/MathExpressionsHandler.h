@@ -18,8 +18,7 @@
 #include <sys/stat.h> // open
 
 #include "../VariablesMapContainer.h"
-#include "../Utility/UtilityFunctions.h"
-#include "../../Utilities/Reference_Counting/SmartPtr.h"
+#include "../../Utility/UtilityFunctions.h"
 
 #define DIV_STR "/"
 #define PLUS_STR "+"

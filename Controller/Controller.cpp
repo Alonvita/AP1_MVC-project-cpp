@@ -31,13 +31,13 @@ Controller::Controller() {
     this->m_mathExpressionsHandler = new MathExpressionsHandler(m_vContainer);
 
     // Initialize Commands Map
-    this->m_commandsList.insert(make_pair(SLEEP_COMMAND_STR, new SleepCommand()));
-    this->m_commandsList.insert(make_pair(BIND_COMMAND_STR, new BindCommand())); // Create Var
-    this->m_commandsList.insert(make_pair(OPERATOR_COMMAND_STR, new OperatorCommand(m_opHandler)));
-    this->m_commandsList.insert(make_pair(WHILE_LOOP_COMMAND_STR, new WhileLoopCommand(&m_commandsList)));
-    this->m_commandsList.insert(make_pair(CREATE_VAR_COMMAND_STR, new CreateVariableCommand(m_vContainer))); // Create Var
-    this->m_commandsList.insert(make_pair(CALCULATE_MATH_COMMAND_STR, new CalculateMathExpressionCommand(m_mathExpressionsHandler)));
-    this->m_commandsList.insert(make_pair(ASSIGN_EXISTING_COMMAND_STR, new AssignExistingVarCommand(m_vContainer ,m_mathExpressionsHandler)));
+    this->m_commandsList.insert(std::make_pair(SLEEP_COMMAND_STR, new SleepCommand()));
+    this->m_commandsList.insert(std::make_pair(BIND_COMMAND_STR, new BindCommand())); // Create Var
+    this->m_commandsList.insert(std::make_pair(OPERATOR_COMMAND_STR, new OperatorCommand(m_opHandler)));
+    this->m_commandsList.insert(std::make_pair(WHILE_LOOP_COMMAND_STR, new WhileLoopCommand(&m_commandsList)));
+    this->m_commandsList.insert(std::make_pair(CREATE_VAR_COMMAND_STR, new CreateVariableCommand(m_vContainer))); // Create Var
+    this->m_commandsList.insert(std::make_pair(CALCULATE_MATH_COMMAND_STR, new CalculateMathExpressionCommand(m_mathExpressionsHandler)));
+    this->m_commandsList.insert(std::make_pair(ASSIGN_EXISTING_COMMAND_STR, new AssignExistingVarCommand(m_vContainer ,m_mathExpressionsHandler)));
 }
 
 /**
@@ -68,7 +68,7 @@ Controller::~Controller() {
  *
  * @return a command result created by the command's execution.
  */
-CommandResult Controller::executeCommand(std::queue<StringsPair>& commandsQueue, IClient* sender) {
+CommandResult Controller::executeCommand(StringsPairQueue& commandsQueue, IClient* sender) {
     // TODO: TEST CODE -> remove
     /*
     auto temp = (VarData*) malloc(sizeof(VarData));

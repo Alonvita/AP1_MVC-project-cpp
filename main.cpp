@@ -15,7 +15,7 @@ int main() {
 
 
     // TESTING CONTROLLER EXECUTION WITH CREATE VARIABLE COMMAND
-    Client client(199);
+    Client client;
     Controller controller;
 
     std::queue<pair<std::string, std::string>> commandsQueue; // initialize a commands queue

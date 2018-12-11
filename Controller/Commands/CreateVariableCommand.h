@@ -12,7 +12,6 @@
 #include <sstream>
 
 #include "ICommand.h"
-#include "../../Utilities/Reference_Counting/SmartPtr.h"
 #include "../Math_Expressions_Handling/MathExpressionsHandler.h"
 
 /**

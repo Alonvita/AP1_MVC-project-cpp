@@ -44,7 +44,7 @@ double MathExpressionsHandler::parse_mathematical_expression(ConstStringRef rawE
 void MathExpressionsHandler::prefixToPostFix(
         const StringsList& mathExpressionAsList,
         StringsList& postfix) {
-    stack<std::string> stack;
+    std::stack<std::string> stack;
 
     // iterate over the list
     for(std::string str : mathExpressionAsList) {
@@ -172,7 +172,7 @@ VarData* MathExpressionsHandler::getVarDataFromMap(ConstStringRef str) {
  * Pseudo source: http://faculty.cs.niu.edu/~hutchins/csci241/eval.htm
  */
 double MathExpressionsHandler::evaluatePostfixList(const StringsList &postfixExpression) {
-    stack<std::string> stack;
+    std::stack<std::string> stack;
 
     // iterate on every string
     for(std::string str : postfixExpression) {
@@ -234,7 +234,7 @@ double MathExpressionsHandler::getVariableValFromMapOrCreateDoubleForNumericVals
         std::stringstream ss;
         ss << "Could not find the requested variable in the map: " << str << "\n";
 
-        throw logic_error(ss.str());
+        throw std::logic_error(ss.str());
     }
 
 
@@ -344,9 +344,9 @@ double MathExpressionsHandler::evaluate(VarData *varData) {
  *
  */
 void MathExpressionsHandler::printExpression(const StringsList& exp) {
-    cout << "\n\n---- Expression Print Check BEGIN ---- \n";
+    std::cout << "\n\n---- Expression Print Check BEGIN ---- \n";
     for(std::string s : exp)
-        cout << s << " ";
-    cout << "\n";
-    cout << "---- Expression Print Check END ---- \n";
+        std::cout << s << " ";
+    std::cout << "\n";
+    std::cout << "---- Expression Print Check END ---- \n";
 }

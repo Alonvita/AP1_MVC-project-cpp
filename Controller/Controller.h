@@ -6,7 +6,6 @@
 #define AP1_SEMETSER_PROJECT_CONTROLLER_H
 
 #include <map>
-#include <queue>
 
 #include "Commands/ICommand.h"
 #include "Commands/BindCommand.h"
@@ -30,15 +29,15 @@ public:
     ~Controller();
 
     /// -------- EXECUTION --------
-    CommandResult executeCommand(std::queue<std::pair<std::string, std::string>>& commandsQueue, IClient* sender);
+    CommandResult executeCommand(StringsPairQueue& commandsQueue, IClient* sender);
 
 
 private:
     CommandsMap m_commandsList;
     OperatorsHandler* m_opHandler;
-    vector<VarData*> m_placeHoldersContainer;
     VariablesMapContainer* m_vContainer;
     unsigned long m_placeHolderCount = 0;
+    std::vector<VarData*> m_placeHoldersContainer;
     MathExpressionsHandler* m_mathExpressionsHandler;
 };
 

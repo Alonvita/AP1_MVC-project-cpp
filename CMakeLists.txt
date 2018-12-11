@@ -9,7 +9,7 @@ set(UTILITIES
         # Defines and Typedefs
         DefinesAndTypedefs.h
         # Variable Data Class
-        Controller/Utility/VarData.cpp Controller/Utility/VarData.h
+        Utility/VarData.cpp Utility/VarData.h
         # Reference Count
         Utilities/Reference_Counting/ReferenceCount.h
         # Smart Pointers
@@ -17,12 +17,14 @@ set(UTILITIES
         )
 
 set(SHARED_DATA
-        #Message
+        # Message
         Shared_Data/Message.h
-        #Command Result
+        # Command Result
         Shared_Data/CommandResult.h
-        #Notification
+        # Notification
         Shared_Data/Notification.h
+        # Lexer
+        Utility/Lexer.cpp Utility/Lexer.h
         )
 
 set(OUTER_HANDLERS
@@ -36,7 +38,7 @@ set(OUTER_HANDLERS
 
 set(MATH_EXP_PARSING_UTIL
         #Utility
-        Controller/Utility/UtilityFunctions.cpp Controller/Utility/UtilityFunctions.h)
+        Utility/UtilityFunctions.cpp Utility/UtilityFunctions.h)
 
 set(CONTROLLER
         #Controller

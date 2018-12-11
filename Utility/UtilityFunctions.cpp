@@ -67,7 +67,7 @@ std::list<std::string> splitString(const std::string &input, const std::string &
  * @param keepDelimiters bool -- true return a list with the delimiters, or false otherwise.
  *
  */
-void splitStringToList(const std::string &input, const std::string& delimiterStr, std::list<std::string> &outList, bool keepDelimiters) {
+void splitStringToList(const std::string &input, const std::string& delimiterStr, StringsList &outList, bool keepDelimiters) {
     // Local Variables
     size_t found, token = 0;
     found = input.find_first_of(delimiterStr); // find the first char in the string that meats any of the separators

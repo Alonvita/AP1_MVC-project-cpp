@@ -9,12 +9,12 @@
 #include <string>
 #include <fstream>
 #include <algorithm>
-#include "../../DefinesAndTypedefs.h"
+#include "../DefinesAndTypedefs.h"
 
 bool isNumeric(const std::string &str);
 void stripStringFromSpaces(std::string& str);
 void stripStringsListFromSpaces(StringsList& list);
-std::list<std::string> splitString(ConstStringRef input, const std::string &delimiterStr, bool keepSpaces, bool keepDelimiters);
 void splitStringToList(ConstStringRef input, ConstStringRef delimiterStr, StringsList &outList, bool keepDelimiters);
+std::list<std::string> splitString(ConstStringRef input, const std::string &delimiterStr, bool keepSpaces, bool keepDelimiters);
 
 #endif //MATHEXPRESSIONS_UTILITYFUNCTIONS_H
