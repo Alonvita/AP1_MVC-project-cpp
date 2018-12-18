@@ -11,46 +11,90 @@
  *
  * @return a queue of string pairs holding [command (string)] [variables (string)] per pair.
  */
-CommandResult Lexer::parseLine(const std::string &line) {
+StringsPairQueue Lexer::parseLine(ConstStringRef line) {
     StringsList strList;
-    StringsPairQueue outQueue = std::queue<std::pair<std::string, std::string>>();
+    StringsPairQueue outQueue = StringsPairQueue();
 
-    splitStringToList(line, " ", strList, true);
+    splitStringToList(line, " ", strList, false);
 
-    for(auto it = strList.begin(); it != strList.end(); ++it) {
-        // server command received
-        if(openServerCommand(*it)) {
-            try {
-                return openServer(it);
-            } catch(std::exception& e) {
-                CommandResult(false, EXECUTION_FAILURE, e.what(), true);
-            }
+    // evaluate every string in the list, and execute accordingly
+    for(ConstStringRef str : strList) {
+        LexerStringEvaluationResult evaluationResult = evaluateString(str);
+
+        try {
+            resultBasedExecution();
+        } catch(std::exception& e) {
+            throw e;
+        }
+    }
+}
+
+/**
+ * evaluateString(ConstStringRef str).
+ *
+ * @param str ConstStringRef -- a const reference to a string.
+ *
+ * @return an enumerator representing the type of the string received.
+ */
+LexerStringEvaluationResult Lexer::evaluateString(ConstStringRef str) {
+    if(str == RAW_OPEN_SERVER_STR)
+        return LEXER_PARSE_SERVER_OPEN;
+
+    if(str == RAW_BIND_STR)
+        return LEXER_PARSE_BIND_TO;
+
+    if(str == RAW_CREATE_VARIABLE_STR)
+        return LEXER_PARSE_CREATE_VARIABLE;
+
+    if(str == RAW_CONNECT_TO_SEVER_STR)
+        return LEXER_PARSE_CONNECT_CLIENT_TO_SERVER;
+
+    if(str == RAW_PRINT_STR)
+        return LEXER_PARSE_PRINT;
+
+    if(str == RAW_WHILE_LOOP_STR)
+        return LEXER_PARSE_START_WHILE_LOOP;
+
+    return LEXER_PARSE_UNKNOWN_STR;
+
+}
+
+/// ---------- COMMANDS EXECUTION ----------
+
+void Lexer::resultBasedExecution(LexerStringEvaluationResult result, ConstStringRef command) {
+    switch(result) {
+        case LEXER_PARSE_SERVER_OPEN: {
+            break;
         }
 
-
-        // connect command received
-        if(connectCommand(*it)) {
-            try {
-                return ParseConnectToServer(it);
-            } catch(std::exception& e) {
-                CommandResult(false, EXECUTION_FAILURE, e.what(), true);
-            }
+        case LEXER_PARSE_BIND_TO: {
+            break;
         }
 
+        case LEXER_PARSE_CREATE_VARIABLE: {
+            break;
+        }
 
-        // text command received
-        //if(readFromFileCommand(*it))
-        //      outQueue.emplace(fileLinesToQueue(*it));
+        case LEXER_PARSE_CONNECT_CLIENT_TO_SERVER: {
+            break;
+        }
 
-        // create var command received
-        //if(varCommand(*it))
-            //outQueue.push(parseCreateVarCommand(it));
+        case LEXER_PARSE_PRINT: {
+            break;
+        }
 
-        // while loop command received
-        //if(whileLoopCommand(*it))
-            //outQueue.emplace(parseWhileLoopToQueue(it));
+        case LEXER_PARSE_START_WHILE_LOOP: {
+            break;
+        }
 
-        throw std::runtime_error("Unknown command: " + line);
+        // Unknown command -> return failures
+        default: {
+            std::stringstream ss;
+            ss << "Failed trying to parse unknown command: ";
+            ss << command << "\n";
+
+            throw std::runtime_error(ss.str());
+        }
     }
 }
 
@@ -60,20 +104,16 @@ CommandResult Lexer::parseLine(const std::string &line) {
  * @param it StringsList::iterator -- an iterator to a StringsList.
  * @return a CommandResult
  */
-CommandResult Lexer::openServer(StringsList::iterator &it) {
+void Lexer::openServer(StringsList::iterator &it) {
     std::stringstream ss;
 
     if(this->m_serverAssigned) {
-        ss << "Server is already open on por: ";
+        ss << "Server is already open on port: ";
+        // TODO: add this after server creation
         //ss << m_server.getPort() << "\n;
 
-        return CommandResult(false, OPEN_SERVER, ss.str(), true);
+        throw std::runtime_error(ss.str());
     }
-
-    ss << "server opened successfully on port: ";
-    //ss << m_server.getPort() << "\n;
-
-    return CommandResult(true, OPEN_SERVER, ss.str(), true);
 }
 
 /**
@@ -82,7 +122,7 @@ CommandResult Lexer::openServer(StringsList::iterator &it) {
  * @param it StringsList::iterator -- an iterator to a StringsList.
  * @return a CommandResult.
  */
-CommandResult Lexer::ParseConnectToServer(StringsList::iterator &it) {
+void Lexer::ParseConnectToServer(StringsList::iterator &it) {
     if(this->m_client->isConnected())
         throw std::runtime_error("This client is already connected to a sever\n");
 
@@ -96,10 +136,9 @@ CommandResult Lexer::ParseConnectToServer(StringsList::iterator &it) {
         // try to connect to the server
         this->m_client->connectToServer(stoi(port), ip_address);
     } catch(std::exception& e) {
-        return CommandResult(false, UNDEFINED, e.what(), true);
+        throw e;
     }
-
-    return CommandResult(true, CONNECTED_TO_SERVER, "Successfully connected to server\n", true);
 }
+
 // TODO: fileLinesToQueue()
 // TODO: will open a file and call parseLine over the lines to create a queue of it's own.
