@@ -31,14 +31,14 @@ public:
 
 
 private:
-    int m_port;
     int g_socket;
+    uint16_t m_port;
     bool m_connected;
     std::string m_ip_address;
     struct sockaddr_in m_connection_details;
 
     /// ---------- PRIVATE SETTERS ----------
-    void setPort(int port);
+    void setPort(uint16_t port);
     void setIPAddress(ConstStringRef ip_address);
 };
 

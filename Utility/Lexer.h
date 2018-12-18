@@ -51,14 +51,17 @@ private:
 
     /// ----- COMMANDS EXECUTION -----
     void openServer(StringsList::iterator& it);
-    void connectClientToServer(int port, ConstStringRef ip);
+    void parseBindCommand(StringsList::iterator &it, StringsPairQueue& outQueue);
+    void connectClientToServer(StringsList::iterator &it);
+    void parseCreateVar(const StringsList& strList, StringsList::iterator &it, StringsPairQueue& outQueue);
+    void parseWhileLoopToQueue(StringsList::iterator &it, StringsPairQueue& outQueue);
+    void parsePrintCommand(StringsList::iterator &it, StringsPairQueue& outQueue);
 
-    void resultBasedExecution(LexerStringEvaluationResult result, ConstStringRef command);
+    void resultBasedExecution(LexerStringEvaluationResult result,  StringsList strList,
+                              StringsList::iterator &it, StringsPairQueue& outQueue);
 
-    /// ----- STRING PARSING -----
-    void ParseConnectToServer(StringsList::iterator &it);
-    StringsPair& parseCreateVarCommand(StringsList::iterator& it);
-    StringsPairQueue& parseWhileLoopToQueue(StringsList::iterator& it);
+    /// ----- UTILITY -----
+    std::string flushIteratorsContentToString(const StringsList& strList, StringsList::iterator &it);
 };
 
 

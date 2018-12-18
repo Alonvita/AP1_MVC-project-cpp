@@ -8,7 +8,7 @@
  * Constructor.
  */
 Client::Client() {
-    this->m_port = -1;
+    this->m_port = 0;
     this->g_socket = -1;
     this->m_connected = false;
     this->m_ip_address = EMPTY_ADDRESS;
@@ -16,10 +16,20 @@ Client::Client() {
 
 /// ---------- GETTERS & SETTERS ----------
 
+/**
+ * isConnected().
+ *
+ * @return true if connected to a server, or false otherwise.
+ */
 bool Client::isConnected() { return this->m_connected; }
 
-void Client::setPort(int port) {
-    if (this->m_port != -1)
+/**
+ * setPort(int port).
+ *
+ * @param port int -- an integer representing a port.
+ */
+void Client::setPort(uint16_t port) {
+    if (this->m_port != 0)
         throw std::runtime_error("Port already assigned: " + std::to_string(m_port));
 
     this->m_port = port;
@@ -104,7 +114,7 @@ bool Client::connectToServer(int port, ConstStringRef ip_address) {
         throw(e);
     }
 
-   if(this->m_port == -1)
+   if(this->m_port == 0)
        throw std::runtime_error("Must initialize port first\n");
 
     if(this->m_ip_address.empty())
@@ -124,4 +134,7 @@ bool Client::connectToServer(int port, ConstStringRef ip_address) {
     } else {
         std::cout << ">> Failure: opening socket.";
     }
+
+    // set connected to true
+    this->m_connected = true;
 }

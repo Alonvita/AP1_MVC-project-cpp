@@ -18,15 +18,17 @@ StringsPairQueue Lexer::parseLine(ConstStringRef line) {
     splitStringToList(line, " ", strList, false);
 
     // evaluate every string in the list, and execute accordingly
-    for(ConstStringRef str : strList) {
-        LexerStringEvaluationResult evaluationResult = evaluateString(str);
+    for(auto it = strList.begin(); it != strList.end(); ++it) {
+        LexerStringEvaluationResult evaluationResult = evaluateString(*it);
 
         try {
-            resultBasedExecution();
+            resultBasedExecution(evaluationResult, strList, it, outQueue);
         } catch(std::exception& e) {
             throw e;
         }
     }
+
+    return outQueue;
 }
 
 /**
@@ -60,30 +62,68 @@ LexerStringEvaluationResult Lexer::evaluateString(ConstStringRef str) {
 }
 
 /// ---------- COMMANDS EXECUTION ----------
-
-void Lexer::resultBasedExecution(LexerStringEvaluationResult result, ConstStringRef command) {
+/**
+ * resultBasedExecution(LexerStringEvaluationResult result,
+                                 ConstStringRef command, StringsPairQueue outQueue).
+ *
+ * @param result LexerStringEvaluationResult -- enum
+ * @param it StringsList::iterator& -- iterator to a strings list.
+ * @param outQueue StringsPairQueue -- a queue to push the result to.
+ */
+void Lexer::resultBasedExecution(LexerStringEvaluationResult result,  StringsList strList,
+                                 StringsList::iterator &it, StringsPairQueue& outQueue) {
     switch(result) {
         case LEXER_PARSE_SERVER_OPEN: {
+            try {
+                openServer(it);
+            } catch (std::exception& e) {
+                throw e;
+            }
             break;
         }
 
         case LEXER_PARSE_BIND_TO: {
+            try {
+                parseBindCommand(it, outQueue);
+            } catch (std::exception& e) {
+                throw e;
+            }
             break;
         }
 
         case LEXER_PARSE_CREATE_VARIABLE: {
+            try {
+                parseCreateVar(strList, it, outQueue);
+            } catch (std::exception& e) {
+                throw e;
+            }
             break;
         }
 
         case LEXER_PARSE_CONNECT_CLIENT_TO_SERVER: {
+            try {
+                connectClientToServer(it);
+            } catch (std::exception& e) {
+                throw e;
+            }
             break;
         }
 
         case LEXER_PARSE_PRINT: {
+            try {
+
+            } catch (std::exception& e) {
+                throw e;
+            }
             break;
         }
 
         case LEXER_PARSE_START_WHILE_LOOP: {
+            try {
+
+            } catch (std::exception& e) {
+                throw e;
+            }
             break;
         }
 
@@ -91,7 +131,7 @@ void Lexer::resultBasedExecution(LexerStringEvaluationResult result, ConstString
         default: {
             std::stringstream ss;
             ss << "Failed trying to parse unknown command: ";
-            ss << command << "\n";
+            ss << (*it) << "\n";
 
             throw std::runtime_error(ss.str());
         }
@@ -122,12 +162,12 @@ void Lexer::openServer(StringsList::iterator &it) {
  * @param it StringsList::iterator -- an iterator to a StringsList.
  * @return a CommandResult.
  */
-void Lexer::ParseConnectToServer(StringsList::iterator &it) {
+void Lexer::connectClientToServer(StringsList::iterator &it) {
     if(this->m_client->isConnected())
         throw std::runtime_error("This client is already connected to a sever\n");
 
     try {
-        // get the IP Address
+        // advance it and then get the IP Address
         std::string ip_address = *++it;
 
         // get the port number
@@ -140,5 +180,70 @@ void Lexer::ParseConnectToServer(StringsList::iterator &it) {
     }
 }
 
+/**
+ * parseBindCommand(StringsList::iterator &it, StringsPairQueue outqueue).
+ *
+ * @param it StringsList::iterator & -- a reference to a stringsList iterator.
+ * @param outQueue StringsPairQueue & -- a strings of pair queue to insert the result to.
+ */
+void Lexer::parseBindCommand(StringsList::iterator &it, StringsPairQueue& outQueue) {
+    StringsPair bindCommandAndData;
+
+    // operation:
+    //  1). take string [string "bind"] and advance iterator.
+    //  2). take string [expected file path as data] and advance iterator.
+    //
+    //  iterator is expected to point list.end() after this.
+    bindCommandAndData = std::make_pair((*it++), (*it++));
+
+    // push it to the queue
+    outQueue.push(bindCommandAndData);
+}
+
+/**
+ * parseCreateVar(StringsList::iterator &it, StringsPairQueue &outQueue).
+ *
+ * @param strList const StringsList& strList -- a const ref to a StringsList
+ * @param it StringsList::iterator & -- a reference to a stringsList iterator.
+ * @param outQueue StringsPairQueue & -- a strings of pair queue to insert the result to.
+ */
+void Lexer::parseCreateVar(const StringsList& strList,
+                           StringsList::iterator &it, StringsPairQueue &outQueue) {
+    StringsPair varCommandAndData;
+
+    varCommandAndData = std::make_pair((*it++), (*it++));
+
+    // iterator is expected to point "=" now.
+    // we will need to call parseLine again AFTER advancing the iterator,
+    //  and flushing the rest of the queue into a string..
+    StringsPairQueue data = parseLine(flushIteratorsContentToString(strList, ++it));
+
+    // push the data to the queue.
+    while(!data.empty()) {
+        outQueue.push(data.front());
+        data.pop();
+    }
+}
+
 // TODO: fileLinesToQueue()
 // TODO: will open a file and call parseLine over the lines to create a queue of it's own.
+
+/// ------ UTILITY ------
+/**
+ * flushIteratorsContentToString(const StringsList& strList, StringsList::iterator &it).
+ *
+ * @param strList const StringsList& -- a constant reference to a StringsList
+ * @param it StringsList::iterator& -- a reference to a StringsList's iterator
+ *
+ * @return a string holding the rest of the list's strings separated by " "
+ */
+std::string Lexer::flushIteratorsContentToString(const StringsList& strList, StringsList::iterator &it) {
+   std::stringstream ss;
+
+   while(it != strList.end()) {
+       ss << (*it) << " ";
+       ++it;
+   }
+
+   return ss.str();
+}

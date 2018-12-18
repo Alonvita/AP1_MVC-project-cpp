@@ -63,7 +63,9 @@ Controller::~Controller() {
 /**
  * executeCommand(std::queue<std::string>& commandsQueue, int client).
  *
- * @param commandsQueue std::queue<std::string>& -- a queue of strings representing commands.
+ * @param commandsQueue StringsPairQueue& -- a queue of pairs of strings:
+ *                                              pair.first <- command as string
+ *                                              pair.second <- params
  * @param socketID int -- sender client's socket.
  *
  * @return a command result created by the command's execution.

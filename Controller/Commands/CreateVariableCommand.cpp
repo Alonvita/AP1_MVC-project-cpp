@@ -14,6 +14,9 @@
 CommandResult CreateVariableCommand::execute(IClient *sender, ConstStringRef command, VarData* placeHolder) {
     std::ostringstream returnMessage;
 
+    // TODO: can add the value to placeholder so the programm supports expressions such as:
+    // TODO:    var a = var b = 15
+
     // bad location for placeHolder or nullptr received
     if (placeHolder == nullptr) {
         returnMessage << "placeHolder is nullptr..." << "\n";
