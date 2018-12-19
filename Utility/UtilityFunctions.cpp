@@ -100,7 +100,74 @@ void stripStringsListFromSpaces(StringsList& list) {
     }
 }
 
+/**
+ * stripStringFromSpaces(std::string& str).
+ *
+ * @param str std::string& -- a reference to a string.
+ */
 void stripStringFromSpaces(std::string& str) {
     std::string::iterator end_pos = std::remove_if(str.begin(), str.end(), isspace);
     str.erase(end_pos, str.end());
+}
+
+/**
+ * flushIteratorsContentToString(const StringsList& strList, StringsList::iterator &it).
+ *
+ * @param strList const StringsList& -- a constant reference to a StringsList
+ * @param it StringsList::iterator& -- a reference to a StringsList's iterator
+ *
+ * @return a string holding the rest of the list's strings separated by " "
+ */
+std::string flushListContentToString(const StringsList &strList, StringsList::iterator &it) {
+    std::stringstream ss;
+
+    while(it != strList.end()) {
+        ss << (*it) << " ";
+        ++it;
+    }
+
+    return ss.str();
+}
+
+
+/**
+ * findStringInStringsList(std::list<T>& list, M tofind).
+ *
+ * @tparam T -- a template of typename T
+ * @tparam M -- a template of typename M
+ * @param list std::list<T> -- a list of types T.
+ *
+ * @return return the iterator of the list to target's position. returns list.end() if not found.
+ */
+template<typename T>
+typename std::list<T>::iterator findItemInList(std::list<T> &list, T target) {
+    // look for RAW_ASSIGN_STR
+    for(auto it = list.begin(); it != list.end(); ++ it) {
+        if((*it) == target)
+            return it;
+    }
+
+    return list.end();
+}
+
+/**
+ * findItemInListFromList(std::list<T> &list, std::list<T> targetsList).
+ *
+ * @tparam T -- a template of typename T.
+ * @param list std::list<T>& -- a reference to a list of types T
+ * @param targetsList std::list<T> -- a list of targets.
+ *
+ * @return an iterator to the first item found in targetsList that was found in list.
+ */
+template<typename T>
+typename std::list<T>::iterator findFirstItemInListFromList(std::list<T> &list, std::list<T> targetsList) {
+    // look for RAW_ASSIGN_STR
+    for(auto it = list.begin(); it != list.end(); ++it) {
+        for(auto itM = targetsList.begin(); itM != targetsList.end(); ++itM) {
+            if ((*it) == (*itM))
+                return it;
+        }
+    }
+
+    return list.end();
 }

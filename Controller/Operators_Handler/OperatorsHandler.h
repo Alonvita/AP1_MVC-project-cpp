@@ -12,12 +12,6 @@
 #include "../VariablesMapContainer.h"
 #include "../../Utility/UtilityFunctions.h"
 
-#define LT "<"
-#define GT ">"
-#define LE "<="
-#define GE ">="
-#define EQ "=="
-
 class OperatorsHandler {
 public:
     explicit OperatorsHandler(VariablesMapContainer* vMapContainer) : m_vMap(vMapContainer) {};

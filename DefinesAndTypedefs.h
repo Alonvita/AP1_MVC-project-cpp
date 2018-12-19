@@ -9,13 +9,32 @@
 #include <list>
 #include <queue>
 
-#define BIND_COMMAND_STR "bind_command"
-#define OPERATOR_COMMAND_STR "operator"
-#define SLEEP_COMMAND_STR "sleep_command"
-#define WHILE_LOOP_COMMAND_STR "while_loop"
-#define CREATE_VAR_COMMAND_STR "make_var_command"
-#define ASSIGN_EXISTING_COMMAND_STR "assign_existing"
-#define CALCULATE_MATH_COMMAND_STR "calculate_math_expression"
+/// ---- OPERATORS ----
+#define LT "<"
+#define GT ">"
+#define LE "<="
+#define GE ">="
+#define EQ "=="
+
+#define OPERATORS_LIST { LT, GT, LE, GE, EQ }
+
+/// ---- LEXER ----
+#define RAW_ASSIGN_STR "="
+#define RAW_BIND_STR "bind"
+#define RAW_PRINT_STR "print"
+#define RAW_WHILE_LOOP_STR "while"
+#define RAW_CREATE_VARIABLE_STR "var"
+#define RAW_CONNECT_TO_SEVER_STR "connect"
+#define RAW_OPEN_SERVER_STR "openDataServer"
+
+/// ---- COMMANDS ----
+#define BIND_COMMAND_STR "BIND"
+#define OPERATOR_COMMAND_STR "OPERATOR"
+#define SLEEP_COMMAND_STR "SLEEP"
+#define WHILE_LOOP_COMMAND_STR "WHILE_LOOP"
+#define CREATE_VAR_COMMAND_STR "MAKE_VAR"
+#define ASSIGN_EXISTING_COMMAND_STR "ASSIGN"
+#define CALCULATE_MATH_COMMAND_STR "CALCULATE_MATH_EXPRESSION"
 
 typedef const std::string& ConstStringRef;
 typedef std::list<std::string> StringsList;

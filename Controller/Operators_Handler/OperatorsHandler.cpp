@@ -18,7 +18,7 @@ bool OperatorsHandler::evaluate_operation(ConstStringRef str) {
     splitStringToList(str, delimiter, l, false);
 
     // check if size is more than expected
-    if(!l.size() == 3)
+    if(l.size() != 3)
         throw std::runtime_error("Wrong amount of arguments: " + std::to_string(l.size()) + " required 3.");
 
     // create the variables needed for evaluation

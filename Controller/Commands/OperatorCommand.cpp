@@ -13,7 +13,7 @@ OperatorCommand::~OperatorCommand() { this->m_opHandler = nullptr; }
 /**
  * execute(IClient* sender, const std::string& command, void* placeHolder).
  *
- * @param sender IClient* -- a pointer to the sending cliend.
+ * @param sender IClient* -- a pointer to the sending client.
  * @param command const std::string& -- a constant reference to a string representing the command.
  * @param placeHolder VarData* -- a placeholder.
  *

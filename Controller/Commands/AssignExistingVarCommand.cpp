@@ -10,7 +10,7 @@
  * @param sender IClient* -- a pointer to the sending cliend.
  * @param command const std::string& -- a constant reference to a string representing the command.
  *                      Convention:
- *                          [variable name] [expression]
+ *                          [variable name] [mathematical expression]
  *
  * @param placeHolder var_data* -- a placeholder.
  *
