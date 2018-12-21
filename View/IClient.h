@@ -21,6 +21,7 @@ public:
     IClient() = default;
     virtual ~IClient() = default;
 
+    virtual void disconnect(bool keepConnection) = 0;
     virtual bool isConnected() = 0;
     virtual std::string readMessage() = 0;
     virtual void writeMessage(Message m) = 0;

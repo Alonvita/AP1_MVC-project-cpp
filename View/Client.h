@@ -20,6 +20,7 @@ public:
     ~Client() = default;
 
     /// ---------- OVERRIDING INTERFACE FUNCTIONS ----------
+    void disconnect(bool keepConnection) override;
     std::string readMessage() override;
     void writeMessage(Message m) override;
     void receiveNotification(Notification notif) override;

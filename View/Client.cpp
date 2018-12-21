@@ -83,7 +83,9 @@ void Client::writeMessage(Message m) {
 void Client::receiveCommandResult(CommandResult result) {
     // create a message
     Message msg = Message(COMMAND_RESULT, result.getData());
-    this->m_connected = result.keepCon();
+
+    // set connection accordingly
+    disconnect(result.keepCon());
 
     // write it
     writeMessage(msg);
@@ -138,4 +140,18 @@ bool Client::connectToServer(int port, ConstStringRef ip_address) {
 
     // set connected to true
     this->m_connected = true;
+}
+
+/**
+ * disconnect(bool keepConnection).
+ *
+ * disconnects the client in case keepConnection is false.
+ *
+ * @param keepConnection bool -- a boolean.
+ */
+void Client::disconnect(bool keepConnection) {
+    if(keepConnection)
+        return;
+
+    // TODO:: disconnect client -> close socket etc.
 }
