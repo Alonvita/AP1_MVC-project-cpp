@@ -1,4 +1,4 @@
-Lexer is "stupid", hence only knows how to parse a given line, given specific defined strings,
+Lexer is "stupid", hence only knows how to parse a line, given specific defined strings,
  and return a queue of strings (parsed commands) based on the command given.
 
 Should Lexer receive an unknown string, it will throw an execution error, returning to it's owner.
@@ -9,8 +9,8 @@ Thus, lexer's "parseLine" function usage should look like:
         std::cout << e.what(); // <--- example
     }
 
-Lexer will be initialized in the client's main(), waiting to start server and connect client to the server.
-And then it will be used by the ClientHandler inside the server.
+In this project, Lexer will be initialized in the client's main(), waiting to start server and connect client to the server.
+ And then it will be used by the ClientHandler inside the server as well.
 
 The ClientHandler will call lexer to parse lines and send back notifications to the user, that is
  to notify the client should his command received properly and were passed to the server for execution

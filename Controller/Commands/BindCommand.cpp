@@ -23,7 +23,8 @@ CommandResult BindCommand::execute(IClient *sender, ConstStringRef command, VarD
     const char* filePath = command.c_str();
 
     // get the file path
-    int fp = open(filePath, O_RDWR);
+    try {
+        int fp = open(filePath, O_RDWR);
 
     // set type and data
     placeHolder->set_data(&fp, BIND);
@@ -32,4 +33,7 @@ CommandResult BindCommand::execute(IClient *sender, ConstStringRef command, VarD
     returnMessage << "Bind Successful" << "\n";
 
     return CommandResult(true, BIND_COMMAND, returnMessage.str(), true);
+    } catch(std::ios_base::failure& e) {
+        return CommandResult(false, EXECUTION_FAILURE, e.what(), true);
+    }
 }

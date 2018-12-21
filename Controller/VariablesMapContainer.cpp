@@ -75,3 +75,44 @@ VarData* VariablesMapContainer::getVarData(ConstStringRef str) {
 
     return (*it).second;
 }
+
+/**
+ *
+ * @param varName
+ * @return
+ */
+double VariablesMapContainer::evaluateVariableValueFromMap(const std::string &varName) {
+    VarData* vd = this->getVarData(varName);
+
+    // var data does not exist -> throw error
+    if(vd == nullptr) {
+        std::stringstream ss;
+        ss << "Variable " << varName << " does not exist in variables map container.\n";
+
+        throw std::runtime_error(ss.str());
+    }
+
+    switch(vd->get_type()) {
+        case DOUBLE:
+            return *(double*)(vd->get_data());
+
+        case BIND: {
+            double value;
+
+            read(*(int*)vd->get_data(), &value, sizeof(double));
+
+            return value;
+        }
+
+        case PAIR: {
+            return ((VarDataPair*)(vd->get_data()))->second;
+        }
+
+        case BOOL: {
+            throw std::runtime_error("Error trying to evaluate variable of type double");
+        }
+
+        case NOT_ASSIGNED:
+            throw std::runtime_error("Variable exists, but is not assigned");
+    }
+}

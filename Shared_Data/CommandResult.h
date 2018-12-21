@@ -21,7 +21,6 @@ enum Command {
     ASSIGN_VAR,
     SLEEP,
     PRINT,
-    SERVER_START,
     CLOSE,
     OPERATION
 };

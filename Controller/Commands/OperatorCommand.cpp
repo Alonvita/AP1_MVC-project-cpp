@@ -22,6 +22,8 @@ OperatorCommand::~OperatorCommand() { this->m_opHandler = nullptr; }
 CommandResult OperatorCommand::execute(IClient* sender, ConstStringRef command, VarData* placeHolder) {
     //try to evaluate
     try {
+        // TODO: add a mutex lock here
+
         bool result = this->m_opHandler->evaluate_operation(command);
 
         // set into the place holder
@@ -30,6 +32,8 @@ CommandResult OperatorCommand::execute(IClient* sender, ConstStringRef command, 
         // return CommandResult
         std::stringstream ss;
         ss << "Successfully evaluated the expression: " << command << "\n";
+
+        // TODO: add a mutex unlock here
 
         return CommandResult(true, OPERATION, ss.str(), true);
     } catch(std::exception& e) {

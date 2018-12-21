@@ -9,11 +9,12 @@ set(UTILITIES
         # Defines and Typedefs
         DefinesAndTypedefs.h
         # Variable Data Class
-        Utility/VarData.cpp Utility/VarData.h
-        # Reference Count
-        Utilities/Reference_Counting/ReferenceCount.h
-        # Smart Pointers
-        Utilities/Reference_Counting/SmartPtr.h
+        Utility/VarData.h Utility/VarData.cpp
+        # Utility Functions
+        Utility/UtilityFunctions.h Utility/UtilityFunctions.cpp
+        # Generic Functions
+        Utility/GenericFunctions.h Utility/GenericFunctions.cpp
+        # MyPriorityQueue
         )
 
 set(SHARED_DATA
@@ -24,7 +25,7 @@ set(SHARED_DATA
         # Notification
         Shared_Data/Notification.h
         # Lexer
-        Utility/Lexer.cpp Utility/Lexer.h
+        Shared_Data/Lexer.cpp Shared_Data/Lexer.h
         )
 
 set(OUTER_HANDLERS
@@ -35,10 +36,6 @@ set(OUTER_HANDLERS
         #OperatorsHandler
         Controller/Operators_Handler/OperatorsHandler.cpp Controller/Operators_Handler/OperatorsHandler.h
         )
-
-set(MATH_EXP_PARSING_UTIL
-        #Utility
-        Utility/UtilityFunctions.cpp Utility/UtilityFunctions.h)
 
 set(CONTROLLER
         #Controller
@@ -70,4 +67,4 @@ set(CLIENTS
         View/Client.cpp View/Client.h
         )
 
-add_executable(projectExecutable ${MAIN} ${SHARED_DATA} ${CONTROLLER} ${UTILITIES} ${CLIENTS} ${OUTER_HANDLERS} ${MATH_EXP_PARSING_UTIL})
+add_executable(projectExecutable ${UTILITIES} ${MAIN} ${SHARED_DATA} ${CONTROLLER} ${CLIENTS} ${OUTER_HANDLERS})

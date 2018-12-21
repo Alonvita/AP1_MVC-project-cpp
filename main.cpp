@@ -4,39 +4,28 @@
 
 #include <iostream>
 #include "View/Client.h"
-#include "Controller/Controller.h"
-#include "Shared_Data/CommandResult.h"
-#include "Controller/Commands/TestPrintCommand.h"
+#include "Shared_Data/Lexer.h"
 
 using namespace std;
 
 int main() {
-    cout << "MAIN\n";
+    Client* c = new Client();
+    StringsPairsQueue q;
 
+    Lexer l(c);
 
-    // TESTING CONTROLLER EXECUTION WITH CREATE VARIABLE COMMAND
-    Client client;
-    Controller controller;
+    q = l.parseLine("var x = alt < 90 * 15");
 
-    std::queue<pair<std::string, std::string>> commandsQueue; // initialize a commands queue
+    std::cout << "Queue's commands order is: \n";
 
-    std::stringstream ss;
+    while(!q.empty()) {
+        StringsPair p = q.front();
 
-    ss << "a < 50\n";
-    ss << ASSIGN_EXISTING_COMMAND_STR << "\n";
-    ss << "a a+10";
+        std:: cout << "First: " << p.first << "\n";
+        std:: cout << "Second: " << p.second << "\n";
 
-    commandsQueue.push(make_pair(WHILE_LOOP_COMMAND_STR, ss.str()));
+        q.pop();
+    }
 
-    CommandResult cRslt = controller.executeCommand(commandsQueue, &client);
-
-    cout << cRslt.getData();
-
-    // In the future, this will done inside the "ClientHandler"
-    do {
-
-        //CommandResult result;
-
-    } while(false);
-
+    delete(c);
 }

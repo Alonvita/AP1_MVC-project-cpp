@@ -152,17 +152,6 @@ bool MathExpressionsHandler::isRightParentheses(ConstStringRef str) {
 }
 
 /**
- * getStrLocationInMap(ConstStringRef str).
- *
- * @param str ConstStringRef  -- a reference to a constant string.
- *
- * @return the pair given by this map. NOTE: map may also return nullptr if it hasn't found anything.
- */
-VarData* MathExpressionsHandler::getVarDataFromMap(ConstStringRef str) {
-    return this->m_vMap->getVarData(str);
-}
-
-/**
  * MathExpressionsParser::createExpressionFromPostFixList.
  *
  * @param postfixExpression const StringsList& -- a const reference to a list<string> representing a postfix expression.
@@ -223,23 +212,18 @@ double MathExpressionsHandler::evaluatePostfixList(const StringsList &postfixExp
  *       when the given str does not exist in the variables map.
  */
 double MathExpressionsHandler::getVariableValFromMapOrCreateDoubleForNumericVals(ConstStringRef str) {
-    // check numeric
+    // if numeric -> return double value of it.
     if(isNumeric(str)) {
         return stod(str);
     }
 
-    VarData* p = getVarDataFromMap(str);
-
-    if(p == nullptr) {
-        std::stringstream ss;
-        ss << "Could not find the requested variable in the map: " << str << "\n";
-
-        throw std::logic_error(ss.str());
+    try {
+        // evaluateVariableValueFromMap throws exception if the varData could not be evaluated as a double value.
+        // that exception will be caught here.
+        return this->m_vMap->evaluateVariableValueFromMap(str);
+    } catch(std::exception& e) {
+        throw std::runtime_error(e.what());
     }
-
-
-    return evaluate(p);
-
 }
 
 /**
@@ -307,28 +291,6 @@ void MathExpressionsHandler::addDummyZeroesBeforeNegationMinus(StringsList& expr
         }
 
         ++it;
-    }
-}
-
-/**
- * evaluate(var_data *varData).
- *
- * @param varData var_data* -- a pointer to var_data.
- *
- * @return the double value of the variable, considering it's type.
- */
-double MathExpressionsHandler::evaluate(VarData *varData) {
-    switch(varData->get_type()) {
-        case DOUBLE:
-            return *(double*)(varData->get_data());
-        case BIND: {
-            double value;
-
-            read(*(int*)varData->get_data(), &value, sizeof(double));
-
-            return value;
-        }
-
     }
 }
 

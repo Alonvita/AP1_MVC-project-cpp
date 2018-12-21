@@ -15,7 +15,6 @@
      */
 CommandResult CalculateMathExpressionCommand::execute(IClient* sender, ConstStringRef command, VarData* placeHolder) {
     // try to evaluate math expression, or catch the exception thrown
-
     try {
         double valResult = this->m_mathExpressionsHandler->parse_mathematical_expression(command);
 

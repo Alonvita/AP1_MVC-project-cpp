@@ -53,12 +53,10 @@ private:
     VariablesMapContainer* m_vMap;
 
     ///---------- UTILITY FUNCTIONS ----------
-    double evaluate(VarData* varData);
     int precedence(const std::string& opL);
     bool isOperator(const std::string& str);
     bool isLeftParentheses(ConstStringRef str);
     bool isRightParentheses(ConstStringRef str);
-    VarData* getVarDataFromMap(ConstStringRef str);
     double evaluatePostfixList(const StringsList& postfixExpression);
     double getVariableValFromMapOrCreateDoubleForNumericVals(ConstStringRef str);
     void addDummyZeroesBeforeNegationMinus(StringsList & expressionAsList);

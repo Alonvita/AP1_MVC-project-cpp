@@ -83,6 +83,7 @@ void Client::writeMessage(Message m) {
 void Client::receiveCommandResult(CommandResult result) {
     // create a message
     Message msg = Message(COMMAND_RESULT, result.getData());
+    this->m_connected = result.keepCon();
 
     // write it
     writeMessage(msg);

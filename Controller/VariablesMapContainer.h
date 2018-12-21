@@ -8,6 +8,7 @@
 #include <map>
 #include <string>
 #include <iostream>
+#include <unistd.h>
 
 #include "../Utility/VarData.h"
 #include "../DefinesAndTypedefs.h"
@@ -22,7 +23,8 @@ public:
     double getData(const std::string& varName);
     VarData* getVarData(const std::string &str);
     VarDataType getType(const std::string& varName);
-    void addToMap(const std::string& varName, VarData*varData);
+    void addToMap(const std::string& varName, VarData* varData);
+    double evaluateVariableValueFromMap(const std::string& varName);
     void setExistingVar(ConstStringRef str, void* data, VarDataType type);
 
 private:

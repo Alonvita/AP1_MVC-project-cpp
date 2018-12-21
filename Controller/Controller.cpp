@@ -12,7 +12,7 @@
 Controller::Controller() {
     this->m_vContainer = new VariablesMapContainer();
 
-    // TODO: TEMP USEAGE -> REMOVE THIS
+    // TODO: TEMP USAGE -> REMOVE THIS
     auto a = new VarData;
     auto d = (double*) malloc(sizeof(double));
     *d = 15;
@@ -70,7 +70,7 @@ Controller::~Controller() {
  *
  * @return a command result created by the command's execution.
  */
-CommandResult Controller::executeCommand(StringsPairQueue& commandsQueue, IClient* sender) {
+CommandResult Controller::executeCommand(StringsPairsQueue& commandsQueue, IClient* sender) {
     // TODO: TEST CODE -> remove
     /*
     auto temp = (VarData*) malloc(sizeof(VarData));
@@ -107,6 +107,7 @@ CommandResult Controller::executeCommand(StringsPairQueue& commandsQueue, IClien
 
         VarData* lastPH = m_placeHoldersContainer[m_placeHolderCount - 1];
 
+        // TODO: I think mutex lock will be here
         commandResult = (*it).second->execute(nullptr, command.second, lastPH);
 
         commandsQueue.pop(); // pop the used command

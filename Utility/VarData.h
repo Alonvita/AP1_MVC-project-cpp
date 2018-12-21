@@ -7,7 +7,13 @@
 
 #include <malloc.h>
 
-enum VarDataType { NOT_ASSIGNED = - 1, DOUBLE, BIND, BOOL };
+enum VarDataType {
+    NOT_ASSIGNED = - 1,
+    DOUBLE,
+    BIND,
+    BOOL,
+    PAIR
+};
 
 class VarData {
 public:
@@ -18,12 +24,12 @@ public:
 
     VarDataType get_type() { return this->type; }
 
-    void *get_data() { return this->m_data; }
+    void* get_data() { return this->m_data; }
 
 private:
     /// ---------- PRIVATE MEMBERS ----------
+    void* m_data;
     bool m_assigned;
-    void *m_data;
     VarDataType type;
 
     /// ---------- PRIVATE FUNCTIONS ----------
