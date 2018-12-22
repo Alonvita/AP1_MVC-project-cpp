@@ -276,17 +276,6 @@ void Lexer::parseOperatorCommand(ConstStringRef str, StringsPairsVector &outVec)
     if(stringSplit.size() > 3)
         throw std::runtime_error("We are sorry, but the program doesn't currently support chained conditions... How'bout you try Python instead?\n");
 
-    std::string& lhs = stringSplit[SPLIT_OP_STR_LHS_PLACEMENT];
-    std::string& op = stringSplit[SPLIT_OP_STR_OP_PLACEMENT];
-    std::string& rhs = stringSplit[SPLIT_OP_STR_RHS_PLACEMENT];
-
-    // first, add lhs as an expression calculation to the outVector.
-    //  see OperatorCommand for more details regarding it's execution
-    parseMathExpression(lhs, outVec);
-
-    // check if rhs is a math expression
-    if(inGivenInitializerList(rhs, MATH_OPERATIONS))
-
     // push a pair to the queue
     outVec.insert(outVec.begin(), makePair(OPERATOR_COMMAND_STR, str));
 }

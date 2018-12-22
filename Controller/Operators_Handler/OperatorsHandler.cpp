@@ -13,9 +13,11 @@
  */
 bool OperatorsHandler::evaluate_operation(ConstStringRef str) {
     std::list<std::string> l;
-    std::string delimiter = " ";
+    std::string delimiters = initializeListToString(OPERATORS_LIST);
 
-    splitStringToList(str, delimiter, l, false);
+    delimiters += " ";
+
+    splitStringToList(str, delimiters, l, false);
 
     // check if size is more than expected
     if(l.size() != 3)
