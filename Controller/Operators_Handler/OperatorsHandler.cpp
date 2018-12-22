@@ -32,14 +32,14 @@ bool OperatorsHandler::evaluate_operation(ConstStringRef str) {
 
     // try to give value to lhs
     try {
-        giveNumericValueOrGetValFromMap(lhs, lhsStr);
+        calculateExpression(lhs, lhsStr);
     } catch(std::exception& e) {
         throw std::runtime_error(e.what());
     }
 
     // try to give value to rhs
     try {
-        giveNumericValueOrGetValFromMap(rhs, rhsStr);
+        calculateExpression(rhs, rhsStr);
 
         try {
             bool result = evaluate(op, lhs, rhs);
@@ -88,24 +88,10 @@ bool OperatorsHandler::evaluate(ConstStringRef operation, double lhs, double rhs
  * giveNumericValueOrGetValFromMap(double& out, const std::string& varName).
  *
  * @param out double& -- a reference to a double value to change.
- * @param varName const std::string& -- a reference to a constant string.
+ * @param expression const std::string& -- a reference to a constant string.
  *
  * checks if a number. if so -> turn to double. otherwise, go to variables map
  */
-void OperatorsHandler::giveNumericValueOrGetValFromMap(double& out, const std::string& varName) {
-    if(isNumeric(varName)) {
-        out = stod(varName); // turn to double
-    } else {
-        VarData* vdata_ptr = this->m_vMap->getVarData(varName); // otherwise, get from map
-
-        if(vdata_ptr == nullptr) {
-            std::stringstream msg;
-            msg << "The requested variable does not exist: ";
-            msg << varName << "\n";
-
-            throw std::runtime_error(msg.str());
-        }
-
-        out = *((double*) vdata_ptr->get_data());
-    }
+void OperatorsHandler::calculateExpression(double &out, const std::string& expression) {
+    out = this->m_handler->parse_mathematical_expression(expression);
 }

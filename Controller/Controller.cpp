@@ -25,10 +25,10 @@ Controller::Controller() {
     // TODO: UNTIL HERE
 
     // initialize opHandler
-    this->m_opHandler = new OperatorsHandler(m_vContainer);
 
     // initialize Math Parser
     this->m_mathExpressionsHandler = new MathExpressionsHandler(m_vContainer);
+    this->m_opHandler = new OperatorsHandler(m_mathExpressionsHandler);
 
     // Initialize Commands Map
     this->m_commandsList.insert(std::make_pair(SLEEP_COMMAND_STR, new SleepCommand()));

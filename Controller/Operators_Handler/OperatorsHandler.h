@@ -9,18 +9,18 @@
 #include <string>
 #include <sstream>
 
-#include "../VariablesMapContainer.h"
 #include "../../Utility/UtilityFunctions.h"
+#include "../Math_Expressions_Handling/MathExpressionsHandler.h"
 
 class OperatorsHandler {
 public:
-    explicit OperatorsHandler(VariablesMapContainer* vMapContainer) : m_vMap(vMapContainer) {};
+    explicit OperatorsHandler(MathExpressionsHandler* mathExpressionsHandler) : m_handler(mathExpressionsHandler) {};
 
     bool evaluate_operation(const std::string &str);
-    void giveNumericValueOrGetValFromMap(double&, const std::string&);
+    void calculateExpression(double &, const std::string &);
 
 private:
-    VariablesMapContainer* m_vMap;
+    MathExpressionsHandler* m_handler;
 
     bool evaluate(const std::string& operation, double lhs, double rhs);
 };

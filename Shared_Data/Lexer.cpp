@@ -280,9 +280,9 @@ void Lexer::parseOperatorCommand(ConstStringRef str, StringsPairsVector &outVec)
     std::string& op = stringSplit[SPLIT_OP_STR_OP_PLACEMENT];
     std::string& rhs = stringSplit[SPLIT_OP_STR_RHS_PLACEMENT];
 
-    // check if lhs is a math expression
-    if(inGivenInitializerList(lhs, MATH_OPERATIONS))
-        throw std::runtime_error("We are sorry, but the program doesn't currently support math expressions as lhs of an operator...\n");
+    // first, add lhs as an expression calculation to the outVector.
+    //  see OperatorCommand for more details regarding it's execution
+    parseMathExpression(lhs, outVec);
 
     // check if rhs is a math expression
     if(inGivenInitializerList(rhs, MATH_OPERATIONS))
