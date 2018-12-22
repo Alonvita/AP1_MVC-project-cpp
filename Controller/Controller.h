@@ -29,7 +29,7 @@ public:
     ~Controller();
 
     /// -------- EXECUTION --------
-    CommandResult executeCommand(StringsPairsQueue& commandsQueue, IClient* sender);
+    CommandResult executeCommand(CommandDataQueue& commandsQueue, IClient* sender);
 
 
 private:

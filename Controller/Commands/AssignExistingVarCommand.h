@@ -17,7 +17,7 @@ public:
     explicit AssignExistingVarCommand(VariablesMapContainer* vMapContainer, MathExpressionsHandler* handler) :
             m_vMapContainer(vMapContainer), m_mathExpressionsHandler(handler) {};
 
-    CommandResult execute(IClient* sender, CommandData command, VarData* placeHolder) override;
+    CommandResult execute(IClient* sender, CommandData* command, VarData* placeHolder) override;
 
 private:
     VariablesMapContainer* m_vMapContainer;

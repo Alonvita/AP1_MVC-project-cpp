@@ -70,7 +70,7 @@ Controller::~Controller() {
  *
  * @return a command result created by the command's execution.
  */
-CommandResult Controller::executeCommand(StringsPairsQueue& commandsQueue, IClient* sender) {
+CommandResult Controller::executeCommand(CommandDataQueue& commandsQueue, IClient* sender) {
     // TODO: TEST CODE -> remove
     /*
     auto temp = (VarData*) malloc(sizeof(VarData));
@@ -94,25 +94,25 @@ CommandResult Controller::executeCommand(StringsPairsQueue& commandsQueue, IClie
         m_placeHolderCount++;
 
         // take front
-        StringsPair command = commandsQueue.front();
+        CommandData* command = commandsQueue.front();
 
         // find commandsQueue in map
-        auto it = m_commandsList.find(command.first);
+        auto it = m_commandsList.find(command->getName());
 
         // if not contains
         if (it == m_commandsList.end()) {
             return CommandResult(false, UNDEFINED, "Unknown Command\n", true); // return unknown commandsQueue
         }
 
-
         VarData* lastPH = m_placeHoldersContainer[m_placeHolderCount - 1];
 
         // TODO: I think mutex lock will be here
-        commandResult = (*it).second->execute(nullptr, command.second, lastPH);
+        commandResult = (*it).second->execute(nullptr, command, lastPH);
 
         commandsQueue.pop(); // pop the used command
-        if(commandsQueue.empty())
+        if(commandsQueue.empty()) {
             break;
+        }
     }
 
     return commandResult;

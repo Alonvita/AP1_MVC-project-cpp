@@ -24,7 +24,7 @@ public:
      *
      * @return a command result, depending on the specific executed command and it's success/failure.
      */
-    CommandResult execute(IClient* sender, CommandData command, VarData* placeHolder) override;
+    CommandResult execute(IClient* sender, CommandData* command, VarData* placeHolder) override;
 
 private:
     OperatorsHandler* m_opHandler;

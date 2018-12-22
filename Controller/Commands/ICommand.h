@@ -34,7 +34,7 @@ public:
      *
      * @return a command result, depending on the specific executed command and it's success/failure.
      */
-    virtual CommandResult execute(IClient* sender, CommandData command, VarData* placeHolder) = 0;
+    virtual CommandResult execute(IClient* sender, CommandData* command, VarData* placeHolder) = 0;
 };
 
 typedef std::map<std::string, ICommand*> CommandsMap;

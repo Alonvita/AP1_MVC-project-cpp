@@ -17,10 +17,10 @@
  *
  * @return a command result, depending on the specific executed command and it's success/failure.
  */
-CommandResult AssignExistingVarCommand::execute(IClient* sender, CommandData command, VarData* placeHolder) {
+CommandResult AssignExistingVarCommand::execute(IClient* sender, CommandData* command, VarData* placeHolder) {
     if(placeHolder->get_type() == NOT_ASSIGNED) {
         std::stringstream ss;
-        ss << "There was no value to assign : " << command.getData() << " to...\n";
+        ss << "There was no value to assign : " << command->getData() << " to...\n";
 
         return CommandResult(false, EXECUTION_FAILURE, ss.str(), true);
     }
@@ -33,10 +33,10 @@ CommandResult AssignExistingVarCommand::execute(IClient* sender, CommandData com
         *val = (*((double*) placeHolder->get_data()));
 
         // set an existing var with the created double
-        this->m_vMapContainer->setExistingVar(command.getData(), val, DOUBLE);
+        this->m_vMapContainer->setExistingVar(command->getData(), val, DOUBLE);
 
         std::stringstream ss;
-        ss << "Variable: \"" << command.getData() << "\" was assigned with : \"" << (*val);
+        ss << "Variable: \"" << command->getData() << "\" was assigned with : \"" << (*val);
 
         //clear val to prevent dangling pointers
         val = nullptr;

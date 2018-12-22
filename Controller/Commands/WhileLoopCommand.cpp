@@ -20,42 +20,41 @@
      *
      * @return a command result, depending on the specific executed command and it's success/failure.
      */
-CommandResult WhileLoopCommand::execute(IClient* sender, CommandData command, VarData* placeHolder) {
+CommandResult WhileLoopCommand::execute(IClient* sender, CommandData* command, VarData* placeHolder) {
     // Local Variables
-    StringsList strList = StringsList();
-
-    // split the given command.
-    splitStringToList(command.getData(), "\n", strList, false);
-
-    auto it = strList.begin(); // iterator
-
     auto condition = new VarData();
 
     // initialization with the first while condition check
     CommandResult retVal =
-            this->m_commandsList->at(OPERATOR_COMMAND_STR)->execute(sender, (*it++), condition);
+            this->m_commandsList->at(OPERATOR_COMMAND_STR)->execute(sender, command, condition);
 
     if(!retVal.commandSucceeded())
         return retVal;
 
     // while condition is true
     while(*(bool*)(condition->get_data())) {
+        // get the queue of commands for this while command
+        CommandDataQueue whileQueue = command->getQueue();
+
         // Execute all commands
-        while(it != strList.end()) {
+        while(!whileQueue.empty()) {
+            CommandData* commandToExecute = whileQueue.front(); // get next command to execute
+            whileQueue.pop(); // pop the command from the queue
+
             // Local Variables
             m_placeHoldersContainer.push_back(new VarData());
             m_placeHoldersCount++;
 
             // Local Vairables
             VarData* lastPH = m_placeHoldersContainer[m_placeHoldersCount - 1];
-            auto map_it = this->m_commandsList->find(*it++);
+            auto map_it = this->m_commandsList->find(commandToExecute->getName());
 
             if(map_it == this->m_commandsList->end()) {
                 delete(condition);
                 return CommandResult(true, UNDEFINED, "Unknown command given inside while loop\n", true);
             }
 
-            retVal = (*map_it).second->execute(sender, (*it++), lastPH);
+            retVal = (*map_it).second->execute(sender, commandToExecute, lastPH);
 
             // command executed poorly -> return
             if(!retVal.commandSucceeded()) {
@@ -64,16 +63,13 @@ CommandResult WhileLoopCommand::execute(IClient* sender, CommandData command, Va
             }
         }
 
-        // reset it
-        it = strList.begin();
-
         // delete and assign with new
         delete(condition);
         condition = new VarData();
 
         // recheck condition
         retVal =
-                this->m_commandsList->at(OPERATOR_COMMAND_STR)->execute(sender, (*it++), condition);
+                this->m_commandsList->at(OPERATOR_COMMAND_STR)->execute(sender, command, condition);
 
         // command executed poorly -> return
         if(!retVal.commandSucceeded()) {

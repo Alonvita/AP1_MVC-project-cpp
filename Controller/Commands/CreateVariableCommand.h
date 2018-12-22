@@ -25,7 +25,7 @@ public:
     explicit CreateVariableCommand(VariablesMapContainer* variablesMapContainer) : m_vContainer(variablesMapContainer) {};
 
     /// ---------- VIRTUAL FUNCTIONS IMPLEMENTATION ---------
-    CommandResult execute(IClient* sender, CommandData command, VarData* placeHolder) override;
+    CommandResult execute(IClient* sender, CommandData* command, VarData* placeHolder) override;
 
 private:
     VariablesMapContainer* m_vContainer;

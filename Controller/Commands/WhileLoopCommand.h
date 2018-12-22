@@ -22,7 +22,7 @@ public:
     };
 
     /// ---------- EXECUTION ----------
-    CommandResult execute(IClient* sender, CommandData command, VarData* placeHolder) override;
+    CommandResult execute(IClient* sender, CommandData* command, VarData* placeHolder) override;
 
 private:
     CommandsMap* m_commandsList;
