@@ -10,22 +10,28 @@ using namespace std;
 
 int main() {
     auto c = new Client();
-    StringsPairsQueue q;
+    CommandDataQueue q;
 
     Lexer l(c);
 
-    q = l.parseLine("var x = alt + (90 * 15) + 30");
+    l.parseLine("while alt < 1000 {", q);
+    l.parseLine("if alt < 20 {", q);
+    l.parseLine("print \"altitude too low!\"", q);
+    l.parseLine("}", q);
+    l.parseLine("var x = bind \"trump\"", q);
+    l.parseLine("}", q);
 
     std::cout << "Queue's commands order is: \n";
 
     while(!q.empty()) {
-        StringsPair p = q.front();
+        CommandData* p = q.front();
 
-        std:: cout << "First: " << p.first << "\n";
-        std:: cout << "Second: " << p.second << "\n";
+        std:: cout << "First: " << p->getName() << "\n";
+        std:: cout << "Second: " << p->getData() << "\n";
 
-        q.pop();
+        COMMAND_DATA_QUEUE_POP(q)
     }
+
 
     delete(c);
 }

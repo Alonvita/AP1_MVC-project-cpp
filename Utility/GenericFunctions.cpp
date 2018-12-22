@@ -45,7 +45,7 @@ std::pair<T, K> makePair(T lhs, K rhs) {
  * @param outQueue std::queue<T>& -- a reference to a queue to push the items to.
  */
 template <typename T>
-void vectorToQueue(const std::vector<T>& vector , std::queue<T>& outQueue) {
+void pushFromVectorToQueue(const std::vector<T> &vector, std::queue<T> &outQueue) {
     std::vector<T> cpy = vector;
 
     std::reverse(cpy.begin(), cpy.end());

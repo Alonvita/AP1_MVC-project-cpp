@@ -17,6 +17,6 @@ template <typename T, typename K>
 std::pair<T, K> makePair(T lhs, K rhs);
 
 template <typename T>
-void vectorToQueue(const std::vector<T>&, std::queue<T>&);
+void pushFromVectorToQueue(const std::vector<T> &vector, std::queue<T> &outQueue);
 
 #endif //AP1_SEMETSER_PROJECT_GENERICFUNCTIONS_H

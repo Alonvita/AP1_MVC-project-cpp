@@ -8,24 +8,22 @@
  *  (2). combine any math expressions and operators evaluations
  *  (3). reverse the vector
  *  (4). evaluate each word in the split vector and push the results into an eveluation vector
- *  (5). operate by execution
- *  (6). push into the outQueue
+ *  (5). operate by execution into placeHolder or evaluationVector.
+ *  (6). if m_readToPlaceHolder == true -> return
+ *  (7). (otherwise) push into the outQueue
  *
  * @param line ConstStringRef -- a constant ref to a string representing a line of commands.
- * @return a StringsPairsQueue holding the commands to be executed by their order.
+ * @param outQueue CommandDataQueue& -- a reference to a commands data queue to add commands to.
  */
-StringsPairsQueue Lexer::parseLine(ConstStringRef line) {
-    // Local Variables
-    StringsPairsQueue outQueue;
-    StringsPairsVector evaluationVector;
-
+void Lexer::parseLine(ConstStringRef line, CommandDataQueue& outQueue) {
     // (1).
     StringsVector stringsVector;
-    splitStringToVector(line, SPLIT_VECTOR_DELIMITERS, stringsVector, true);
-    clearVectorOfEmptyStringsAndSpaces(stringsVector);
+    splitStringToVector(line, LEXER_SPLIT_DELIMITERS, stringsVector, true);
+    clearVectorOfEmptyStringsNewLinesAndSpaces(stringsVector);
 
     // (2).
     try {
+        rejoinAllStringsInVector(stringsVector);
         rejoinAllStringsFromInitializerList(stringsVector, OPERATORS_LIST);
         rejoinAllStringsFromInitializerList(stringsVector, MATH_OPERATIONS);
     } catch(std::exception& e) {
@@ -38,20 +36,15 @@ StringsPairsQueue Lexer::parseLine(ConstStringRef line) {
     for(int i = 0; i < stringsVector.size(); ++i) {
         // (4).
         LexerEvalResult evaluation = evaluateString(stringsVector[i]);
-
         try {
             // (5).
-            resultBasedExecution(evaluation, stringsVector, i, evaluationVector);
+            resultBasedExecution(evaluation, stringsVector, i, m_placeHolder[0]);
         } catch(std::exception& e) {
             throw std::runtime_error(e.what());
         }
     }
-
-    // (6).
-    vectorToQueue(evaluationVector, outQueue);
-
-    // return.
-    return outQueue;
+if(!m_curlyBracketsFound && m_readToPlaceHolder == 0)
+    pushFromVectorToQueue(m_placeHolder[0], outQueue);
 }
 
 /**
@@ -86,6 +79,18 @@ LexerEvalResult Lexer::evaluateString(ConstStringRef str) {
     if(isPath(str))
         return LEXER_PARSE_PATH;
 
+    if(str == RAW_OPEN_BRACKETS)
+        return LEXER_PARSE_OPEN_CURLY_BRACKETS;
+
+    if(str == RAW_CLOSE_BRACKETS)
+        return LEXER_PARSE_CLOSE_CURLY_BRACKETS;
+
+    if(str == RAW_CLOSE_COMMAND_STR)
+        return LEXER_PARSE_CLOSE_COMMAND;
+
+    if(str == RAW_IF_COMMAND)
+        return LEXER_PARSE_IF_COMMAND;
+
     // NOTE: isOperator must come BEFORE isMathExpression, for expressions such as:
     //         altitude < 100 * flaps_deg
 
@@ -104,17 +109,23 @@ LexerEvalResult Lexer::evaluateString(ConstStringRef str) {
 
 /**
  * resultBasedExecution(LexerStringEvaluationResult result, StringsList strList,
-                                  StringsList::iterator &it, StringsPairsVector &outVector).
+                                  StringsList::iterator &it, CommandDataVector &outVector).
  *
  * the function will execute a parsing operation based on the given result.
  *
  * @param result LexerStringEvaluationResult -- a result based on the string pointed by it.
  * @param strList StringsVector -- a vector of strings.
  * @param listIndex int -- an index to the current string
- * @param outVector StringsPairsVector -- a queue of pairs representing <[command_name],[data]>
+ * @param outVector CommandDataVector -- a queue of pairs representing <[command_name],[data]>
  */
 void Lexer::resultBasedExecution(LexerEvalResult result, StringsVector strVector,
-                                  int listIndex, StringsPairsVector &outVector) {
+                                  int listIndex, CommandDataVector &outVector) {
+    // if m_readToPlaceHolder > 0 -> create an alias to that placeHolder. Otherwise,
+    //  take outVector as an alias
+    CommandDataVector& outVecAlias =
+            m_readToPlaceHolder > 0 ? m_placeHolder[m_readToPlaceHolder] : outVector;
+
+
     switch(result) {
         // given a variable or string, simply return, doing nothing with it.
         case LEXER_PARSE_VARIABLE_STR: // skip variables
@@ -123,13 +134,23 @@ void Lexer::resultBasedExecution(LexerEvalResult result, StringsVector strVector
         case LEXER_PARSE_PATH: // skip paths
             return;
 
+        case LEXER_PARSE_OPEN_CURLY_BRACKETS: {
+            m_curlyBracketsFound = true;
+            return;
+        }
+
         case LEXER_PARSE_MATH_EXPRESSION: {
-            parseMathExpression(strVector[listIndex], outVector);
+            parseMathExpression(strVector[listIndex], outVecAlias);
+            return;
+        }
+
+        case LEXER_PARSE_IF_COMMAND: {
+            parseIfCommand(outVecAlias);
             return;
         }
 
         case LEXER_PARSE_OPERATOR: {
-            parseOperatorCommand(strVector[listIndex], outVector);
+            parseOperatorCommand(strVector[listIndex], outVecAlias);
             return;
         }
 
@@ -141,40 +162,58 @@ void Lexer::resultBasedExecution(LexerEvalResult result, StringsVector strVector
             // TODO: add server open
             return;
 
-        case LEXER_PARSE_PRINT:
-            // TODO: add parsePrint
+        case LEXER_PARSE_PRINT: {
+            parsePrintCommand(strVector, listIndex, outVecAlias);
             return;
+        }
 
-        case LEXER_PARSE_START_WHILE_LOOP:
-            // TODO: add parseWhileLoop
+        case LEXER_PARSE_START_WHILE_LOOP: {
+            parseWhileLoopToQueue(outVecAlias);
             return;
+        }
 
         case LEXER_PARSE_BIND_TO: {
             try {
-                parseBindCommand(strVector, listIndex, outVector);
+                parseBindCommand(strVector, listIndex, outVecAlias);
             } catch(std::exception& e) {
                 throw(std::runtime_error(e.what()));
             }
-            break;
+            return;
         }
 
         case LEXER_PARSE_CREATE_VARIABLE: {
             try {
-                parseCreateVar(strVector, listIndex, outVector);
+                parseCreateVar(strVector, listIndex, outVecAlias);
             } catch(std::exception& e) {
                 throw(std::runtime_error(e.what()));
             }
 
-            break;
+            return;
         }
 
         case LEXER_PARSE_ASSIGN: {
             try {
-                parseAssignCommand(strVector, listIndex, outVector);
+                parseAssignCommand(strVector, listIndex, outVecAlias);
             } catch(std::exception& e) {
                 throw(std::runtime_error(e.what()));
             }
-            break;
+            return;
+        }
+
+        case LEXER_PARSE_CLOSE_COMMAND: {
+            parseCloseCommand(strVector[listIndex], outVecAlias);
+            return;
+        }
+
+        case LEXER_PARSE_CLOSE_CURLY_BRACKETS: {
+            if(outVecAlias.empty())
+                throw std::runtime_error("No commands were assigned before receiving '}'\n");
+
+            // point to the first command in the last placeholder
+            CommandData* assignTo = (m_placeHolder[m_readToPlaceHolder - 1])[0];
+
+            assignCommandWithPlaceHolder(assignTo);
+            return;
         }
 
         case LEXER_PARSE_UNKNOWN:
@@ -184,13 +223,13 @@ void Lexer::resultBasedExecution(LexerEvalResult result, StringsVector strVector
 
 /// ---------- UTILITY FUNCTIONS ----------
 /**
- * parseBindCommand(const StringsVector &strList, int index, StringsPairsVector &outVector).
+ * parseBindCommand(const StringsVector &strList, int index, CommandDataVector &outVector).
  *
  * @param strVec const StringsVector& -- a const reference to a strings vector.
  * @param index int -- an index representing the position of the command string in the vector.
- * @param outVector StringsPairsVector& -- a reference to a StringsPairsVector to modify accordingly.
+ * @param outVector CommandDataVector& -- a reference to a CommandDataVector to modify accordingly.
  */
-void Lexer::parseBindCommand(const StringsVector &strVec, int index, StringsPairsVector &outVector) {
+void Lexer::parseBindCommand(const StringsVector &strVec, int index, CommandDataVector &outVector) {
     // index is expected to be larger than 1, since there should be a string argument to bind to.
     // therefore, we will check if the index - 1 is within vector range (not -1)
     if(!indexWithinVectorRange(index - 1, strVec))
@@ -201,18 +240,18 @@ void Lexer::parseBindCommand(const StringsVector &strVec, int index, StringsPair
         throw std::runtime_error("The given argument is not a string. "
                                  "Please make sure to provide a string in the following manner: \"PATH\"");
 
-    // everything is ok -> create a pair containing the command name and data
-    outVector.insert(outVector.begin(), makePair<std::string, std::string>(BIND_COMMAND_STR, strVec[index - 1]));
+    outVector.insert(outVector.begin(), new CommandData(BIND_COMMAND_STR, strVec[index - 1]));
+
 }
 
 /**
- * parseCreateVar(const StringsVector &strVec, int index, StringsPairsVector &outVector).
+ * parseCreateVar(const StringsVector &strVec, int index, CommandDataVector &outVector).
  *
  * @param strVec const StringsVector& -- a const reference to a vector of strings.
  * @param index int -- an index.
- * @param outVector StringsPairQueue& -- a reference to a StringsPairQueue to modify accordingly.
+ * @param outVector CommandDataQueue& -- a reference to a CommandDataQueue to modify accordingly.
  */
-void Lexer::parseCreateVar(const StringsVector &strVec, int index, StringsPairsVector &outVector) {
+void Lexer::parseCreateVar(const StringsVector &strVec, int index, CommandDataVector &outVector) {
     if(!indexWithinVectorRange(index - 1, strVec))
         throw std::runtime_error("Missing variable name to create...\n");
 
@@ -220,27 +259,28 @@ void Lexer::parseCreateVar(const StringsVector &strVec, int index, StringsPairsV
     if(!outVector.empty()) {
         // check if the last command pushed is ASSIGN.
         // if so, we will need to push this create var after it.
-        if (outVector[0].first == ASSIGN_EXISTING_COMMAND_STR) {
+        if (outVector[0]->getName() == ASSIGN_EXISTING_COMMAND_STR) {
             outVector.insert(
                     outVector.begin() + 1,
-                    makePair<std::string, std::string>(
-                            RAW_CREATE_VARIABLE_STR, strVec[index - 1]));
+                    new CommandData(
+                            RAW_CREATE_VARIABLE_STR,
+                            strVec[index - 1]));
             return;
         }
     }
 
     // otherwise, just insert the createVar at the beginning
-    outVector.insert(outVector.begin(), makePair<std::string, std::string>(CREATE_VAR_COMMAND_STR, strVec[index - 1]));
+    outVector.insert(outVector.begin(), new CommandData(CREATE_VAR_COMMAND_STR, strVec[index - 1]));
 }
 
 /**
- * parseAssignCommand(const StringsVector &strVec, int index, StringsPairsVector &outVector).
+ * parseAssignCommand(const StringsVector &strVec, int index, CommandDataVector &outVector).
  *
  * @param strVec const StringsVec& -- a const reference to a string of vectors.
  * @param index int -- an index.
- * @param outVector StringsPairsVector& -- a reference to a StringsPairsVector to modify accordingly.
+ * @param outVector CommandDataVector& -- a reference to a CommandDataVector to modify accordingly.
  */
-void Lexer::parseAssignCommand(const StringsVector &strVec, int index, StringsPairsVector &outVector) {
+void Lexer::parseAssignCommand(const StringsVector &strVec, int index, CommandDataVector &outVector) {
     // Check that a something was given before the "=" sign
     if(!indexWithinVectorRange(index + 1, strVec))
         throw std::runtime_error("Please provide a variable to assign to. None was provided\n");
@@ -254,16 +294,16 @@ void Lexer::parseAssignCommand(const StringsVector &strVec, int index, StringsPa
         throw std::runtime_error("Cannot assign to a command. Please provide a variable\n");
 
     // the next item in the list exists, and it is a variable -> create a pair and push it to the queue
-    outVector.insert(outVector.begin(), makePair(ASSIGN_EXISTING_COMMAND_STR, strVec[index + 1]));
+    outVector.insert(outVector.begin(), new CommandData(ASSIGN_EXISTING_COMMAND_STR, strVec[index + 1]));
 }
 
 /**
- * parseOperatorCommand(int index, StringsPairsVector &outVec).
+ * parseOperatorCommand(int index, CommandDataVector &outVec).
  *
  * @param str ConstStringRef str -- a const ref to a string.
- * @param outVector StringsPairsVector& -- a reference to a StringsPairsVector to modify accordingly.
+ * @param outVector CommandDataVector& -- a reference to a CommandDataVector to modify accordingly.
  */
-void Lexer::parseOperatorCommand(ConstStringRef str, StringsPairsVector &outVec) {
+void Lexer::parseOperatorCommand(ConstStringRef str, CommandDataVector &outVector) {
     // make a string out of the operators initializer list
     std::string operatorsAsDelimitersList = initializeListToString(OPERATORS_LIST);
 
@@ -276,28 +316,125 @@ void Lexer::parseOperatorCommand(ConstStringRef str, StringsPairsVector &outVec)
     if(stringSplit.size() > 3)
         throw std::runtime_error("We are sorry, but the program doesn't currently support chained conditions... How'bout you try Python instead?\n");
 
-    // push a pair to the queue
-    outVec.insert(outVec.begin(), makePair(OPERATOR_COMMAND_STR, str));
+    outVector.insert(outVector.begin(), new CommandData(OPERATOR_COMMAND_STR, str));
 }
 
 /**
- * parseMathExpression(const std::string &str, StringsPairsVector &outVec)
+ * parseMathExpression(const std::string &str, CommandDataVector &outVec)
  *
  * @param str ConstStringRef str -- a const ref to a string.
- * @param outVector StringsPairsVector& -- a reference to a StringsPairsVector to modify accordingly.
+ * @param outVector CommandDataVector& -- a reference to a CommandDataVector to modify accordingly.
  */
-void Lexer::parseMathExpression(const std::string &str, StringsPairsVector &outVec) {
+void Lexer::parseMathExpression(const std::string &str, CommandDataVector &outVector) {
     // push a pair to the queue
-    outVec.insert(outVec.begin(), makePair(CALCULATE_MATH_COMMAND_STR, str));
+    outVector.insert(outVector.begin(), new CommandData(CALCULATE_MATH_COMMAND_STR, str));
 }
 
 /**
- * parseIfCommand(const StringsVector &strVec, int index, StringsPairsVector &outVec).
+ * parseIfCommand(const StringsVector &strVec, int index, CommandDataVector &outVec).
  *
- * @param strVec
- * @param index
- * @param outVec
+ * @param outVector CommandDataVector& -- a reference to a CommandDataVector to modify accordingly.
  */
-void Lexer::parseIfCommand(const StringsVector &strVec, int index, StringsPairsVector &outVec) {
+void Lexer::parseIfCommand(CommandDataVector &outVec) {
+    if(!(outVec[0]->getName() == OPERATOR_COMMAND_STR))
+        throw std::runtime_error("Could not find a condition when parsing if command\n");
 
+    // set the name of the operator command to an IF command
+    outVec[0]->setName(IF_COMMAND_STR);
+
+    // if curly brackets were found
+    if (m_curlyBracketsFound) {
+        createNewPlaceHolder();
+    } else {
+        // otherwise -> treat as 1 life if.
+        throw std::runtime_error("Our apology, one line ifs are not implemented in this version\n");
+    }
+}
+
+
+/**
+ * parseCloseCommand(ConstStringRef command, CommandDataVector &outVec).
+ *
+ * @param str ConstStringRef str -- a const ref to a string.
+ * @param outVector CommandDataVector& -- a reference to a CommandDataVector to modify accordingly.
+ */
+void Lexer::parseCloseCommand(ConstStringRef command, CommandDataVector &outVec) {
+    outVec.insert(outVec.begin(), new CommandData(CLOSE_COMMAND_STR, command));
+}
+
+/**
+ * parsePrintCommand(const StringsVector &strVec, int index, CommandDataVector &outVec).
+ *
+ * @param strVec const StringsVec& -- a const reference to a string of vectors.
+ * @param index int -- an index.
+ * @param outVector CommandDataVector& -- a reference to a CommandDataVector to modify accordingly.
+ */
+void Lexer::parsePrintCommand(const StringsVector &strVec, int index, CommandDataVector &outVec) {
+    if(!indexWithinVectorRange(index - 1, strVec))
+        throw std::runtime_error("Required string argument to print command\n");
+
+    std::string command = strVec[index - 1];
+
+    if(!isPath(command))
+        throw std::runtime_error("Please provide print command with a string\n");
+
+    outVec.insert(outVec.begin(), new CommandData(PRINT_COMMAND_STR, command));
+}
+
+/**
+ * parseWhileLoopToQueue(const StringsVector &strVec, int index, CommandDataVector &outVec).
+ *
+ * @param outVector CommandDataVector& -- a reference to a CommandDataVector to modify accordingly.
+ */
+void Lexer::parseWhileLoopToQueue(CommandDataVector &outVec) {
+    if(!(outVec[0]->getName() == OPERATOR_COMMAND_STR))
+        throw std::runtime_error("Could not find a condition when parsing if command\n");
+
+    // set the name of the operator command to an IF command
+    outVec[0]->setName(WHILE_LOOP_COMMAND_STR);
+
+
+    if(m_curlyBracketsFound) {
+        createNewPlaceHolder();
+    } else {
+        // otherwise -> treat as 1 life if.
+        throw std::runtime_error("Our apology, one line while loops are not implemented in this version\n");
+    }
+}
+
+
+/// ---------- PRIVATE METHODS ----------
+/**
+ * assignCommandWithPlaceHolder(CommandData &command).
+ *
+ * @param command CommandData& -- a reference to a command data.
+ */
+void Lexer::assignCommandWithPlaceHolder(CommandData* command) {
+    // Local Variables
+    CommandDataQueue queue;
+
+    // push placeHolder into a queue WITHOUT the IF command
+    try {
+        pushFromVectorToQueue(m_placeHolder[m_readToPlaceHolder], queue);
+    } catch (std::exception& e) {
+        throw std::runtime_error(e.what());
+    }
+
+    // assign command with it
+    command->setCommandsQueue(queue);
+
+    // delete the placeHolder, since it was assigned
+    m_placeHolder.erase(m_placeHolder.begin() + m_readToPlaceHolder);
+
+    // --indexer
+    m_readToPlaceHolder--;
+}
+
+/**
+ * createNewPlaceHolder().
+ */
+void Lexer::createNewPlaceHolder() {
+    m_readToPlaceHolder++; // increase counter
+    m_placeHolder.emplace_back(CommandDataVector()); // emplace new vector
+    m_curlyBracketsFound = false; // reinitialzie to false
 }

@@ -176,9 +176,9 @@ bool isPath(const std::string &str) {
  *
  * @param vec StringsVector& -- a reference to a vector of strings.
  */
-void clearVectorOfEmptyStringsAndSpaces(StringsVector &vec) {
+void clearVectorOfEmptyStringsNewLinesAndSpaces(StringsVector &vec) {
     for(auto it = vec.begin(); it != vec.end(); ++ it)
-        if((*it).empty() || (*it) == " ") {
+        if((*it).empty() || (*it) == " " || (*it) == "\n") {
             vec.erase(it); // erase data
             it--; // go back once since data was erased...
         }
@@ -264,4 +264,29 @@ std::string initializeListToString(const StringsInitializeList& initList) {
         ss << listStr;
 
     return ss.str();
+}
+
+/**
+ * rejoinAllStringsInVector(StringsVector& stringsVector);
+ *
+ * @param stringsVector StringsVector& -- a reference to a strings vector.
+ */
+void rejoinAllStringsInVector(StringsVector& stringsVector) {
+    std::stringstream ss;
+    auto it = stringsVector.begin();
+
+    for(; it != stringsVector.end(); ++it) {
+        if(*it == "\"") {
+            do {
+                ss << *it << " ";
+
+                stringsVector.erase(it);
+            } while(*it != "\"");
+
+            ss << *it; // close the string with a "
+            stringsVector.erase(it);
+            stringsVector.insert(it, ss.str());
+            return;
+        }
+    }
 }

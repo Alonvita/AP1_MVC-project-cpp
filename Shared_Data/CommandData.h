@@ -14,8 +14,9 @@ public:
 
     const std::string& getName() { return m_name; }
     ConstStringRef getData() { return m_commandData; }
+    void setName(ConstStringRef name) { m_name = name; }
     std::queue<CommandData*> getQueue() { return m_commandsQueue; }
-    void setCommandsList(const std::queue<CommandData*>& commandsQueue) { m_commandsQueue = commandsQueue; }
+    void setCommandsQueue(const std::queue<CommandData *> &commandsQueue) { m_commandsQueue = commandsQueue; }
 
 
 private:
@@ -25,5 +26,6 @@ private:
 };
 
 typedef std::queue<CommandData*> CommandDataQueue;
+typedef std::vector<CommandData*> CommandDataVector;
 
 #endif //AP1_SEMETSER_PROJECT_COMMANDDATA_H
