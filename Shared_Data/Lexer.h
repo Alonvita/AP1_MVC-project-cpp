@@ -74,9 +74,9 @@ private:
     void parseMathExpression(ConstStringRef str, CommandDataVector &outVec);
     void parseCloseCommand(ConstStringRef command, CommandDataVector &outVec);
     void parseOperatorCommand(ConstStringRef str, CommandDataVector &outVector);
-    void parsePrintCommand(const StringsVector& strVec, int index, CommandDataVector& outVec);
-    void parseBindCommand(const StringsVector& strVec, int index, CommandDataVector& outVec);
     void parseCreateVar(const StringsVector& strVec,int index, CommandDataVector& outVec);
+    void parseBindCommand(const StringsVector& strVec, int index, CommandDataVector& outVec);
+    void parsePrintCommand(const StringsVector& strVec, int index, CommandDataVector& outVec);
     void parseAssignCommand(const StringsVector& strVec,int index, CommandDataVector& outVec);
     void resultBasedExecution(LexerEvalResult result,  StringsVector strVec, int listIndex, CommandDataVector& outVec);
 };

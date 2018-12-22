@@ -5,22 +5,23 @@
 #include "WhileLoopCommand.h"
 
 /**
-     * execute(IClient* sender, const std::string& command, void* placeHolder).
-     *
-     * @param sender IClient* -- a pointer to the sending cliend.
-     * @param command const std::string& -- a constant reference to a string representing the command.
-     *          WhileLoop convention is:
-     *              condition (\n)
-     *              command (\n)
-     *              variables (\n)
-     *              command (\n)
-     *              variables(\n)
-     *              ...
-     * @param placeHolder var_data* -- a placeholder.
-     *
-     * @return a command result, depending on the specific executed command and it's success/failure.
-     */
+ * execute(IClient* sender, CommandData* command, void* placeHolder).
+ *
+ * CommandData:
+ *      name -- WHILE_LOOP_COMMAND_STR
+ *      data -- the while condition
+ *      Queue -- the queue will hold the command to execute while condition is met.
+ *
+ * @param sender IClient* -- a pointer to the sending client.
+ * @param command CommandData* -- a point to a command data.
+ * @param placeHolder var_data* -- a placeholder.
+ *
+ * @return a command result, depending on the specific executed command and it's success/failure.
+ */
 CommandResult WhileLoopCommand::execute(IClient* sender, CommandData* command, VarData* placeHolder) {
+
+    // TODO: check if command and use Util if it works properly.
+
     // Local Variables
     auto condition = new VarData();
 

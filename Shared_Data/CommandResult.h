@@ -19,6 +19,7 @@ enum Command {
     CALCULATE_EXPRESSION,
     LOOP_ENDS,
     ASSIGN_VAR,
+    IF_END,
     SLEEP,
     PRINT,
     CLOSE,

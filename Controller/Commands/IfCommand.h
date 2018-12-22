@@ -1,21 +1,19 @@
 //
-// Created by alon on 10/12/18.
+// Created by alon on 22/12/18.
 //
 
-#ifndef AP1_SEMETSER_PROJECT_WHILELOOPCOMMAND_H
-#define AP1_SEMETSER_PROJECT_WHILELOOPCOMMAND_H
+#ifndef AP1_SEMETSER_PROJECT_IFCOMMAND_H
+#define AP1_SEMETSER_PROJECT_IFCOMMAND_H
 
 
-#include <map>
 #include "ICommand.h"
-#include "../../DefinesAndTypedefs.h"
 #include "CommandsUtil/CommandsUtil.h"
 
-class WhileLoopCommand : public ICommand {
+class IfCommand : ICommand {
 public:
     /// ---------- CONSTRUCTORS & DESTRUCTORS ----------
-    explicit WhileLoopCommand(CommandsMap* commandsList) : m_commandsList(commandsList) {};
-    ~WhileLoopCommand() override {
+    explicit IfCommand(CommandsMap* commandsList) : m_commandsList(commandsList) {};
+    ~IfCommand() override {
         this->m_commandsList = nullptr;
 
         for(VarData* vD : this->m_placeHoldersContainer)
@@ -32,4 +30,4 @@ private:
 };
 
 
-#endif //AP1_SEMETSER_PROJECT_WHILELOOPCOMMAND_H
+#endif //AP1_SEMETSER_PROJECT_IFCOMMAND_H

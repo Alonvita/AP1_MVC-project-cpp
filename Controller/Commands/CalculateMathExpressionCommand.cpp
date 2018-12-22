@@ -5,14 +5,14 @@
 #include "CalculateMathExpressionCommand.h"
 
 /**
-     * execute(IClient* sender, const std::string& command, void* placeHolder).
-     *
-     * @param sender IClient* -- a pointer to the sending cliend.
-     * @param command const std::string& -- a constant reference to a string representing the command.
-     * @param placeHolder var_data* -- a placeholder.
-     *
-     * @return a command result, depending on the specific executed command and it's success/failure.
-     */
+ * execute(IClient* sender, CommandData* command, void* placeHolder).
+ *
+ * @param sender IClient* -- a pointer to the sending client.
+ * @param command CommandData* -- a point to a command data.
+ * @param placeHolder VarData* -- a placeholder.
+ *
+ * @return a command result, depending on the specific executed command and it's success/failure.
+ */
 CommandResult CalculateMathExpressionCommand::execute(IClient* sender, CommandData* command, VarData* placeHolder) {
     // try to evaluate math expression, or catch the exception thrown
     try {

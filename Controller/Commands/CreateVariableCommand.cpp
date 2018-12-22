@@ -5,11 +5,13 @@
 #include "CreateVariableCommand.h"
 
 /**
+ * execute(IClient* sender, CommandData* command, void* placeHolder).
  *
- * @param sender
- * @param command
- * @param placeHolder
- * @return
+ * @param sender IClient* -- a pointer to the sending client.
+ * @param command CommandData* -- a point to a command data.
+ * @param placeHolder VarData* -- a placeholder.
+ *
+ * @return a command result, depending on the specific executed command and it's success/failure.
  */
 CommandResult CreateVariableCommand::execute(IClient *sender, CommandData* command, VarData* placeHolder) {
     std::ostringstream returnMessage;

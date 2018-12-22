@@ -5,10 +5,10 @@
 #include "SleepCommand.h"
 
 /**
-     * execute(IClient* sender, const std::string& command, void* placeHolder).
+     * execute(IClient* sender, CommandData* command, void* placeHolder).
      *
-     * @param sender IClient* -- a pointer to the sending cliend.
-     * @param command const std::string& -- a constant reference to a string representing the command.
+     * @param sender IClient* -- a pointer to the sending client.
+     * @param command CommandData* -- a point to a command data.
      * @param placeHolder var_data* -- a placeholder.
      *
      * @return a command result, depending on the specific executed command and it's success/failure.

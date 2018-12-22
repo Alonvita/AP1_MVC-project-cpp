@@ -20,9 +20,9 @@ public:
     ~Client() = default;
 
     /// ---------- OVERRIDING INTERFACE FUNCTIONS ----------
-    void disconnect(bool keepConnection) override;
     std::string readMessage() override;
     void writeMessage(Message m) override;
+    void disconnect(bool keepConnection) override;
     void receiveNotification(Notification notif) override;
     void receiveCommandResult(CommandResult result) override;
     bool connectToServer(int port, ConstStringRef ip_address) override;
