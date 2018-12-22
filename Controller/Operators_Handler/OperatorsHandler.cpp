@@ -9,7 +9,7 @@
  * evaluate_opperation(const std::string &str)
  *
  * @param string const std::string& -- a constant reference to a string.
- * @return a true or fale depending on the parameters and the operation.
+ * @return a true or false depending on the parameters and the operation.
  */
 bool OperatorsHandler::evaluate_operation(ConstStringRef str) {
     std::list<std::string> l;

@@ -265,14 +265,27 @@ void Lexer::parseAssignCommand(const StringsVector &strVec, int index, StringsPa
  */
 void Lexer::parseOperatorCommand(ConstStringRef str, StringsPairsVector &outVec) {
     // make a string out of the operators initializer list
+    std::string operatorsAsDelimitersList = initializeListToString(OPERATORS_LIST);
 
+    // Local Variable
     StringsVector stringSplit;
 
-    splitStringToVector(str, )
+    // split the string to a vector holding: [LHS] -- [OPERATOR] -- [RHS]
+    splitStringToVector(str, operatorsAsDelimitersList, stringSplit, true);
+
+    if(stringSplit.size() > 3)
+        throw std::runtime_error("We are sorry, but the program doesn't currently support chained conditions... How'bout you try Python instead?\n");
+
+    std::string& lhs = stringSplit[SPLIT_OP_STR_LHS_PLACEMENT];
+    std::string& op = stringSplit[SPLIT_OP_STR_OP_PLACEMENT];
+    std::string& rhs = stringSplit[SPLIT_OP_STR_RHS_PLACEMENT];
 
     // check if lhs is a math expression
+    if(inGivenInitializerList(lhs, MATH_OPERATIONS))
+        throw std::runtime_error("We are sorry, but the program doesn't currently support math expressions as lhs of an operator...\n");
 
     // check if rhs is a math expression
+    if(inGivenInitializerList(rhs, MATH_OPERATIONS))
 
     // push a pair to the queue
     outVec.insert(outVec.begin(), makePair(OPERATOR_COMMAND_STR, str));

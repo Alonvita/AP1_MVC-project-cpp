@@ -14,7 +14,7 @@ int main() {
 
     Lexer l(c);
 
-    q = l.parseLine("var x = alt < 90 * 15");
+    q = l.parseLine("var x = alt < (90 * 15) + 30");
 
     std::cout << "Queue's commands order is: \n";
 

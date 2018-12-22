@@ -13,6 +13,9 @@
 #include "../Utility/GenericFunctions.h"
 
 #define SPLIT_VECTOR_DELIMITERS " {}="
+#define SPLIT_OP_STR_LHS_PLACEMENT 0
+#define SPLIT_OP_STR_OP_PLACEMENT 1
+#define SPLIT_OP_STR_RHS_PLACEMENT 2
 
 /**
  * Defines the types of evaluations available by this Lexer.
