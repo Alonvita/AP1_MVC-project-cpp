@@ -14,7 +14,7 @@ public:
     CalculateMathExpressionCommand(MathExpressionsHandler* handler) : m_mathExpressionsHandler(handler) {};
     ~CalculateMathExpressionCommand() { this->m_mathExpressionsHandler = nullptr; }
 
-    CommandResult execute(IClient* sender, ConstStringRef command, VarData* placeHolder) override;
+    CommandResult execute(IClient* sender, CommandData command, VarData* placeHolder) override;
 
 private:
     MathExpressionsHandler* m_mathExpressionsHandler;

@@ -20,12 +20,12 @@
      *
      * @return a command result, depending on the specific executed command and it's success/failure.
      */
-CommandResult WhileLoopCommand::execute(IClient* sender, ConstStringRef command, VarData* placeHolder) {
+CommandResult WhileLoopCommand::execute(IClient* sender, CommandData command, VarData* placeHolder) {
     // Local Variables
     StringsList strList = StringsList();
 
     // split the given command.
-    splitStringToList(command, "\n", strList, false);
+    splitStringToList(command.getData(), "\n", strList, false);
 
     auto it = strList.begin(); // iterator
 

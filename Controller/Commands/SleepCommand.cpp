@@ -13,18 +13,18 @@
      *
      * @return a command result, depending on the specific executed command and it's success/failure.
      */
-CommandResult SleepCommand::execute(IClient* sender, ConstStringRef command, VarData* placeHolder)  {
+CommandResult SleepCommand::execute(IClient* sender, CommandData command, VarData* placeHolder)  {
     try {
-        int milliseconds = stoi(command);
+        int milliseconds = stoi(command.getData());
 
         if(milliseconds < 0) {
-            throw std::runtime_error("Cannot sleep for negative value: " + command);
+            throw std::runtime_error("Cannot sleep for negative value: " + command.getData());
         } else {
             sleep((unsigned int)milliseconds);
         }
 
         std::stringstream ss;
-        ss << "Program slept for: " << command << " milliseconds\n";
+        ss << "Program slept for: " << command.getData() << " milliseconds\n";
 
         return CommandResult(true, SLEEP, ss.str(), true);
 

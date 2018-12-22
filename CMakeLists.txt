@@ -26,6 +26,8 @@ set(SHARED_DATA
         Shared_Data/Notification.h
         # Lexer
         Shared_Data/Lexer.cpp Shared_Data/Lexer.h
+        # Command Data
+        Shared_Data/CommandData.h Shared_Data/CommandData.cpp
         )
 
 set(OUTER_HANDLERS
@@ -41,7 +43,6 @@ set(CONTROLLER
         #Controller
         Controller/Controller.cpp Controller/Controller.h
         # Test Printing ICommand -- will be used for testing stuff
-        Controller/Commands/TestPrintCommand.h
         # Interface
         Controller/Commands/ICommand.h
         # CreateVariableCommand

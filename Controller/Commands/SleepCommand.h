@@ -15,7 +15,7 @@ public:
     SleepCommand() = default;
     ~SleepCommand() override = default;
 
-    CommandResult execute(IClient* sender, ConstStringRef command, VarData* placeHolder) override;
+    CommandResult execute(IClient* sender, CommandData command, VarData* placeHolder) override;
 
 };
 

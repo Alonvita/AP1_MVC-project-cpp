@@ -13,10 +13,10 @@
      *
      * @return a command result, depending on the specific executed command and it's success/failure.
      */
-CommandResult CalculateMathExpressionCommand::execute(IClient* sender, ConstStringRef command, VarData* placeHolder) {
+CommandResult CalculateMathExpressionCommand::execute(IClient* sender, CommandData command, VarData* placeHolder) {
     // try to evaluate math expression, or catch the exception thrown
     try {
-        double valResult = this->m_mathExpressionsHandler->parse_mathematical_expression(command);
+        double valResult = this->m_mathExpressionsHandler->parse_mathematical_expression(command.getData());
 
         placeHolder->set_data(&valResult, DOUBLE);
     } catch(std::exception& e) {

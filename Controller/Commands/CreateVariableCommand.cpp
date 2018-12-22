@@ -11,7 +11,7 @@
  * @param placeHolder
  * @return
  */
-CommandResult CreateVariableCommand::execute(IClient *sender, ConstStringRef command, VarData* placeHolder) {
+CommandResult CreateVariableCommand::execute(IClient *sender, CommandData command, VarData* placeHolder) {
     std::ostringstream returnMessage;
 
     // TODO: can add the value to placeholder so the programm supports expressions such as:
@@ -26,16 +26,16 @@ CommandResult CreateVariableCommand::execute(IClient *sender, ConstStringRef com
     
     try {
         // add it to the map
-        this->m_vContainer->addToMap(command, placeHolder);
+        this->m_vContainer->addToMap(command.getData(), placeHolder);
 
         // create the message
-        returnMessage << "SUCCESS: creating new variable: " << command << "\n";
+        returnMessage << "SUCCESS: creating new variable: " << command.getData() << "\n";
 
         return CommandResult(true, CREATE_VAR, returnMessage.str(), true);
     } catch (std::bad_cast &e) {
         return CommandResult(false, EXECUTION_FAILURE, "BAD_CAST: could not cast to a double from placeHolder\n", true);
     } catch (std::exception &e) {
-        returnMessage << "FAILURE when adding " << command << " to the map\n";
+        returnMessage << "FAILURE when adding " << command.getData() << " to the map\n";
 
         return CommandResult(false, EXECUTION_FAILURE, returnMessage.str(), true);
     }

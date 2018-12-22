@@ -290,3 +290,14 @@ void Lexer::parseMathExpression(const std::string &str, StringsPairsVector &outV
     // push a pair to the queue
     outVec.insert(outVec.begin(), makePair(CALCULATE_MATH_COMMAND_STR, str));
 }
+
+/**
+ * parseIfCommand(const StringsVector &strVec, int index, StringsPairsVector &outVec).
+ *
+ * @param strVec
+ * @param index
+ * @param outVec
+ */
+void Lexer::parseIfCommand(const StringsVector &strVec, int index, StringsPairsVector &outVec) {
+
+}

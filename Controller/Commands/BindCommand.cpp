@@ -18,9 +18,9 @@ BindCommand::~BindCommand() = default;
      *
      * @return a command result, depending on the specific executed command and it's success/failure.
      */
-CommandResult BindCommand::execute(IClient *sender, ConstStringRef command, VarData *placeHolder) {
+CommandResult BindCommand::execute(IClient *sender, CommandData command, VarData *placeHolder) {
     // create a new VarData to be held inside placeHolder
-    const char* filePath = command.c_str();
+    const char* filePath = command.getData().c_str();
 
     // get the file path
     try {
