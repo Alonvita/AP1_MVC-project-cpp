@@ -39,6 +39,7 @@
 #define ASSIGN_EXISTING_COMMAND_STR "ASSIGN"
 #define CALCULATE_MATH_COMMAND_STR "CALCULATE_MATH_EXPRESSION"
 
+typedev std::initializer_list<std::string> StringsInitializeList;
 typedef std::pair<std::string, double> VarDataPair;
 
 typedef const std::string& ConstStringRef;

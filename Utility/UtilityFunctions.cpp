@@ -250,3 +250,18 @@ bool containsSubstringFromInitializerList(ConstStringRef str, std::initializer_l
 
     return false;
 }
+
+/**
+ * initializeListToString(const StringsInitializeList& initList).
+ *
+ * @param initList const StringsInitializeList& -- a const ref to an init list.
+ * @return a string containing the initList.
+ */
+std::string initializeListToString(const StringsInitializeList& initList) {
+    std::stringstream ss;
+
+    for(ConstStringRef listStr : initList)
+        ss << listStr;
+
+    return ss.str();
+}

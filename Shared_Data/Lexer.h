@@ -52,15 +52,18 @@ private:
     LexerEvalResult evaluateString(ConstStringRef str);
 
     /// ----- COMMANDS EXECUTION -----
-    void openServer(int index);
-    void connectClientToServer(int index);
-    void parsePrintCommand(int index, StringsPairsVector& outQueue);
-    void parseOperatorCommand(int index, StringsPairsVector& outQueue);
-    void parseWhileLoopToQueue(int index, StringsPairsVector& outQueue);
-    void parseBindCommand(const StringsVector& strVec, int index, StringsPairsVector& outQueue);
-    void parseCreateVar(const StringsVector& strVec,int index, StringsPairsVector& outQueue);
-    void parseAssignCommand(const StringsVector& strVec,int index, StringsPairsVector& outQueue);
-    void resultBasedExecution(LexerEvalResult result,  StringsVector strVec, int listIndex, StringsPairsVector& outQueue);
+    void openServer(const StringsVector& strVec, int index);
+    void connectClientToServer(const StringsVector& strVec, int index);
+    void parseMathExpression(ConstStringRef str, StringsPairsVector &outVec);
+    void parseOperatorCommand(ConstStringRef str, StringsPairsVector &outVec);
+    void parseIfCommand(const StringsVector& strVec, int index, StringsPairsVector& outVec);
+    void parseCloseCommand(const StringsVector& strVec, int index, StringsPairsVector& outVec);
+    void parsePrintCommand(const StringsVector& strVec, int index, StringsPairsVector& outVec);
+    void parseWhileLoopToQueue(const StringsVector& strVec, int index, StringsPairsVector& outVec);
+    void parseBindCommand(const StringsVector& strVec, int index, StringsPairsVector& outVec);
+    void parseCreateVar(const StringsVector& strVec,int index, StringsPairsVector& outVec);
+    void parseAssignCommand(const StringsVector& strVec,int index, StringsPairsVector& outVec);
+    void resultBasedExecution(LexerEvalResult result,  StringsVector strVec, int listIndex, StringsPairsVector& outVec);
 };
 
 

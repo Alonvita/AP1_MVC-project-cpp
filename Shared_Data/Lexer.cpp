@@ -117,17 +117,21 @@ void Lexer::resultBasedExecution(LexerEvalResult result, StringsVector strVector
                                   int listIndex, StringsPairsVector &outVector) {
     switch(result) {
         // given a variable or string, simply return, doing nothing with it.
-        case LEXER_PARSE_VARIABLE_STR:
+        case LEXER_PARSE_VARIABLE_STR: // skip variables
             return;
 
-        case LEXER_PARSE_PATH:
+        case LEXER_PARSE_PATH: // skip paths
             return;
 
-        case LEXER_PARSE_MATH_EXPRESSION:
+        case LEXER_PARSE_MATH_EXPRESSION: {
+            parseMathExpression(strVector[listIndex], outVector);
             return;
+        }
 
-        case LEXER_PARSE_OPERATOR:
+        case LEXER_PARSE_OPERATOR: {
+            parseOperatorCommand(strVector[listIndex], outVector);
             return;
+        }
 
         case LEXER_PARSE_CONNECT_CLIENT_TO_SERVER:
             // TODO: add connect to server
@@ -198,7 +202,7 @@ void Lexer::parseBindCommand(const StringsVector &strVec, int index, StringsPair
                                  "Please make sure to provide a string in the following manner: \"PATH\"");
 
     // everything is ok -> create a pair containing the command name and data
-    outVector.insert(outVector.begin(), makePair<std::string, std::string>(RAW_BIND_STR, strVec[index - 1]));
+    outVector.insert(outVector.begin(), makePair<std::string, std::string>(BIND_COMMAND_STR, strVec[index - 1]));
 }
 
 /**
@@ -216,7 +220,7 @@ void Lexer::parseCreateVar(const StringsVector &strVec, int index, StringsPairsV
     if(!outVector.empty()) {
         // check if the last command pushed is ASSIGN.
         // if so, we will need to push this create var after it.
-        if (outVector[0].first == RAW_ASSIGN_STR) {
+        if (outVector[0].first == ASSIGN_EXISTING_COMMAND_STR) {
             outVector.insert(
                     outVector.begin() + 1,
                     makePair<std::string, std::string>(
@@ -226,7 +230,7 @@ void Lexer::parseCreateVar(const StringsVector &strVec, int index, StringsPairsV
     }
 
     // otherwise, just insert the createVar at the beginning
-    outVector.insert(outVector.begin(), makePair<std::string, std::string>(RAW_CREATE_VARIABLE_STR, strVec[index - 1]));
+    outVector.insert(outVector.begin(), makePair<std::string, std::string>(CREATE_VAR_COMMAND_STR, strVec[index - 1]));
 }
 
 /**
@@ -250,6 +254,37 @@ void Lexer::parseAssignCommand(const StringsVector &strVec, int index, StringsPa
         throw std::runtime_error("Cannot assign to a command. Please provide a variable\n");
 
     // the next item in the list exists, and it is a variable -> create a pair and push it to the queue
-    outVector.insert(outVector.begin(), makePair(RAW_ASSIGN_STR, strVec[index + 1]));
+    outVector.insert(outVector.begin(), makePair(ASSIGN_EXISTING_COMMAND_STR, strVec[index + 1]));
 }
 
+/**
+ * parseOperatorCommand(int index, StringsPairsVector &outVec).
+ *
+ * @param str ConstStringRef str -- a const ref to a string.
+ * @param outVector StringsPairsVector& -- a reference to a StringsPairsVector to modify accordingly.
+ */
+void Lexer::parseOperatorCommand(ConstStringRef str, StringsPairsVector &outVec) {
+    // make a string out of the operators initializer list
+
+    StringsVector stringSplit;
+
+    splitStringToVector(str, )
+
+    // check if lhs is a math expression
+
+    // check if rhs is a math expression
+
+    // push a pair to the queue
+    outVec.insert(outVec.begin(), makePair(OPERATOR_COMMAND_STR, str));
+}
+
+/**
+ * parseMathExpression(const std::string &str, StringsPairsVector &outVec)
+ *
+ * @param str ConstStringRef str -- a const ref to a string.
+ * @param outVector StringsPairsVector& -- a reference to a StringsPairsVector to modify accordingly.
+ */
+void Lexer::parseMathExpression(const std::string &str, StringsPairsVector &outVec) {
+    // push a pair to the queue
+    outVec.insert(outVec.begin(), makePair(CALCULATE_MATH_COMMAND_STR, str));
+}
