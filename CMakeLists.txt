@@ -63,8 +63,6 @@ set(CONTROLLER
         Controller/Commands/SleepCommand.h Controller/Commands/SleepCommand.cpp
         # If Command
         Controller/Commands/IfCommand.h Controller/Commands/IfCommand.cpp
-        # Commands Util
-        Controller/Commands/CommandsUtil/CommandsQueueExecution.h Controller/Commands/CommandsUtil/CommandsQueueExecution.cpp
         )
 
 set(CLIENTS
