@@ -12,22 +12,23 @@
  * @return a true or false depending on the parameters and the operation.
  */
 bool OperatorsHandler::evaluate_operation(ConstStringRef str) {
-    std::list<std::string> l;
+    std::vector<std::string> vec;
     std::string delimiters = initializeListToString(OPERATORS_LIST);
 
     delimiters += " ";
 
-    splitStringToList(str, delimiters, l, false);
+    splitStringToVector(str, delimiters, vec, true);
+    clearVectorOfEmptyStringsNewLinesAndSpaces(vec);
 
     // check if size is more than expected
-    if(l.size() != 3)
-        throw std::runtime_error("Wrong amount of arguments: " + std::to_string(l.size()) + " required 3.");
+    if(vec.size() != 3)
+        throw std::runtime_error("Wrong amount of arguments: " + std::to_string(vec.size()) + " required 3.");
 
     // create the variables needed for evaluation
     double lhs;
     double rhs;
 
-    auto it = l.begin();
+    auto it = vec.begin();
     ConstStringRef lhsStr = (*(it++));
     ConstStringRef op = (*(it++));
     ConstStringRef rhsStr = (*it);
@@ -95,5 +96,9 @@ bool OperatorsHandler::evaluate(ConstStringRef operation, double lhs, double rhs
  * checks if a number. if so -> turn to double. otherwise, go to variables map
  */
 void OperatorsHandler::calculateExpression(double &out, const std::string& expression) {
-    out = this->m_handler->parse_mathematical_expression(expression);
+    try {
+        out = this->m_handler->parse_mathematical_expression(expression);
+    } catch(std::exception& e) {
+        throw std::runtime_error(e.what());
+    }
 }

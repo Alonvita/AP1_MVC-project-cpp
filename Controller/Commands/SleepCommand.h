@@ -10,12 +10,14 @@
 
 #include "ICommand.h"
 
+#define SECONDS_TO_MILLISECONDS(x) x/100
+
 class SleepCommand : public ICommand {
 public:
     SleepCommand() = default;
     ~SleepCommand() override = default;
 
-    CommandResult execute(IClient* sender, CommandData* command, VarData* placeHolder) override;
+    CommandResult execute(IClient* sender, CommandData* commandPtr, VarData* inHolder, VarData* outHolder) override;
 
 };
 

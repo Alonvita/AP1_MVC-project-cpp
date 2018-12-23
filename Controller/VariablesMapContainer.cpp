@@ -11,23 +11,27 @@
  */
 VariablesMapContainer::~VariablesMapContainer() {
     // clear the map.
-    for(std::pair<std::string, VarData*> p : this->m_variablesMap)
-        delete(p.second);
+    for(auto it = this->m_variablesMap.begin(); it != this->m_variablesMap.end(); ++ it) {
+        VarData* temp = (*it).second;
+        (*it).second = nullptr;
+
+        delete (temp);
+    }
 }
 
 /**
  * setExistingVar(ConstStringRef str, double val).
  *
- * @param str ConstStrinfRef -- a constant strinf reference.
- * @param val double -- a value to sign the variable to.
+ * @param str ConstStrinfRef -- a constant string reference.
+ * @param varData const VarData& -- a const ref to a VarData.
  */
-void VariablesMapContainer::setExistingVar(ConstStringRef str, void* data, VarDataType type) {
+void VariablesMapContainer::setExistingVar(ConstStringRef str, VarData& varData) {
     auto it = m_variablesMap.find(str);
 
     if(it == m_variablesMap.end())
         throw std::runtime_error("The requested variable does not exist: " + str);
 
-    (*it).second->set_data(data, type);
+    *((*it).second) = varData;
 }
 
 /**
@@ -37,6 +41,11 @@ void VariablesMapContainer::setExistingVar(ConstStringRef str, void* data, VarDa
  * @param value double -- a value
  */
 void VariablesMapContainer::addToMap(ConstStringRef varName, VarData* varData) {
+    auto it = m_variablesMap.find(varName);
+
+    if(it != m_variablesMap.end())
+        throw std::runtime_error("Variable already exists under the name: " + varName + "\n");
+
     this->m_variablesMap.insert(make_pair(varName, varData));
 }
 

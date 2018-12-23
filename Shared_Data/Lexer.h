@@ -29,6 +29,7 @@ enum LexerEvalResult {
     LEXER_PARSE_SERVER_OPEN,
     LEXER_PARSE_VARIABLE_STR,
     LEXER_PARSE_CLOSE_COMMAND,
+    LEXER_PARSE_SLEEP_COMMAND,
     LEXER_PARSE_CREATE_VARIABLE,
     LEXER_PARSE_MATH_EXPRESSION,
     LEXER_PARSE_START_WHILE_LOOP,
@@ -45,6 +46,15 @@ public:
         m_curlyBracketsFound(false) {
         m_placeHolder.emplace_back(CommandDataVector());
     };
+
+    ~Lexer() {
+        for(CommandDataVector vec : m_placeHolder) {
+            for(CommandData* commandDataPtr : vec)
+                delete(commandDataPtr);
+
+            vec.clear();
+        }
+    }
 
     ///---------- PUBLIC METHODS ----------
     void parseLine(ConstStringRef line, CommandDataQueue& outQueue);
@@ -68,6 +78,7 @@ private:
 
     /// ----- COMMANDS EXECUTION -----
     void parseIfCommand(CommandDataVector &outVec);
+    void parseSleepCommand(CommandDataVector &outVec);
     void parseWhileLoopToQueue(CommandDataVector &outVec);
     void openServer(const StringsVector& strVec, int index);
     void connectClientToServer(const StringsVector& strVec, int index);
@@ -78,7 +89,7 @@ private:
     void parseBindCommand(const StringsVector& strVec, int index, CommandDataVector& outVec);
     void parsePrintCommand(const StringsVector& strVec, int index, CommandDataVector& outVec);
     void parseAssignCommand(const StringsVector& strVec,int index, CommandDataVector& outVec);
-    void resultBasedExecution(LexerEvalResult result,  StringsVector strVec, int listIndex, CommandDataVector& outVec);
+    void resultBasedExecution(LexerEvalResult result,  StringsVector& strVec, int listIndex, CommandDataVector& outVec);
 };
 
 

@@ -7,26 +7,22 @@
 
 
 #include "ICommand.h"
-#include "CommandsUtil/CommandsUtil.h"
+#include "CommandsUtil/CommandsQueueExecution.h"
+#include "../IController.h"
 
-class IfCommand : ICommand {
+class IfCommand : public ICommand {
 public:
     /// ---------- CONSTRUCTORS & DESTRUCTORS ----------
-    explicit IfCommand(CommandsMap* commandsList) : m_commandsList(commandsList) {};
-    ~IfCommand() override {
-        this->m_commandsList = nullptr;
-
-        for(VarData* vD : this->m_placeHoldersContainer)
-            delete(vD);
-    };
+    explicit IfCommand(IController* controller, CommandsMap* map) :
+                m_commandsList(map), m_controller(controller) {};
+    ~IfCommand() override = default;
 
     /// ---------- EXECUTION ----------
-    CommandResult execute(IClient* sender, CommandData* command, VarData* placeHolder) override;
+    CommandResult execute(IClient* sender, CommandData* commandPtr, VarData* inHolder, VarData* outHolder) override;
 
 private:
+    IController* m_controller;
     CommandsMap* m_commandsList;
-    unsigned long m_placeHoldersCount = 0;
-    std::vector<VarData*> m_placeHoldersContainer;
 };
 
 

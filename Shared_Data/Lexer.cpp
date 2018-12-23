@@ -26,25 +26,30 @@ void Lexer::parseLine(ConstStringRef line, CommandDataQueue& outQueue) {
         rejoinAllStringsInVector(stringsVector);
         rejoinAllStringsFromInitializerList(stringsVector, OPERATORS_LIST);
         rejoinAllStringsFromInitializerList(stringsVector, MATH_OPERATIONS);
-    } catch(std::exception& e) {
+    } catch (std::exception &e) {
         throw std::runtime_error(e.what());
     }
 
     // (3).
     std::reverse(stringsVector.begin(), stringsVector.end());
 
-    for(int i = 0; i < stringsVector.size(); ++i) {
+    for (int i = 0; i < stringsVector.size(); ++i) {
         // (4).
         LexerEvalResult evaluation = evaluateString(stringsVector[i]);
         try {
             // (5).
             resultBasedExecution(evaluation, stringsVector, i, m_placeHolder[0]);
-        } catch(std::exception& e) {
+        } catch (std::exception &e) {
             throw std::runtime_error(e.what());
         }
     }
-if(!m_curlyBracketsFound && m_readToPlaceHolder == 0)
-    pushFromVectorToQueue(m_placeHolder[0], outQueue);
+    if (!m_curlyBracketsFound && m_readToPlaceHolder == 0) {
+        // PUSH
+        pushFromVectorToQueue(m_placeHolder[0], outQueue);
+
+        // CLEAR placeHolder[0]
+        m_placeHolder[0].clear();
+    }
 }
 
 /**
@@ -73,6 +78,9 @@ LexerEvalResult Lexer::evaluateString(ConstStringRef str) {
     if(str == RAW_CREATE_VARIABLE_STR)
         return LEXER_PARSE_CREATE_VARIABLE;
 
+    if(str == RAW_SLEEP_STR)
+        return LEXER_PARSE_SLEEP_COMMAND;
+
     if(str == RAW_BIND_STR)
         return LEXER_PARSE_BIND_TO;
 
@@ -88,7 +96,7 @@ LexerEvalResult Lexer::evaluateString(ConstStringRef str) {
     if(str == RAW_CLOSE_COMMAND_STR)
         return LEXER_PARSE_CLOSE_COMMAND;
 
-    if(str == RAW_IF_COMMAND)
+    if(str == RAW_IF_COMMAND_STR)
         return LEXER_PARSE_IF_COMMAND;
 
     // NOTE: isOperator must come BEFORE isMathExpression, for expressions such as:
@@ -99,8 +107,9 @@ LexerEvalResult Lexer::evaluateString(ConstStringRef str) {
         return LEXER_PARSE_OPERATOR;
     }
 
-    // check math expression
-    if(containsSubstringFromInitializerList(str, MATH_OPERATIONS)) {
+    // check math expression or numeric value
+    if(containsSubstringFromInitializerList(str, MATH_OPERATIONS) ||
+        isNumeric(str)) {
         return LEXER_PARSE_MATH_EXPRESSION;
     }
 
@@ -118,7 +127,7 @@ LexerEvalResult Lexer::evaluateString(ConstStringRef str) {
  * @param listIndex int -- an index to the current string
  * @param outVector CommandDataVector -- a queue of pairs representing <[command_name],[data]>
  */
-void Lexer::resultBasedExecution(LexerEvalResult result, StringsVector strVector,
+void Lexer::resultBasedExecution(LexerEvalResult result, StringsVector& strVector,
                                   int listIndex, CommandDataVector &outVector) {
     // if m_readToPlaceHolder > 0 -> create an alias to that placeHolder. Otherwise,
     //  take outVector as an alias
@@ -131,8 +140,19 @@ void Lexer::resultBasedExecution(LexerEvalResult result, StringsVector strVector
         case LEXER_PARSE_VARIABLE_STR: // skip variables
             return;
 
-        case LEXER_PARSE_PATH: // skip paths
+        case LEXER_PARSE_SLEEP_COMMAND: {
+            parseSleepCommand(outVecAlias);
+            break;
+        }
+
+        case LEXER_PARSE_PATH: {
+            std::string& filePath = strVector[listIndex];
+
+            // clear from \" and spaces
+            filePath.erase(std::remove(filePath.begin(), filePath.end(), '\"'), filePath.end());
+            filePath.erase(std::remove(filePath.begin(), filePath.end(), ' '), filePath.end());
             return;
+        }
 
         case LEXER_PARSE_OPEN_CURLY_BRACKETS: {
             m_curlyBracketsFound = true;
@@ -235,11 +255,6 @@ void Lexer::parseBindCommand(const StringsVector &strVec, int index, CommandData
     if(!indexWithinVectorRange(index - 1, strVec))
         throw std::runtime_error("Missing data argument to bind to\n");
 
-    // check that the given argument is indeed a string.
-    if(!isPath(strVec[index - 1]))
-        throw std::runtime_error("The given argument is not a string. "
-                                 "Please make sure to provide a string in the following manner: \"PATH\"");
-
     outVector.insert(outVector.begin(), new CommandData(BIND_COMMAND_STR, strVec[index - 1]));
 
 }
@@ -257,13 +272,12 @@ void Lexer::parseCreateVar(const StringsVector &strVec, int index, CommandDataVe
 
     // if the outVec is not empty ->
     if(!outVector.empty()) {
-        // check if the last command pushed is ASSIGN.
-        // if so, we will need to push this create var after it.
+        // should the last command pushed is ASSIGN, the var will come before assign and calculation.
         if (outVector[0]->getName() == ASSIGN_EXISTING_COMMAND_STR) {
             outVector.insert(
-                    outVector.begin() + 1,
+                    outVector.end(),
                     new CommandData(
-                            RAW_CREATE_VARIABLE_STR,
+                            CREATE_VAR_COMMAND_STR,
                             strVec[index - 1]));
             return;
         }
@@ -402,6 +416,18 @@ void Lexer::parseWhileLoopToQueue(CommandDataVector &outVec) {
     }
 }
 
+/**
+ * parseSleepCommand(const std::string &str, CommandDataVector &outVec).
+ *
+ * @param outVector CommandDataVector& -- a reference to a CommandDataVector to modify accordingly.
+ */
+void Lexer::parseSleepCommand(CommandDataVector &outVec) {
+    if(!(outVec[0]->getName() == CALCULATE_MATH_COMMAND_STR))
+        throw std::runtime_error("Please insert time in milliseconds for the program should sleep for\n");
+
+    // set the name of the operator command to an IF command
+    outVec[0]->setName(SLEEP_COMMAND_STR);
+}
 
 /// ---------- PRIVATE METHODS ----------
 /**

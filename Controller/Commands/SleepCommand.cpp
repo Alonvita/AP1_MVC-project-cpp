@@ -5,26 +5,29 @@
 #include "SleepCommand.h"
 
 /**
-     * execute(IClient* sender, CommandData* command, void* placeHolder).
-     *
-     * @param sender IClient* -- a pointer to the sending client.
-     * @param command CommandData* -- a point to a command data.
-     * @param placeHolder var_data* -- a placeholder.
-     *
-     * @return a command result, depending on the specific executed command and it's success/failure.
-     */
-CommandResult SleepCommand::execute(IClient* sender, CommandData* command, VarData* placeHolder)  {
+ * execute(IClient* sender, const std::string& command, void* inHolder).
+ *
+ * @param sender IClient* -- a pointer to the sending client.
+ * @param commandPtr CommandData* -- a pointer to a commandData.
+ * @param inHolder var_data* -- a inHolder.
+ *
+ * @return a command result, depending on the specific executed command and it's success/failure.
+ */
+CommandResult SleepCommand::execute(IClient* sender, CommandData* commandPtr, VarData* inHolder, VarData* outHolder) {
     try {
-        int milliseconds = stoi(command->getData());
+        double milliseconds = SECONDS_TO_MILLISECONDS(stod(commandPtr->getData()));
 
         if(milliseconds < 0) {
-            throw std::runtime_error("Cannot sleep for negative value: " + command->getData());
+            throw std::runtime_error("Cannot sleep for negative value: " + commandPtr->getData());
         } else {
-            sleep((unsigned int)milliseconds);
+            sleep(milliseconds);
         }
 
         std::stringstream ss;
-        ss << "Program slept for: " << command->getData() << " milliseconds\n";
+        ss << "Program slept for: " << commandPtr->getData() << " milliseconds\n";
+
+        // pass inHolder's data on.
+        *outHolder = *inHolder;
 
         return CommandResult(true, SLEEP, ss.str(), true);
 

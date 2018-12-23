@@ -40,6 +40,8 @@ set(OUTER_HANDLERS
         )
 
 set(CONTROLLER
+        #IController
+        Controller/IController.h
         #Controller
         Controller/Controller.h Controller/Controller.cpp
         # Test Printing ICommand -- will be used for testing stuff
@@ -62,7 +64,7 @@ set(CONTROLLER
         # If Command
         Controller/Commands/IfCommand.h Controller/Commands/IfCommand.cpp
         # Commands Util
-        Controller/Commands/CommandsUtil/CommandsUtil.h Controller/Commands/CommandsUtil/CommandsUtil.cpp
+        Controller/Commands/CommandsUtil/CommandsQueueExecution.h Controller/Commands/CommandsUtil/CommandsQueueExecution.cpp
         )
 
 set(CLIENTS

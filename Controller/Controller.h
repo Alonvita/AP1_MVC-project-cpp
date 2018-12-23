@@ -8,9 +8,10 @@
 #include <map>
 
 #include "Commands/ICommand.h"
+#include "Commands/IfCommand.h"
 #include "Commands/BindCommand.h"
-#include "../DefinesAndTypedefs.h"
 #include "Commands/SleepCommand.h"
+#include "../DefinesAndTypedefs.h"
 #include "Commands/OperatorCommand.h"
 #include "Commands/WhileLoopCommand.h"
 #include "../Shared_Data/CommandResult.h"
@@ -21,15 +22,15 @@
 #include "Math_Expressions_Handling/MathExpressionsHandler.h"
 
 
-class Controller {
+class Controller : public IController {
 public:
     /// -------- CONSTRUCTORS & DESTRUCTORS --------
     // TODO: Controller should receive a ClientHandler* to the constructor after creating ClientHandler
     Controller();
-    ~Controller();
+    ~Controller() override;
 
     /// -------- EXECUTION --------
-    CommandResult executeCommand(CommandDataQueue& commandsQueue, IClient* sender);
+    CommandResult executeCommand(const CommandDataQueue& commandsQueue, IClient* sender) override;
 
 
 private:

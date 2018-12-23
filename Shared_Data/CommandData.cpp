@@ -21,12 +21,6 @@ CommandData::CommandData(ConstStringRef name, ConstStringRef data) : m_name(name
 CommandData::~CommandData() {
     // clear the queue
     while(!m_commandsQueue.empty()) {
-        // take a pointer to the next CommandData
-        CommandData *removeVal = m_commandsQueue.front();
-
-        // remove it from the queue
-        m_commandsQueue.pop();
-
-        delete(removeVal);
+        SAFELY_POP_COMMAND_DATA_QUEUE(m_commandsQueue)
     }
 }

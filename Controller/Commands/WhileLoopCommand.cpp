@@ -13,12 +13,12 @@
  *      Queue -- the queue will hold the command to execute while condition is met.
  *
  * @param sender IClient* -- a pointer to the sending client.
- * @param command CommandData* -- a point to a command data.
- * @param placeHolder var_data* -- a placeholder.
+ * @param commandPtr CommandData* -- a pointer to a commandData.
+ * @param inHolder var_data* -- a inHolder.
  *
  * @return a command result, depending on the specific executed command and it's success/failure.
  */
-CommandResult WhileLoopCommand::execute(IClient* sender, CommandData* command, VarData* placeHolder) {
+CommandResult WhileLoopCommand::execute(IClient* sender, CommandData* commandPtr, VarData* inHolder, VarData* outHolder) {
 
     // TODO: check if command and use Util if it works properly.
 
@@ -27,7 +27,7 @@ CommandResult WhileLoopCommand::execute(IClient* sender, CommandData* command, V
 
     // initialization with the first while condition check
     CommandResult retVal =
-            this->m_commandsList->at(OPERATOR_COMMAND_STR)->execute(sender, command, condition);
+            m_commandsList->at(OPERATOR_COMMAND_STR)->execute(sender, commandPtr, inHolder, condition);
 
     if(!retVal.commandSucceeded())
         return retVal;
@@ -35,7 +35,7 @@ CommandResult WhileLoopCommand::execute(IClient* sender, CommandData* command, V
     // while condition is true
     while(*(bool*)(condition->get_data())) {
         // get the queue of commands for this while command
-        CommandDataQueue whileQueue = command->getQueue();
+        CommandDataQueue whileQueue = commandPtr->getQueue();
 
         // Execute all commands
         while(!whileQueue.empty()) {
@@ -47,7 +47,9 @@ CommandResult WhileLoopCommand::execute(IClient* sender, CommandData* command, V
             m_placeHoldersCount++;
 
             // Local Vairables
+            VarData* currPH = m_placeHoldersContainer[m_placeHoldersCount];
             VarData* lastPH = m_placeHoldersContainer[m_placeHoldersCount - 1];
+
             auto map_it = this->m_commandsList->find(commandToExecute->getName());
 
             if(map_it == this->m_commandsList->end()) {
@@ -55,7 +57,7 @@ CommandResult WhileLoopCommand::execute(IClient* sender, CommandData* command, V
                 return CommandResult(true, UNDEFINED, "Unknown command given inside while loop\n", true);
             }
 
-            retVal = (*map_it).second->execute(sender, commandToExecute, lastPH);
+            retVal = (*map_it).second->execute(sender, commandToExecute, lastPH, currPH);
 
             // command executed poorly -> return
             if(!retVal.commandSucceeded()) {
@@ -68,9 +70,9 @@ CommandResult WhileLoopCommand::execute(IClient* sender, CommandData* command, V
         delete(condition);
         condition = new VarData();
 
-        // recheck condition
+        // if it's a loop -> recheck condition
         retVal =
-                this->m_commandsList->at(OPERATOR_COMMAND_STR)->execute(sender, command, condition);
+                this->m_commandsList->at(OPERATOR_COMMAND_STR)->execute(sender, commandPtr, inHolder, condition);
 
         // command executed poorly -> return
         if(!retVal.commandSucceeded()) {
@@ -78,6 +80,9 @@ CommandResult WhileLoopCommand::execute(IClient* sender, CommandData* command, V
             return retVal;
         }
     }
+
+    // pass inHolder's data on
+    *outHolder = *inHolder;
 
     // Everything went well -> return a successful result
     CommandResult result(true, LOOP_ENDS, "While loop ended successfully\n", true);

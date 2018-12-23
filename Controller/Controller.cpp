@@ -12,32 +12,25 @@
 Controller::Controller() {
     this->m_vContainer = new VariablesMapContainer();
 
-    // TODO: TEMP USAGE -> REMOVE THIS
-    auto a = new VarData;
-    auto d = (double*) malloc(sizeof(double));
-    *d = 15;
-
-    a->set_data(d, DOUBLE);
-
-    m_vContainer->addToMap("a", a);
-
-
-    // TODO: UNTIL HERE
-
-    // initialize opHandler
 
     // initialize Math Parser
-    this->m_mathExpressionsHandler = new MathExpressionsHandler(m_vContainer);
-    this->m_opHandler = new OperatorsHandler(m_mathExpressionsHandler);
+    m_mathExpressionsHandler = new MathExpressionsHandler(m_vContainer);
+
+    // initialize opHandler
+    m_opHandler = new OperatorsHandler(m_mathExpressionsHandler);
+
+    // initialize PH container
+    m_placeHoldersContainer.push_back(new VarData());
 
     // Initialize Commands Map
-    this->m_commandsList.insert(std::make_pair(SLEEP_COMMAND_STR, new SleepCommand()));
-    this->m_commandsList.insert(std::make_pair(BIND_COMMAND_STR, new BindCommand())); // Create Var
-    this->m_commandsList.insert(std::make_pair(OPERATOR_COMMAND_STR, new OperatorCommand(m_opHandler)));
-    this->m_commandsList.insert(std::make_pair(WHILE_LOOP_COMMAND_STR, new WhileLoopCommand(&m_commandsList)));
-    this->m_commandsList.insert(std::make_pair(CREATE_VAR_COMMAND_STR, new CreateVariableCommand(m_vContainer))); // Create Var
-    this->m_commandsList.insert(std::make_pair(CALCULATE_MATH_COMMAND_STR, new CalculateMathExpressionCommand(m_mathExpressionsHandler)));
-    this->m_commandsList.insert(std::make_pair(ASSIGN_EXISTING_COMMAND_STR, new AssignExistingVarCommand(m_vContainer ,m_mathExpressionsHandler)));
+    m_commandsList.insert(std::make_pair(SLEEP_COMMAND_STR, new SleepCommand()));
+    m_commandsList.insert(std::make_pair(BIND_COMMAND_STR, new BindCommand())); // Create Var
+    m_commandsList.insert(std::make_pair(IF_COMMAND_STR, new IfCommand(this, &m_commandsList)));
+    m_commandsList.insert(std::make_pair(OPERATOR_COMMAND_STR, new OperatorCommand(m_opHandler)));
+    m_commandsList.insert(std::make_pair(WHILE_LOOP_COMMAND_STR, new WhileLoopCommand(this, &m_commandsList)));
+    m_commandsList.insert(std::make_pair(CREATE_VAR_COMMAND_STR, new CreateVariableCommand(m_vContainer))); // Create Var
+    m_commandsList.insert(std::make_pair(CALCULATE_MATH_COMMAND_STR, new CalculateMathExpressionCommand(m_mathExpressionsHandler)));
+    m_commandsList.insert(std::make_pair(ASSIGN_EXISTING_COMMAND_STR, new AssignExistingVarCommand(m_vContainer ,m_mathExpressionsHandler)));
 }
 
 /**
@@ -53,9 +46,8 @@ Controller::~Controller() {
     for(CommandsMapPair p : this->m_commandsList)
         delete p.second;
 
-    for(VarData* vd : this->m_placeHoldersContainer) {
+    for(VarData* vd : this->m_placeHoldersContainer)
         delete(vd);
-    }
 }
 
 ///---------- EXECUTION ----------
@@ -70,31 +62,17 @@ Controller::~Controller() {
  *
  * @return a command result created by the command's execution.
  */
-CommandResult Controller::executeCommand(CommandDataQueue& commandsQueue, IClient* sender) {
-    // TODO: TEST CODE -> remove
-    /*
-    auto temp = (VarData*) malloc(sizeof(VarData));
-    int fp = open("/home/alon/Desktop/Untitled Folder/test.txt" ,O_RDWR);
-    double d = 1234.124;
-    write(fp, &d, sizeof(double));
-    lseek(fp, 0, SEEK_SET);
-
-    temp->set_data(&fp);
-    temp->set_type(BIND_COMMAND);
-    m_placeHolder.push_back(temp);
-    */
-
-    // add temp to our placeHolder vector
-
+CommandResult Controller::executeCommand(const CommandDataQueue& commandsQueue, IClient* sender) {
     // Undefined command
     CommandResult commandResult;
+    CommandDataQueue queueCpy = commandsQueue;
 
-    while(true) {
+    while(!queueCpy.empty()) {
         m_placeHoldersContainer.push_back(new VarData());
         m_placeHolderCount++;
 
         // take front
-        CommandData* command = commandsQueue.front();
+        CommandData* command = queueCpy.front();
 
         // find commandsQueue in map
         auto it = m_commandsList.find(command->getName());
@@ -104,12 +82,17 @@ CommandResult Controller::executeCommand(CommandDataQueue& commandsQueue, IClien
             return CommandResult(false, UNDEFINED, "Unknown Command\n", true); // return unknown commandsQueue
         }
 
+        VarData* currPH = m_placeHoldersContainer[m_placeHolderCount];
         VarData* lastPH = m_placeHoldersContainer[m_placeHolderCount - 1];
 
         // TODO: I think mutex lock will be here
-        commandResult = (*it).second->execute(nullptr, command, lastPH);
+        commandResult = (*it).second->execute(nullptr, command, lastPH, currPH);
 
-        commandsQueue.pop(); // pop the used command
+        if(!commandResult.commandSucceeded())
+            return CommandResult(false, EXECUTION_FAILURE, commandResult.getData(), true);
+
+        queueCpy.pop();
+
         if(commandsQueue.empty()) {
             break;
         }

@@ -11,28 +11,32 @@
 OperatorCommand::~OperatorCommand() { this->m_opHandler = nullptr; }
 
 /**
- * execute(IClient* sender, CommandData* command, void* placeHolder).
+ * execute(IClient* sender, const std::string& command, void* inHolder).
  *
  * @param sender IClient* -- a pointer to the sending client.
- * @param command CommandData* -- a point to a command data.
- * @param placeHolder VarData* -- a placeholder.
+ * @param commandPtr CommandData* -- a pointer to a commandData.
+ * @param inHolder var_data* -- a inHolder.
  *
  * @return a command result, depending on the specific executed command and it's success/failure.
  */
-CommandResult OperatorCommand::execute(IClient* sender, CommandData* command, VarData* placeHolder) {
+CommandResult OperatorCommand::execute(IClient* sender, CommandData* commandPtr, VarData* inHolder, VarData* outHolder) {
     //try to evaluate
     try {
         // TODO: add a mutex lock here
 
         // evaluate the operation containing LHS OP RHS
-        bool result = this->m_opHandler->evaluate_operation(command->getData());
+        bool* result = (bool*) malloc(sizeof(bool));
 
-        // set into the place holder
-        placeHolder->set_data(&result, BOOL);
+        *result = this->m_opHandler->evaluate_operation(commandPtr->getData());
+
+        // set into the out holder
+        outHolder->set_data(result, BOOL);
+
+        free(result);
 
         // return CommandResult
         std::stringstream ss;
-        ss << "Successfully evaluated the expression: " << command->getData() << "\n";
+        ss << "Successfully evaluated the expression: " << commandPtr->getData() << "\n";
 
         // TODO: add a mutex unlock here
 

@@ -5,39 +5,32 @@
 #include "CreateVariableCommand.h"
 
 /**
- * execute(IClient* sender, CommandData* command, void* placeHolder).
+ * execute(IClient* sender, const std::string& command, void* inHolder).
  *
  * @param sender IClient* -- a pointer to the sending client.
- * @param command CommandData* -- a point to a command data.
- * @param placeHolder VarData* -- a placeholder.
+ * @param commandPtr CommandData* -- a pointer to a commandData.
+ * @param inHolder var_data* -- a inHolder.
  *
  * @return a command result, depending on the specific executed command and it's success/failure.
  */
-CommandResult CreateVariableCommand::execute(IClient *sender, CommandData* command, VarData* placeHolder) {
+CommandResult CreateVariableCommand::execute(IClient* sender, CommandData* commandPtr, VarData* inHolder, VarData* outHolder) {
     std::ostringstream returnMessage;
-
-    // TODO: can add the value to placeholder so the programm supports expressions such as:
-    // TODO:    var a = var b = 15
-
-    // bad location for placeHolder or nullptr received
-    if (placeHolder == nullptr) {
-        returnMessage << "placeHolder is nullptr..." << "\n";
-
-        return CommandResult(false, UNDEFINED, returnMessage.str(), true);
-    }
     
     try {
-        // add it to the map
-        this->m_vContainer->addToMap(command->getData(), placeHolder);
+        // add an empty var to map
+        this->m_vContainer->addToMap(commandPtr->getData(), new VarData());
 
         // create the message
-        returnMessage << "SUCCESS: creating new variable: " << command->getData() << "\n";
+        returnMessage << "SUCCESS: creating new variable: " << commandPtr->getData() << "\n";
+
+        // pass inHolder on
+        *outHolder = *inHolder;
 
         return CommandResult(true, CREATE_VAR, returnMessage.str(), true);
     } catch (std::bad_cast &e) {
         return CommandResult(false, EXECUTION_FAILURE, "BAD_CAST: could not cast to a double from placeHolder\n", true);
     } catch (std::exception &e) {
-        returnMessage << "FAILURE when adding " << command->getData() << " to the map\n";
+        returnMessage << "FAILURE when adding " << commandPtr->getData() << " to the map\n";
 
         return CommandResult(false, EXECUTION_FAILURE, returnMessage.str(), true);
     }

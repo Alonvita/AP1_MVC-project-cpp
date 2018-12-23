@@ -9,12 +9,14 @@
 #include <map>
 #include "ICommand.h"
 #include "../../DefinesAndTypedefs.h"
-#include "CommandsUtil/CommandsUtil.h"
+#include "CommandsUtil/CommandsQueueExecution.h"
+#include "../IController.h"
 
 class WhileLoopCommand : public ICommand {
 public:
     /// ---------- CONSTRUCTORS & DESTRUCTORS ----------
-    explicit WhileLoopCommand(CommandsMap* commandsList) : m_commandsList(commandsList) {};
+    WhileLoopCommand(IController* controller, CommandsMap* commandsList) :
+                m_controller(controller), m_commandsList(commandsList) {};
     ~WhileLoopCommand() override {
         this->m_commandsList = nullptr;
 
@@ -23,9 +25,10 @@ public:
     };
 
     /// ---------- EXECUTION ----------
-    CommandResult execute(IClient* sender, CommandData* command, VarData* placeHolder) override;
+    CommandResult execute(IClient* sender, CommandData* commandPtr, VarData* inHolder, VarData* outHolder) override;
 
 private:
+    IController* m_controller;
     CommandsMap* m_commandsList;
     unsigned long m_placeHoldersCount = 0;
     std::vector<VarData*> m_placeHoldersContainer;

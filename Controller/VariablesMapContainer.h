@@ -25,7 +25,7 @@ public:
     VarDataType getType(const std::string& varName);
     void addToMap(const std::string& varName, VarData* varData);
     double evaluateVariableValueFromMap(const std::string& varName);
-    void setExistingVar(ConstStringRef str, void* data, VarDataType type);
+    void setExistingVar(ConstStringRef str, VarData& varData);
 
 private:
     std::map<std::string, VarData*> m_variablesMap;

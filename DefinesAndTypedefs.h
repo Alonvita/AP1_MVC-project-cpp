@@ -24,10 +24,11 @@
 /// ---- LEXER ----
 #define RAW_ASSIGN_STR "="
 #define RAW_BIND_STR "bind"
-#define RAW_IF_COMMAND "if"
+#define RAW_SLEEP_STR "sleep"
 #define RAW_PRINT_STR "print"
 #define RAW_OPEN_BRACKETS "{"
 #define RAW_CLOSE_BRACKETS "}"
+#define RAW_IF_COMMAND_STR "if"
 #define RAW_WHILE_LOOP_STR "while"
 #define RAW_CLOSE_COMMAND_STR "close"
 #define RAW_CREATE_VARIABLE_STR "var"
@@ -46,10 +47,10 @@
 #define ASSIGN_EXISTING_COMMAND_STR "ASSIGN"
 #define CALCULATE_MATH_COMMAND_STR "CALCULATE_MATH_EXPRESSION"
 
-#define COMMAND_DATA_QUEUE_POP(queue) delete(queue.front()); queue.pop();
+#define SAFELY_POP_COMMAND_DATA_QUEUE(queue) delete(queue.front()); queue.pop();
 
 typedef std::initializer_list<std::string> StringsInitializeList;
-typedef std::pair<std::string, double> VarDataPair;
+typedef std::pair<char*, double> VarDataPair;
 
 typedef const std::string& ConstStringRef;
 typedef std::list<std::string> StringsList;

@@ -198,8 +198,8 @@ double MathExpressionsHandler::evaluatePostfixList(const StringsList &postfixExp
         stack.push(str);
     }
 
-    // return the double value of the top of the stack (that is the evaluated value)
-    return stod(stack.top());
+    // return the double value of the top of the stack (that is the evaluated value OR a variable's value)
+    return getVariableValFromMapOrCreateDoubleForNumericVals(stack.top());
 }
 
 /**

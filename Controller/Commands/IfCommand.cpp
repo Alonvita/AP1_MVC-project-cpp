@@ -5,36 +5,33 @@
 #include "IfCommand.h"
 
 /**
- * execute(IClient* sender, CommandData* command, void* placeHolder).
+ * execute(IClient* sender, const std::string& command, void* inHolder).
  *
  * @param sender IClient* -- a pointer to the sending client.
- * @param command CommandData* -- a point to a command data.
- * @param placeHolder VarData* -- a placeholder.
+ * @param commandPtr CommandData* -- a pointer to a commandData.
+ * @param inHolder var_data* -- a inHolder.
  *
  * @return a command result, depending on the specific executed command and it's success/failure.
  */
-CommandResult IfCommand::execute(IClient *sender, CommandData *command, VarData *placeHolder) {
+CommandResult IfCommand::execute(IClient* sender, CommandData* commandPtr, VarData* inHolder, VarData* outHolder) {
     // Local Variables
-    auto condition = new VarData();
+    auto conditionPlaceHolder = new VarData();
 
     // initialization with the first while condition check
     CommandResult retVal =
-            this->m_commandsList->at(OPERATOR_COMMAND_STR)->execute(sender, command, condition);
+            this->m_commandsList->at(OPERATOR_COMMAND_STR)->execute(sender, commandPtr, inHolder, conditionPlaceHolder);
 
     if(!retVal.commandSucceeded())
         return retVal;
 
     // while condition is true
-    if(*(bool*)(condition->get_data())) {
+    if(*(bool*)(conditionPlaceHolder->get_data())) {
         // get the queue of commands for this while command
-        CommandDataQueue whileQueue = command->getQueue();
-        CommandResult result = executeCommandsQueue(sender,
-                                    whileQueue,
-                                    m_placeHoldersContainer,
-                                    m_placeHoldersCount,
-                                    condition,
-                                    retVal,
-                                    m_commandsList);
+        CommandResult result = m_controller->executeCommand(commandPtr->getQueue(), sender);
+
+        // pass inHolder's data on
+        *outHolder = *inHolder;
+        delete(conditionPlaceHolder);
 
         if(result.commandSucceeded()) {
             return CommandResult(true, IF_END, "If command ended successfully - condition was met\n", true);
@@ -43,6 +40,8 @@ CommandResult IfCommand::execute(IClient *sender, CommandData *command, VarData 
         }
     }
 
-    // Everything went well -> return a successful result
+    delete(conditionPlaceHolder);
+
+    // Condition not met
     return CommandResult(true, IF_END, "If command ended successfully - condition was NOT met\n", true);
 }

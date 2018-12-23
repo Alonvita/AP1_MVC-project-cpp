@@ -6,6 +6,10 @@
 #define AP1_SEMETSER_PROJECT_VARDATA_H
 
 #include <malloc.h>
+#include <iostream>
+#include <sstream>
+
+#include "../DefinesAndTypedefs.h"
 
 enum VarDataType {
     NOT_ASSIGNED = - 1,
@@ -17,23 +21,26 @@ enum VarDataType {
 
 class VarData {
 public:
-    VarData() : m_assigned(false), m_data(nullptr), type(NOT_ASSIGNED) {};
+    explicit VarData(bool data);
+    VarData() : m_assigned(false), m_data(nullptr), m_type(NOT_ASSIGNED) {};
     ~VarData();
 
-    void set_data(void *data, VarDataType type);
+    VarData& operator=(const VarData& type);
 
-    VarDataType get_type() { return this->type; }
-
-    void* get_data() { return this->m_data; }
+    void        set_data(void *data, VarDataType type);
+    VarDataType get_type() const { return m_type; }
+    void*       get_data() const { return m_data; }
+    bool        get_assigned() const { return m_assigned; }
 
 private:
     /// ---------- PRIVATE MEMBERS ----------
     void* m_data;
     bool m_assigned;
-    VarDataType type;
+    VarDataType m_type;
+    void allocVarDataSpaceFor(void *data);
 
     /// ---------- PRIVATE FUNCTIONS ----------
-    void set_type(VarDataType type) { this->type = type; }
+    void set_type(VarDataType type) { this->m_type = type; }
 };
 
 
