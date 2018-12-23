@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.12)
 project(AP1_Semetser_Project)
 
-set(CMAKE_CXX_STANDARD 14)
+
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -pthread -Wextra")
 
 set(MAIN main.cpp)
 
@@ -32,37 +34,53 @@ set(SHARED_DATA
 
 set(OUTER_HANDLERS
         #VariableMapContainer
-        Controller/VariablesMapContainer.h Controller/VariablesMapContainer.cpp
+        Server/Controller/VariablesMapContainer.h Server/Controller/VariablesMapContainer.cpp
         #MathExpressionsHandler
-        Controller/Math_Expressions_Handling/MathExpressionsHandler.h Controller/Math_Expressions_Handling/MathExpressionsHandler.cpp
+        Server/Controller/Math_Expressions_Handling/MathExpressionsHandler.h Server/Controller/Math_Expressions_Handling/MathExpressionsHandler.cpp
         #OperatorsHandler
-        Controller/Operators_Handler/OperatorsHandler.h Controller/Operators_Handler/OperatorsHandler.cpp
+        Server/Controller/Operators_Handler/OperatorsHandler.h Server/Controller/Operators_Handler/OperatorsHandler.cpp
         )
 
-set(CONTROLLER
+set(SERVER
+        ### THREADING ###
+        Server/ThreadPool/Task.h
+        Server/ThreadPool/Thread.h Server/ThreadPool/Thread.cpp
+        Server/ThreadPool/WorkQueue.h Server/ThreadPool/WorkQueue.cpp
+        Server/ThreadPool/ThreadPool.h Server/ThreadPool/ThreadPool.cpp
+        Server/ThreadPool/PoolWorkerThread.h Server/ThreadPool/PoolWorkerThread.cpp
+
+        #IServer
+        Server/IServer.h
+        # TCPServer
+        Server/TCPServer.h Server/TCPServer.cpp
+
+        #IClientHandler
+        Server/ClientHandler/IClientHandler.h
+        #ClientHandler
+        Server/ClientHandler/ClientHandler.h Server/ClientHandler/ClientHandler.cpp
         #IController
-        Controller/IController.h
+        Server/Controller/IController.h
         #Controller
-        Controller/Controller.h Controller/Controller.cpp
+        Server/Controller/Controller.h Server/Controller/Controller.cpp
         # Test Printing ICommand -- will be used for testing stuff
         # Interface
-        Controller/Commands/ICommand.h
+        Server/Controller/Commands/ICommand.h
         # CreateVariableCommand
-        Controller/Commands/CreateVariableCommand.h Controller/Commands/CreateVariableCommand.cpp
+        Server/Controller/Commands/CreateVariableCommand.h Server/Controller/Commands/CreateVariableCommand.cpp
         # BindCommand
-        Controller/Commands/BindCommand.h Controller/Commands/BindCommand.cpp
+        Server/Controller/Commands/BindCommand.h Server/Controller/Commands/BindCommand.cpp
         #OperatorCommand
-        Controller/Commands/OperatorCommand.h Controller/Commands/OperatorCommand.cpp
+        Server/Controller/Commands/OperatorCommand.h Server/Controller/Commands/OperatorCommand.cpp
         #CalculateMathExpressionCommand
-        Controller/Commands/CalculateMathExpressionCommand.h Controller/Commands/CalculateMathExpressionCommand.cpp
+        Server/Controller/Commands/CalculateMathExpressionCommand.h Server/Controller/Commands/CalculateMathExpressionCommand.cpp
         # While Loop Command
-        Controller/Commands/WhileLoopCommand.h Controller/Commands/WhileLoopCommand.cpp
+        Server/Controller/Commands/WhileLoopCommand.h Server/Controller/Commands/WhileLoopCommand.cpp
         # Assign Existing Var
-        Controller/Commands/AssignExistingVarCommand.h Controller/Commands/AssignExistingVarCommand.cpp
+        Server/Controller/Commands/AssignExistingVarCommand.h Server/Controller/Commands/AssignExistingVarCommand.cpp
         # Sleep Command
-        Controller/Commands/SleepCommand.h Controller/Commands/SleepCommand.cpp
+        Server/Controller/Commands/SleepCommand.h Server/Controller/Commands/SleepCommand.cpp
         # If Command
-        Controller/Commands/IfCommand.h Controller/Commands/IfCommand.cpp
+        Server/Controller/Commands/IfCommand.h Server/Controller/Commands/IfCommand.cpp
         )
 
 set(CLIENTS
@@ -72,4 +90,4 @@ set(CLIENTS
         View/Client.cpp View/Client.h
         )
 
-add_executable(projectExecutable ${UTILITIES} ${MAIN} ${SHARED_DATA} ${CONTROLLER} ${CLIENTS} ${OUTER_HANDLERS})
+add_executable(projectExecutable ${UTILITIES} ${MAIN} ${SHARED_DATA} ${SERVER} ${CLIENTS} ${OUTER_HANDLERS})

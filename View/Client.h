@@ -5,8 +5,9 @@
 #ifndef AP1_SEMETSER_PROJECT_CLIENT_H
 #define AP1_SEMETSER_PROJECT_CLIENT_H
 
-#include <arpa/inet.h>
 #include <cstring>
+#include <unistd.h>
+#include <arpa/inet.h>
 
 #include "IClient.h"
 #include "../DefinesAndTypedefs.h"
@@ -16,19 +17,21 @@
 class Client : public IClient {
 public:
     /// ---------- CONSTRUCTORS & DESTRUCTORS ----------
-    Client();
+    Client() noexcept;
+    explicit Client(int socket_id) noexcept;
     ~Client() = default;
 
     /// ---------- OVERRIDING INTERFACE FUNCTIONS ----------
-    std::string readMessage() override;
-    void writeMessage(Message m) override;
-    void disconnect(bool keepConnection) override;
-    void receiveNotification(Notification notif) override;
-    void receiveCommandResult(CommandResult result) override;
-    bool connectToServer(int port, ConstStringRef ip_address) override;
+    std::string     readMessage() override;
+    void            writeMessage(Message m) override;
+    void            disconnect(bool keepConnection) override;
+    void            receiveNotification(Notification notif) override;
+    void            receiveCommandResult(CommandResult result) override;
+    bool            connectToServer(uint16_t port, ConstStringRef ip_address) override;
 
     /// ---------- GETTERS & SETTERS ----------
-    bool isConnected() override;
+    bool    isConnected() override;
+    int     getSocketID() override { return g_socket; }
 
 
 private:

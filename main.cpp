@@ -5,7 +5,8 @@
 #include <iostream>
 #include "View/Client.h"
 #include "Shared_Data/Lexer.h"
-#include "Controller/Controller.h"
+#include "Server/Controller/Controller.h"
+#include "Server/ThreadPool/ThreadPool.h"
 
 using namespace std;
 

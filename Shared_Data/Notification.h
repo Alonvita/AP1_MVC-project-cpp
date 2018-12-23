@@ -8,6 +8,7 @@
 #include <string>
 
 enum NotificationType {
+    FAILURE,
     SERVER_DATA_OPENED,
     VARIABLE_CREATED,
     CONNECTED_TO_SERVER,

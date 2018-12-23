@@ -4,14 +4,24 @@
 
 #include "Client.h"
 
+
 /**
  * Constructor.
  */
-Client::Client() {
+Client::Client(int socket_id) noexcept {
     this->m_port = 0;
-    this->g_socket = -1;
+    this->m_connected = false;
+    this->g_socket = socket_id;
+    this->m_ip_address = EMPTY_ADDRESS;
+}
+/**
+ * Constructor.
+ */
+Client::Client() noexcept {
+    this->m_port = 0;
     this->m_connected = false;
     this->m_ip_address = EMPTY_ADDRESS;
+    this->g_socket = socket(AF_INET, SOCK_STREAM, 0);
 }
 
 /// ---------- GETTERS & SETTERS ----------
@@ -109,7 +119,7 @@ void Client::receiveNotification(Notification notif) {
  *
  * @return true on successful connection, or false otherwise.
  */
-bool Client::connectToServer(int port, ConstStringRef ip_address) {
+bool Client::connectToServer(uint16_t port, ConstStringRef ip_address) {
     try {
         setPort(port);
         setIPAddress(ip_address);
@@ -123,7 +133,6 @@ bool Client::connectToServer(int port, ConstStringRef ip_address) {
     if(this->m_ip_address.empty())
         throw std::runtime_error("must initialize ip_address first\n");
 
-    this->g_socket = socket(AF_INET, SOCK_STREAM, 0);
     if (g_socket >= 0) {
         // Memset the connection details
         memset(&this->m_connection_details, 0, sizeof(this->m_connection_details));
@@ -153,5 +162,7 @@ void Client::disconnect(bool keepConnection) {
     if(keepConnection)
         return;
 
-    // TODO:: disconnect client -> close socket etc.
+    // close socket and set connected to false
+    close(g_socket);
+    m_connected = false;
 }

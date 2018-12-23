@@ -33,7 +33,7 @@ void Lexer::parseLine(ConstStringRef line, CommandDataQueue& outQueue) {
     // (3).
     std::reverse(stringsVector.begin(), stringsVector.end());
 
-    for (int i = 0; i < stringsVector.size(); ++i) {
+    for (unsigned i = 0; i < stringsVector.size(); ++i) {
         // (4).
         LexerEvalResult evaluation = evaluateString(stringsVector[i]);
         try {

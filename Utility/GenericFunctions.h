@@ -11,7 +11,7 @@
 #include <algorithm>
 
 template <typename T>
-bool indexWithinVectorRange(int index, const std::vector<T>& vector);
+bool indexWithinVectorRange(unsigned index, const std::vector<T>& vector);
 
 template <typename T, typename K>
 std::pair<T, K> makePair(T lhs, K rhs);

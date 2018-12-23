@@ -14,7 +14,7 @@
  * @return true if the given index is between 0 and vector.size().
  */
 template <typename T>
-bool indexWithinVectorRange(int index, const std::vector<T>& vector) {
+bool indexWithinVectorRange(unsigned index, const std::vector<T>& vector) {
     return 0 <= index && index <= vector.size();
 }
 

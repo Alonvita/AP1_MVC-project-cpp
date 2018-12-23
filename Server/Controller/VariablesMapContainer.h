@@ -10,9 +10,9 @@
 #include <iostream>
 #include <unistd.h>
 
-#include "../Utility/VarData.h"
-#include "../DefinesAndTypedefs.h"
-#include "../Utility/UtilityFunctions.h"
+#include "../../Utility/VarData.h"
+#include "../../DefinesAndTypedefs.h"
+#include "../../Utility/UtilityFunctions.h"
 
 class VariablesMapContainer {
 public:

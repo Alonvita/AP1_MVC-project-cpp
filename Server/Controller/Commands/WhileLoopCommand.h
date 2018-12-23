@@ -8,9 +8,8 @@
 
 #include <map>
 #include "ICommand.h"
-#include "../../DefinesAndTypedefs.h"
-#include "CommandsUtil/CommandsQueueExecution.h"
 #include "../IController.h"
+#include "../../../DefinesAndTypedefs.h"
 
 class WhileLoopCommand : public ICommand {
 public:

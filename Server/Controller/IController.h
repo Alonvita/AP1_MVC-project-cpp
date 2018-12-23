@@ -5,9 +5,9 @@
 #ifndef AP1_SEMETSER_PROJECT_ICONTROLLER_H
 #define AP1_SEMETSER_PROJECT_ICONTROLLER_H
 
-#include "../View/IClient.h"
-#include "../Shared_Data/CommandData.h"
-#include "../Shared_Data/CommandResult.h"
+#include "../../View/IClient.h"
+#include "../../Shared_Data/CommandData.h"
+#include "../../Shared_Data/CommandResult.h"
 
 class IController {
 public:

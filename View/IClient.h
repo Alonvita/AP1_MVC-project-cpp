@@ -18,15 +18,16 @@
  */
 class IClient {
 public:
-    IClient() = default;
     virtual ~IClient() = default;
 
-    virtual void disconnect(bool keepConnection) = 0;
+    virtual int  getSocketID() = 0;
     virtual bool isConnected() = 0;
+
     virtual std::string readMessage() = 0;
     virtual void writeMessage(Message m) = 0;
+    virtual void disconnect(bool keepConnection) = 0;
     virtual void receiveNotification(Notification notif) = 0;
     virtual void receiveCommandResult(CommandResult result) = 0;
-    virtual bool connectToServer(int port, ConstStringRef ip_address) = 0;
+    virtual bool connectToServer(uint16_t port, ConstStringRef ip_address) = 0;
 };
 #endif //AP1_SEMETSER_PROJECT_ICLIENT_H
