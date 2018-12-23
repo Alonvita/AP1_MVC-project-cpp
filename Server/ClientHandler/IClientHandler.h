@@ -9,6 +9,8 @@
 #include "../ThreadPool/Task.h"
 #include "../Controller/IController.h"
 
+#define MAX_PACKET_SIZE 4096
+
 class IClientHandler : public Task {
 public:
     void run() override = 0;

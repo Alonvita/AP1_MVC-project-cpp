@@ -53,6 +53,8 @@ set(SERVER
         Server/IServer.h
         # TCPServer
         Server/TCPServer.h Server/TCPServer.cpp
+        # FlightGearClientHandler
+        Server/ClientHandler/FlightGearClientHandler.h Server/ClientHandler/FlightGearClientHandler.cpp
 
         #IClientHandler
         Server/ClientHandler/IClientHandler.h

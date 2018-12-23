@@ -290,3 +290,37 @@ void rejoinAllStringsInVector(StringsVector& stringsVector) {
         }
     }
 }
+
+/**
+ * isValidIPAddress(ConstStringRef str)
+ *
+ * @param str ConstSTringRef -- a const ref to a string.
+ * @return true if the string is a valid IP address.
+ */
+bool isValidIPAddress(const std::string& str) {
+    unsigned count = 0;
+    unsigned count2 = 0;
+
+    for (char c : str) {
+        // check digit
+        if (!isdigit(c)) {
+            // not digit -> check '.'
+            if (!(c == '.')) {
+                return false;
+            }
+
+            // '.' -> check count
+            if (3 < count || count == 0) {
+                return false; // 3 < count || count == 0 -> return false.
+            } else if (3 < count2) {
+                return false; // 3 dots were already found -> return false.
+            }
+            count2++;
+            count = 0;
+            continue;
+        }
+        ++count;
+    }
+
+    return true;
+}

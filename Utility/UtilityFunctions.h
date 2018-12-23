@@ -14,6 +14,7 @@
 
 bool isPath(ConstStringRef str);
 bool isNumeric(const std::string &str);
+bool isValidIPAddress(ConstStringRef str);
 void stripStringFromSpaces(std::string& str);
 void stripStringsListFromSpaces(StringsList& list);
 void rejoinAllStringsInVector(StringsVector& stringsVector);

@@ -16,6 +16,7 @@
 TCPServer::TCPServer(uint16_t port, ThreadPool* threadPool) {
     // initialize local variables
     m_threadPool = threadPool;
+    m_clientHandler;
 
     // initialize server
     m_sockfd = socket(AF_INET, SOCK_STREAM, 0);

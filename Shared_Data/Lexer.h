@@ -7,11 +7,12 @@
 
 #include <sstream>
 
+#include "CommandData.h"
 #include "CommandResult.h"
 #include "../View/IClient.h"
+#include "../Server/IServer.h"
 #include "../Utility/UtilityFunctions.h"
 #include "../Utility/GenericFunctions.h"
-#include "CommandData.h"
 
 #define LEXER_SPLIT_DELIMITERS " {}=\""
 
@@ -41,7 +42,7 @@ enum LexerEvalResult {
 class Lexer {
 public:
     explicit Lexer(IClient* client) :
-        m_client(client), m_serverAssigned(false),
+        m_client(client),
         m_readToPlaceHolder(0), m_placeHolder(std::vector<CommandDataVector>()),
         m_curlyBracketsFound(false) {
         m_placeHolder.emplace_back(CommandDataVector());
@@ -62,7 +63,6 @@ public:
 private:
     ///---------- LOCAL VARIABLES ----------
     IClient* m_client;
-    bool m_serverAssigned;
     int m_readToPlaceHolder;
     bool m_curlyBracketsFound;
     std::vector<CommandDataVector> m_placeHolder;
@@ -80,8 +80,6 @@ private:
     void parseIfCommand(CommandDataVector &outVec);
     void parseSleepCommand(CommandDataVector &outVec);
     void parseWhileLoopToQueue(CommandDataVector &outVec);
-    void openServer(const StringsVector& strVec, int index);
-    void connectClientToServer(const StringsVector& strVec, int index);
     void parseMathExpression(ConstStringRef str, CommandDataVector &outVec);
     void parseCloseCommand(ConstStringRef command, CommandDataVector &outVec);
     void parseOperatorCommand(ConstStringRef str, CommandDataVector &outVector);
@@ -90,6 +88,9 @@ private:
     void parsePrintCommand(const StringsVector& strVec, int index, CommandDataVector& outVec);
     void parseAssignCommand(const StringsVector& strVec,int index, CommandDataVector& outVec);
     void resultBasedExecution(LexerEvalResult result,  StringsVector& strVec, int listIndex, CommandDataVector& outVec);
+
+    void openServer(const StringsVector &strVec, int index, CommandDataVector &outVec);
+    void connectClientToServer(const StringsVector &strVec, int index, CommandDataVector &outVec);
 };
 
 

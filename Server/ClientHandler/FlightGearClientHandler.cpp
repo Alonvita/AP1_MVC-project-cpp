@@ -2,18 +2,21 @@
 // Created by alon on 23/12/18.
 //
 
-#include "ClientHandler.h"
+#include "FlightGearClientHandler.h"
 
 /**
  * run().
  */
-void ClientHandler::run() {
+void FlightGearClientHandler::run() {
     ssize_t n;
     char msg[MAX_PACKET_SIZE];
 
     while(m_client->isConnected()) {
-        // read from client
-        if(fgets(msg, MAX_PACKET_SIZE, stdin) == 0) {
+        // receive a message
+        n = recv(m_client->getSocketID(), msg, MAX_PACKET_SIZE, 0);
+
+        // check file ended while reading
+        if(n == 0) {
             m_client->disconnect(false);
             return;
         }

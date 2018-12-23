@@ -8,8 +8,6 @@
 #include "IClientHandler.h"
 #include "../../Shared_Data/Lexer.h"
 
-#define MAX_PACKET_SIZE 4096
-
 class ClientHandler : public IClientHandler {
 public:
     ClientHandler(IController* controller, Lexer* lex, IClient* client) :

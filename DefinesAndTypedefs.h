@@ -45,8 +45,13 @@
 #define CREATE_VAR_COMMAND_STR "MAKE_VAR"
 #define WHILE_LOOP_COMMAND_STR "WHILE_LOOP"
 #define ASSIGN_EXISTING_COMMAND_STR "ASSIGN"
+#define OPEN_SERVER_COMMAND_STR "OPEN_SERVER"
+#define CONNECT_TO_SERVER_COMMAND_STR "CONNECT_TO"
 #define CALCULATE_MATH_COMMAND_STR "CALCULATE_MATH_EXPRESSION"
 
+#define DEFAULT_READS_PER_SECOND_STR "10"
+
+#define SAFELY_REMOVE_COMMAND_DATA_VEC_BEGIN(vec) delete (vec[0]); vec.erase(outVec.begin());
 #define SAFELY_POP_COMMAND_DATA_QUEUE(queue) delete(queue.front()); queue.pop();
 
 typedef std::initializer_list<std::string> StringsInitializeList;

@@ -175,11 +175,11 @@ void Lexer::resultBasedExecution(LexerEvalResult result, StringsVector& strVecto
         }
 
         case LEXER_PARSE_CONNECT_CLIENT_TO_SERVER:
-            // TODO: add connect to server
+            connectClientToServer(strVector, listIndex, outVecAlias);
             return;
 
         case LEXER_PARSE_SERVER_OPEN:
-            // TODO: add server open
+            openServer(strVector, listIndex, outVecAlias);
             return;
 
         case LEXER_PARSE_PRINT: {
@@ -423,10 +423,85 @@ void Lexer::parseWhileLoopToQueue(CommandDataVector &outVec) {
  */
 void Lexer::parseSleepCommand(CommandDataVector &outVec) {
     if(!(outVec[0]->getName() == CALCULATE_MATH_COMMAND_STR))
-        throw std::runtime_error("Please insert time in milliseconds for the program should sleep for\n");
 
-    // set the name of the operator command to an IF command
-    outVec[0]->setName(SLEEP_COMMAND_STR);
+    // set the name of the command to an SLEEP command
+    outVec[0]->setName(OPEN_SERVER_COMMAND_STR);
+}
+
+/**
+ * openServer(const StringsVector &strVec, int index, CommandDataVector &outVec).
+ *
+ * @param strVec const StringsVec& -- a const reference to a string of vectors.
+ * @param index int -- an index.
+ * @param outVector CommandDataVector& -- a reference to a CommandDataVector to modify accordingly.
+ */
+void Lexer::openServer(const StringsVector &strVec, int index, CommandDataVector &outVec) {
+    if(2 < outVec.size() || outVec.size() == 0) {
+        throw std::runtime_error("Command's call convention is: \"openDataServer\" [PORT] [READS PER SECOND]\n");
+    }
+
+    if(!isNumeric(outVec[0]->getData())) {
+        throw std::runtime_error("Command's call convention is: \"openDataServer\" [PORT] [READS PER SECOND]\n");
+    }
+
+    std::string readsPerSec;
+    std::string port = outVec[0]->getData(); // set the port
+    SAFELY_REMOVE_COMMAND_DATA_VEC_BEGIN(outVec);
+
+    if(outVec.size() == 1) {
+        if(!isNumeric(outVec[1]->getData()))
+            throw std::runtime_error("Command's call convention is: \"openDataServer\" [PORT] [READS PER SECOND]\n");
+
+        readsPerSec = outVec[1]->getData();
+        SAFELY_REMOVE_COMMAND_DATA_VEC_BEGIN(outVec);
+    }
+
+    std::stringstream command;
+    command << port;
+
+    if(!readsPerSec.empty()) {
+        command << " " << readsPerSec;
+    } else {
+        command << " " << DEFAULT_READS_PER_SECOND_STR; // default reads per second...
+    }
+
+    // push the open server command
+    outVec.insert(outVec.begin(), new CommandData(OPEN_SERVER_COMMAND_STR, command.str()));
+}
+
+/**
+ * connectClientToServer(const StringsVector &strVec, int index, CommandDataVector &outVec).
+ *
+ * @param strVec const StringsVec& -- a const reference to a string of vectors.
+ * @param index int -- an index.
+ * @param outVector CommandDataVector& -- a reference to a CommandDataVector to modify accordingly.
+ */
+ void Lexer::connectClientToServer(const StringsVector &strVec, int index, CommandDataVector &outVec) {
+     if(outVec.size() != 2) {
+         throw std::runtime_error("Command's call convention is: \"connect\" [IP_ADDRESS] [PORT]\n");
+     }
+
+     if(!isValidIPAddress(outVec[0]->getData())) {
+         throw std::runtime_error("Please provide a valid IP address of type IPv4: xxx.xxx.xxx.xxx\n");
+     }
+
+    if (!isNumeric(outVec[1]->getData())) {
+        throw std::runtime_error("Please provide a port. Command's call convention is: \"connect\" [IP_ADDRESS] [PORT]\n");
+    }
+
+    std::string IP = outVec[0]->getData(); // take the IP address
+    std::string port = outVec[1]->getData(); // take the port
+
+
+    std::stringstream command;
+    command << IP << " " << port;
+
+    // clear the vector -> commands will not be needed
+    SAFELY_REMOVE_COMMAND_DATA_VEC_BEGIN(outVec);
+    SAFELY_REMOVE_COMMAND_DATA_VEC_BEGIN(outVec);
+
+    // push the open server command
+    outVec.insert(outVec.begin(), new CommandData(CONNECT_TO_SERVER_COMMAND_STR, command.str()));
 }
 
 /// ---------- PRIVATE METHODS ----------

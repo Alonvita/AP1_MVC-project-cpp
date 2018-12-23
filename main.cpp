@@ -17,18 +17,18 @@ int main() {
     Lexer l(c);
 
     //l.parseLine("while alt < 1000 {", q);
-    l.parseLine("var alt = 14", q);
-    l.parseLine("if alt < 20 {", q);
-    //l.parseLine("print \"altitude too low!\"", q);
-    l.parseLine("sleep 250", q);
-    l.parseLine("}", q);
-    //l.parseLine("}", q);
+    try {
+        l.parseLine("openDataServer", q);
+    } catch(std::exception& e) {
+        std::cout << e.what();
+        exit(0);
+    }
 
     std::cout << "Queue's commands order is: \n";
 
-    auto controller = new Controller();
+  //  auto controller = new Controller();
 
-    CommandResult r = controller->executeCommand(q, c);
+//    CommandResult r = controller->executeCommand(q, c);
 
     while(!q.empty()) {
         CommandData* p = q.front();
@@ -41,5 +41,5 @@ int main() {
 
 
     delete(c);
-    delete(controller);
+    //delete(controller);
 }
