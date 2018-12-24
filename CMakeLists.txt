@@ -64,27 +64,32 @@ set(SERVER
         Server/Controller/IController.h
         #Controller
         Server/Controller/Controller.h Server/Controller/Controller.cpp
-        # Test Printing ICommand -- will be used for testing stuff
-        # Interface
-        Server/Controller/Commands/ICommand.h
+
+        ### COMMANDS ###
+        # ICommand
+        Server/ICommand.h
+        # ServerHandlingCommand
+        Server/ServerHandlingCommands/ServerHandlingCommand.h
+        # IControllerCommand
+        Server/Controller/Commands/ControllerCommands/IControllerCommand.h
         # CreateVariableCommand
-        Server/Controller/Commands/CreateVariableCommand.h Server/Controller/Commands/CreateVariableCommand.cpp
+        Server/Controller/Commands/ControllerCommands/CreateVariableCommand.h Server/Controller/Commands/ControllerCommands/CreateVariableCommand.cpp
         # BindCommand
-        Server/Controller/Commands/BindCommand.h Server/Controller/Commands/BindCommand.cpp
+        Server/Controller/Commands/ControllerCommands/BindCommand.h Server/Controller/Commands/ControllerCommands/BindCommand.cpp
         #OperatorCommand
-        Server/Controller/Commands/OperatorCommand.h Server/Controller/Commands/OperatorCommand.cpp
+        Server/Controller/Commands/ControllerCommands/OperatorCommand.h Server/Controller/Commands/ControllerCommands/OperatorCommand.cpp
         #CalculateMathExpressionCommand
-        Server/Controller/Commands/CalculateMathExpressionCommand.h Server/Controller/Commands/CalculateMathExpressionCommand.cpp
+        Server/Controller/Commands/ControllerCommands/CalculateMathExpressionCommand.h Server/Controller/Commands/ControllerCommands/CalculateMathExpressionCommand.cpp
         # While Loop Command
-        Server/Controller/Commands/WhileLoopCommand.h Server/Controller/Commands/WhileLoopCommand.cpp
+        Server/Controller/Commands/ControllerCommands/WhileLoopCommand.h Server/Controller/Commands/ControllerCommands/WhileLoopCommand.cpp
         # Assign Existing Var
-        Server/Controller/Commands/AssignExistingVarCommand.h Server/Controller/Commands/AssignExistingVarCommand.cpp
+        Server/Controller/Commands/ControllerCommands/AssignExistingVarCommand.h Server/Controller/Commands/ControllerCommands/AssignExistingVarCommand.cpp
         # Sleep Command
-        Server/Controller/Commands/SleepCommand.h Server/Controller/Commands/SleepCommand.cpp
+        Server/Controller/Commands/ControllerCommands/SleepCommand.h Server/Controller/Commands/ControllerCommands/SleepCommand.cpp
         # If Command
-        Server/Controller/Commands/IfCommand.h Server/Controller/Commands/IfCommand.cpp
+        Server/Controller/Commands/ControllerCommands/IfCommand.h Server/Controller/Commands/ControllerCommands/IfCommand.cpp
         # Start Server Command
-        Server/Controller/Commands/StartServerCommand.h Server/Controller/Commands/StartServerCommand.cpp
+        Server/ServerHandlingCommands/StartServerCommand.h Server/ServerHandlingCommands/StartServerCommand.cpp
         )
 
 set(CLIENTS

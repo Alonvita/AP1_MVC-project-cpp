@@ -8,11 +8,11 @@
 #include <unistd.h>
 #include <sstream>
 
-#include "ICommand.h"
+#include "IControllerCommand.h"
 
 #define SECONDS_TO_MILLISECONDS(x) x/100
 
-class SleepCommand : public ICommand {
+class SleepCommand : public IControllerCommand {
 public:
     SleepCommand() = default;
     ~SleepCommand() override = default;

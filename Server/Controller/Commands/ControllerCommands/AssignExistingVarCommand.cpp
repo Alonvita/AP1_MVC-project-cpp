@@ -17,6 +17,9 @@
  * @return a command result, depending on the specific executed command and it's success/failure.
  */
 CommandResult AssignExistingVarCommand::execute(IClient* sender, CommandData* commandPtr, VarData* inHolder, VarData* outHolder) {
+    if(sender == nullptr)
+        throw std::runtime_error("Client is nullptr, and may not be connected to any server\n");
+
     if(inHolder->get_type() == NOT_ASSIGNED) {
         std::stringstream ss;
         ss << "There was no value to assign var named: " << commandPtr->getData() << ", to...\n";

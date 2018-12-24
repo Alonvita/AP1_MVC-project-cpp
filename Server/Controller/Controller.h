@@ -7,18 +7,18 @@
 
 #include <map>
 
-#include "Commands/ICommand.h"
-#include "Commands/IfCommand.h"
-#include "Commands/BindCommand.h"
-#include "Commands/SleepCommand.h"
+#include "Commands/ControllerCommands/IfCommand.h"
+#include "Commands/ControllerCommands/BindCommand.h"
+#include "Commands/ControllerCommands/SleepCommand.h"
 #include "../../DefinesAndTypedefs.h"
-#include "Commands/OperatorCommand.h"
-#include "Commands/WhileLoopCommand.h"
+#include "Commands/ControllerCommands/OperatorCommand.h"
+#include "Commands/ControllerCommands/WhileLoopCommand.h"
+#include "Commands/ControllerCommands/IControllerCommand.h"
+#include "Commands/ControllerCommands/CreateVariableCommand.h"
 #include "../../Shared_Data/CommandResult.h"
-#include "Commands/CreateVariableCommand.h"
-#include "Commands/AssignExistingVarCommand.h"
+#include "Commands/ControllerCommands/AssignExistingVarCommand.h"
 #include "Operators_Handler/OperatorsHandler.h"
-#include "Commands/CalculateMathExpressionCommand.h"
+#include "Commands/ControllerCommands/CalculateMathExpressionCommand.h"
 #include "Math_Expressions_Handling/MathExpressionsHandler.h"
 
 #define CHECK_SERVER_RUNNING !m_serverRunning && command->getName() != CONNECT_TO_SERVER_COMMAND_STR
@@ -35,7 +35,7 @@ public:
 
 private:
     bool m_serverRunning;
-    CommandsMap m_commandsList;
+    ControllerCommandsMap m_commandsList;
     OperatorsHandler* m_opHandler;
     VariablesMapContainer* m_vContainer;
     unsigned long m_placeHolderCount = 0;

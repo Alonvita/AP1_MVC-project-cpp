@@ -54,7 +54,7 @@ void TCPServer::receive() {
     // create a new clientHandler for this client.
     //  Ideally there should be a clientHandler Factory, depending on clients type, but I am not sure
     //  that I'll have the time to do this today...
-    m_clientHandlersContainer.push_back(new ClientHandler(m_controller, m_lexer, c));
+    m_clientHandlersContainer.push_back(new FlightGearClientHandler(m_controller, m_lexer, c));
 
     // create a new Task for the clientHandler. The task will be executed by the ThreadPool.
     m_threadPool->addTask(m_clientHandlersContainer[m_clientHandlersCount]);

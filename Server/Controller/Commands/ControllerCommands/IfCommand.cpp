@@ -14,6 +14,9 @@
  * @return a command result, depending on the specific executed command and it's success/failure.
  */
 CommandResult IfCommand::execute(IClient* sender, CommandData* commandPtr, VarData* inHolder, VarData* outHolder) {
+    if(sender == nullptr)
+        throw std::runtime_error("Client is nullptr, and may not be connected to any server\n");
+
     // Local Variables
     auto conditionPlaceHolder = new VarData();
 
@@ -36,7 +39,7 @@ CommandResult IfCommand::execute(IClient* sender, CommandData* commandPtr, VarDa
         if(result.commandSucceeded()) {
             return CommandResult(true, IF_END, "If command ended successfully - condition was met\n", true);
         } else {
-            return CommandResult(false, EXECUTION_FAILURE, result.getData(), true);
+            return CommandResult(false, EXECUTION_FAILURE, "If Command: " + result.getData(), true);
         }
     }
 

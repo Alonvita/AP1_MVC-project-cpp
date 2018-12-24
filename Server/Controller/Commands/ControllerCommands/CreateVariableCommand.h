@@ -7,18 +7,17 @@
 
 
 #include <map>
-
-#include <typeinfo>
 #include <sstream>
+#include <typeinfo>
 
-#include "ICommand.h"
-#include "../Math_Expressions_Handling/MathExpressionsHandler.h"
+#include "IControllerCommand.h"
+#include "../../Math_Expressions_Handling/MathExpressionsHandler.h"
 
 /**
  * CreateVariableCommand.
  *  Will create a Variable, given a command to set the variable with.
  */
-class CreateVariableCommand : public ICommand {
+class CreateVariableCommand : public IControllerCommand {
 public:
     /// ---------- CONSTRUCTOR & DESTRUCTOR ---------
     ~CreateVariableCommand() override = default;

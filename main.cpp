@@ -17,13 +17,19 @@ int main() {
 
     auto threadPool = new ThreadPool(5); // initialize threadPool
 
-    auto c = new Client();
+    auto lexer = new Lexer(); // lexer
+    auto controller = new Controller(); // controller
+    auto c = new Client(); // a client
 
     // create a client handler to read lines
-    ClientHandler* clientHandler = new ClientHandler();
+    auto clientHandler = new ClientHandler(controller, lexer, c);
 
     // run a new client handling task
+    threadPool->addTask(clientHandler);
 
     delete(threadPool); // delete the threadPool
     delete(c); // delete the client
+    delete(controller);
+    delete(lexer);
+    delete(clientHandler);
 }

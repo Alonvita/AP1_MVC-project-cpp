@@ -20,6 +20,9 @@ OperatorCommand::~OperatorCommand() { this->m_opHandler = nullptr; }
  * @return a command result, depending on the specific executed command and it's success/failure.
  */
 CommandResult OperatorCommand::execute(IClient* sender, CommandData* commandPtr, VarData* inHolder, VarData* outHolder) {
+    if(sender == nullptr)
+        throw std::runtime_error("Client is nullptr, and may not be connected to any server\n");
+
     //try to evaluate
     try {
         // TODO: add a mutex lock here

@@ -8,9 +8,9 @@
 #include <fcntl.h>
 #include <sstream>
 
-#include "ICommand.h"
+#include "IControllerCommand.h"
 
-class BindCommand : public ICommand {
+class BindCommand : public IControllerCommand {
 public:
     BindCommand() = default;
     ~BindCommand() override;

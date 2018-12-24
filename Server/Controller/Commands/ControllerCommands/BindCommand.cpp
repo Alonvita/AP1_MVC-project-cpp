@@ -21,6 +21,9 @@ BindCommand::~BindCommand() = default;
  * @return a command result, depending on the specific executed command and it's success/failure.
  */
 CommandResult BindCommand::execute(IClient* sender, CommandData* commandPtr, VarData* inHolder, VarData* outHolder) {
+    if(sender == nullptr)
+        throw std::runtime_error("Client is nullptr, and may not be connected to any server\n");
+
     // create a new VarData to be held inside inHolder
     const char* filePath = commandPtr->getData().c_str();
 

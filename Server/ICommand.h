@@ -8,11 +8,11 @@
 #include <queue>
 #include <iostream>
 
-#include "../../../View/IClient.h"
-#include "../../../Utility/VarData.h"
-#include "../../../DefinesAndTypedefs.h"
-#include "../../../Utility/UtilityFunctions.h"
-#include "../../../Shared_Data/CommandData.h"
+#include "../View/IClient.h"
+#include "../Utility/VarData.h"
+#include "../DefinesAndTypedefs.h"
+#include "../Utility/UtilityFunctions.h"
+#include "../Shared_Data/CommandData.h"
 
 /**
  * Command will serve as a pure-virtual class for commands to inherit.

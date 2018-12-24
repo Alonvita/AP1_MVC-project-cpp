@@ -6,11 +6,11 @@
 #define AP1_SEMETSER_PROJECT_ASSIGNEXISTINGVARCOMMAND_H
 
 
-#include "ICommand.h"
-#include "../VariablesMapContainer.h"
-#include "../Math_Expressions_Handling/MathExpressionsHandler.h"
+#include "IControllerCommand.h"
+#include "../../VariablesMapContainer.h"
+#include "../../Math_Expressions_Handling/MathExpressionsHandler.h"
 
-class AssignExistingVarCommand : public ICommand {
+class AssignExistingVarCommand : public IControllerCommand {
 public:
     ~AssignExistingVarCommand() override { this->m_mathExpressionsHandler = nullptr; this->m_vMapContainer = nullptr; }
 

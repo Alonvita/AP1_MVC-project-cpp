@@ -5,11 +5,11 @@
 #ifndef AP1_SEMETSER_PROJECT_STARTSERVERCOMMAND_H
 #define AP1_SEMETSER_PROJECT_STARTSERVERCOMMAND_H
 
-#include "ICommand.h"
-#include "../Controller.h"
+#include "ServerHandlingCommand.h"
+#include "../Controller/Controller.h"
 
-class StartServerCommand : public ICommand {
-    StartServerCommand(Controller* controller) : m_controller(controller);
+class StartServerCommand : public ServerHandlingCommand {
+    StartServerCommand(Controller* controller) : m_controller(controller) {};
 
     CommandResult execute(IClient* sender, CommandData* commandPtr, VarData* inHolder, VarData* outHolder) override;
 

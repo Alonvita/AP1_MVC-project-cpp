@@ -5,11 +5,10 @@
 #ifndef AP1_SEMETSER_PROJECT_CALCULATEMATHEXPRESSIONCOMMAND_H
 #define AP1_SEMETSER_PROJECT_CALCULATEMATHEXPRESSIONCOMMAND_H
 
+#include "IControllerCommand.h"
+#include "../../Math_Expressions_Handling/MathExpressionsHandler.h"
 
-#include "ICommand.h"
-#include "../Math_Expressions_Handling/MathExpressionsHandler.h"
-
-class CalculateMathExpressionCommand : public ICommand {
+class CalculateMathExpressionCommand : public IControllerCommand {
 public:
     CalculateMathExpressionCommand(MathExpressionsHandler* handler) : m_mathExpressionsHandler(handler) {};
     ~CalculateMathExpressionCommand() { this->m_mathExpressionsHandler = nullptr; }

@@ -7,14 +7,14 @@
 
 
 #include <map>
-#include "ICommand.h"
-#include "../IController.h"
-#include "../../../DefinesAndTypedefs.h"
+#include "../../IController.h"
+#include "IControllerCommand.h"
+#include "../../../../DefinesAndTypedefs.h"
 
-class WhileLoopCommand : public ICommand {
+class WhileLoopCommand : public IControllerCommand {
 public:
     /// ---------- CONSTRUCTORS & DESTRUCTORS ----------
-    WhileLoopCommand(IController* controller, CommandsMap* commandsList) :
+    WhileLoopCommand(IController* controller, ControllerCommandsMap* commandsList) :
                 m_controller(controller), m_commandsList(commandsList) {};
     ~WhileLoopCommand() override {
         this->m_commandsList = nullptr;
@@ -28,7 +28,7 @@ public:
 
 private:
     IController* m_controller;
-    CommandsMap* m_commandsList;
+    ControllerCommandsMap* m_commandsList;
     unsigned long m_placeHoldersCount = 0;
     std::vector<VarData*> m_placeHoldersContainer;
 };

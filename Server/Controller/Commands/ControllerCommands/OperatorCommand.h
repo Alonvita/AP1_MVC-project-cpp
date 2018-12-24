@@ -6,11 +6,11 @@
 #define AP1_SEMETSER_PROJECT_OPERATORCOMMAND_H
 
 
-#include "ICommand.h"
-#include "../Operators_Handler/OperatorsHandler.h"
-#include "../Math_Expressions_Handling/MathExpressionsHandler.h"
+#include "IControllerCommand.h"
+#include "../../Operators_Handler/OperatorsHandler.h"
+#include "../../Math_Expressions_Handling/MathExpressionsHandler.h"
 
-class OperatorCommand : public ICommand {
+class OperatorCommand : public IControllerCommand {
 public:
     explicit OperatorCommand(OperatorsHandler* opHandler) : m_opHandler(opHandler) {};
     ~OperatorCommand() override;

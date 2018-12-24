@@ -7,7 +7,7 @@
 
 #include "ClientHandler.h"
 
-class FlightGearClientHandler : public Task {
+class FlightGearClientHandler : public IClientHandler {
 public:
     FlightGearClientHandler(IController* controller, Lexer* lex, IClient* client) :
     m_controller(controller), m_lexer(lex), m_client(client) {};

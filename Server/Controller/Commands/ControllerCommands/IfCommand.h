@@ -6,13 +6,13 @@
 #define AP1_SEMETSER_PROJECT_IFCOMMAND_H
 
 
-#include "ICommand.h"
-#include "../IController.h"
+#include "../../IController.h"
+#include "IControllerCommand.h"
 
-class IfCommand : public ICommand {
+class IfCommand : public IControllerCommand {
 public:
     /// ---------- CONSTRUCTORS & DESTRUCTORS ----------
-    explicit IfCommand(IController* controller, CommandsMap* map) :
+    explicit IfCommand(IController* controller, ControllerCommandsMap* map) :
                 m_commandsList(map), m_controller(controller) {};
     ~IfCommand() override = default;
 
@@ -21,7 +21,7 @@ public:
 
 private:
     IController* m_controller;
-    CommandsMap* m_commandsList;
+    ControllerCommandsMap* m_commandsList;
 };
 
 
