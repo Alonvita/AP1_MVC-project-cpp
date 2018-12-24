@@ -9,8 +9,8 @@
 #include "Server/Controller/Controller.h"
 #include "Server/ThreadPool/ThreadPool.h"
 #include "Server/ClientHandler/ClientHandler.h"
-#include "Server/ServerOpenAndConnection/OpenServerTask.h"
-#include "Server/ServerOpenAndConnection/ConnectToServerTask.h"
+#include "Server/ServerOpenAndConnection/OpenServer.h"
+#include "Server/ServerOpenAndConnection/ConnectToServer.h"
 
 using namespace std;
 
@@ -61,7 +61,7 @@ int main() {
 
         if(commandsQueue.front()->getName() == CONNECT_TO_SERVER_COMMAND_STR) {
             try {
-                auto connectToServerTask = new ConnectToServerTask(commandsQueue, client, serverRunningStatus);
+                auto connectToServerTask = new ConnectToServer(commandsQueue, client, serverRunningStatus);
 
                 if(connectToServerTask->run())
                     std::cout << "Successfully connected to server!\n";

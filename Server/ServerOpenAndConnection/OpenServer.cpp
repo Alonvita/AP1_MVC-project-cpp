@@ -2,7 +2,7 @@
 // Created by alon on 24/12/18.
 //
 
-#include "OpenServerTask.h"
+#include "OpenServer.h"
 #include "StartServerCommand.h"
 
 /**

@@ -55,8 +55,8 @@ set(SERVER
         # Connect to Server Command
         Server/ServerOpenAndConnection/ConnectToServerCommand.h Server/ServerOpenAndConnection/ConnectToServerCommand.cpp
         # Tasks
-        Server/ServerOpenAndConnection/ConnectToServerTask.h Server/ServerOpenAndConnection/ConnectToServerTask.cpp
-        Server/ServerOpenAndConnection/OpenServerTask.h Server/ServerOpenAndConnection/OpenServerTask.cpp
+        Server/ServerOpenAndConnection/ConnectToServer.h Server/ServerOpenAndConnection/ConnectToServer.cpp
+        Server/ServerOpenAndConnection/OpenServer.h Server/ServerOpenAndConnection/OpenServer.cpp
 
         #IServer
         Server/IServer.h

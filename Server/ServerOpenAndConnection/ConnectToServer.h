@@ -11,9 +11,9 @@
 #include "../../View/IClient.h"
 #include "../../Shared_Data/CommandData.h"
 
-class ConnectToServerTask {
+class ConnectToServer {
 public:
-    ConnectToServerTask(CommandDataQueue& commandDataQueue, IClient* client, bool serverRunningStatus) :
+    ConnectToServer(CommandDataQueue& commandDataQueue, IClient* client, bool serverRunningStatus) :
     m_client(client), m_commandDataQueue(commandDataQueue), m_serverRunningStatus(serverRunningStatus) {};
 
     bool run();
