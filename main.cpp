@@ -7,39 +7,23 @@
 #include "Shared_Data/Lexer.h"
 #include "Server/Controller/Controller.h"
 #include "Server/ThreadPool/ThreadPool.h"
+#include "Server/ClientHandler/ClientHandler.h"
 
 using namespace std;
 
 int main() {
+    // Local Variables
+    bool serverRunning = false;
+
+    auto threadPool = new ThreadPool(5); // initialize threadPool
+
     auto c = new Client();
-    CommandDataQueue q;
 
-    Lexer l(c);
+    // create a client handler to read lines
+    ClientHandler* clientHandler = new ClientHandler();
 
-    //l.parseLine("while alt < 1000 {", q);
-    try {
-        l.parseLine("openDataServer", q);
-    } catch(std::exception& e) {
-        std::cout << e.what();
-        exit(0);
-    }
+    // run a new client handling task
 
-    std::cout << "Queue's commands order is: \n";
-
-  //  auto controller = new Controller();
-
-//    CommandResult r = controller->executeCommand(q, c);
-
-    while(!q.empty()) {
-        CommandData* p = q.front();
-
-        std:: cout << "First: " << p->getName() << "\n";
-        std:: cout << "Second: " << p->getData() << "\n";
-
-        SAFELY_POP_COMMAND_DATA_QUEUE(q)
-    }
-
-
-    delete(c);
-    //delete(controller);
+    delete(threadPool); // delete the threadPool
+    delete(c); // delete the client
 }

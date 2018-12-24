@@ -23,6 +23,11 @@ void ClientHandler::run() {
         // parse the line from lexer
         m_lexer->parseLine(msg, commandsQueue);
 
+        // check if lexer is still reading a section.
+        //  If so, continue to the next iteration instead of executing.
+        if(!m_lexer->doneReadingSection())
+            continue;
+
         // execute given commands
         CommandResult result = m_controller->executeCommand(commandsQueue, m_client);
 

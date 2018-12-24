@@ -5,18 +5,23 @@
 #include <cstring>
 #include "TCPServer.h"
 #include "../View/Client.h"
+#include "ClientHandler/FlightGearClientHandler.h"
 
 
 /**
- * TCPServer(uint16_t port, ThreadPool* threadPool).
+ * TCPServer(uint16_t port, ThreadPool* threadPool, Controller* controller, Lexer* lexer).
  *
  * @param port uint16_t -- a port
  * @param threadPool ThreadPool* -- a pointer to a ThreadPool.
+ * @param controller Controller* -- a pointer to a server controller.
+ * @param lexer Lexer* -- a pointer to a lexer.
  */
-TCPServer::TCPServer(uint16_t port, ThreadPool* threadPool) {
+TCPServer::TCPServer(uint16_t port, ThreadPool* threadPool, Controller* controller, Lexer* lexer) {
     // initialize local variables
+    m_lexer = lexer;
+    m_controller = controller;
     m_threadPool = threadPool;
-    m_clientHandler;
+    m_clientHandlersCount = 0;
 
     // initialize server
     m_sockfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -43,15 +48,25 @@ void TCPServer::receive() {
     // create a new client
     IClient* c = new Client(m_newsockfd);
 
-    if(THREADS_NUMBER < m_threadsCounter) {
-        c->receiveNotification(Notification(FAILURE, "Sorry, the server is full.\n"));
-        return;
-    } else {
-        c->receiveNotification(Notification(CONNECTED_TO_SERVER, "Successfully connected to server\n"));
-    }
+    // send "connected" notification
+    c->receiveNotification(Notification(SERVER_DATA_OPENED, "Connected to server\n"));
+
+    // create a new clientHandler for this client.
+    //  Ideally there should be a clientHandler Factory, depending on clients type, but I am not sure
+    //  that I'll have the time to do this today...
+    m_clientHandlersContainer.push_back(new ClientHandler(m_controller, m_lexer, c));
 
     // create a new Task for the clientHandler. The task will be executed by the ThreadPool.
-    m_threadPool->addTask(m_clientHandler);
+    m_threadPool->addTask(m_clientHandlersContainer[m_clientHandlersCount]);
 }
 
-void TCPServer::stop() { return; }
+void TCPServer::stop() {
+    close(m_sockfd); // close the socket
+
+    // clear the client Handlers vector
+    for(IClientHandler* handler : m_clientHandlersContainer) {
+        delete(handler);
+    }
+
+    m_clientHandlersContainer.clear();
+}

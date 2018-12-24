@@ -18,7 +18,6 @@ public:
     ~SleepCommand() override = default;
 
     CommandResult execute(IClient* sender, CommandData* commandPtr, VarData* inHolder, VarData* outHolder) override;
-
 };
 
 

@@ -42,7 +42,7 @@ enum LexerEvalResult {
 class Lexer {
 public:
     explicit Lexer(IClient* client) :
-        m_client(client),
+        m_client(client), m_closeBracketsCount(0), m_openBracketsCount(0), m_readingSection(false),
         m_readToPlaceHolder(0), m_placeHolder(std::vector<CommandDataVector>()),
         m_curlyBracketsFound(false) {
         m_placeHolder.emplace_back(CommandDataVector());
@@ -58,12 +58,16 @@ public:
     }
 
     ///---------- PUBLIC METHODS ----------
+    bool doneReadingSection() { return (!m_readingSection); };
     void parseLine(ConstStringRef line, CommandDataQueue& outQueue);
 
 private:
     ///---------- LOCAL VARIABLES ----------
     IClient* m_client;
+    int m_openBracketsCount;
     int m_readToPlaceHolder;
+    bool m_readingSection;
+    int m_closeBracketsCount;
     bool m_curlyBracketsFound;
     std::vector<CommandDataVector> m_placeHolder;
     // IServer server;

@@ -82,11 +82,14 @@ CommandResult Controller::executeCommand(const CommandDataQueue& commandsQueue, 
             return CommandResult(false, UNDEFINED, "Unknown Command\n", true); // return unknown commandsQueue
         }
 
+        if(CHECK_SERVER_RUNNING)
+            return CommandResult(false, EXECUTION_FAILURE, "Cannot execute command, since server is not running\n", true);
+
+
         VarData* currPH = m_placeHoldersContainer[m_placeHolderCount];
         VarData* lastPH = m_placeHoldersContainer[m_placeHolderCount - 1];
 
-        // TODO: I think mutex lock will be here
-        commandResult = (*it).second->execute(nullptr, command, lastPH, currPH);
+        commandResult = (*it).second->execute(sender, command, lastPH, currPH);
 
         if(!commandResult.commandSucceeded())
             return CommandResult(false, EXECUTION_FAILURE, commandResult.getData(), true);

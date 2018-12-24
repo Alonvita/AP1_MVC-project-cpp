@@ -21,6 +21,7 @@
 #include "Commands/CalculateMathExpressionCommand.h"
 #include "Math_Expressions_Handling/MathExpressionsHandler.h"
 
+#define CHECK_SERVER_RUNNING !m_serverRunning && command->getName() != CONNECT_TO_SERVER_COMMAND_STR
 
 class Controller : public IController {
 public:
@@ -32,8 +33,8 @@ public:
     /// -------- EXECUTION --------
     CommandResult executeCommand(const CommandDataQueue& commandsQueue, IClient* sender) override;
 
-
 private:
+    bool m_serverRunning;
     CommandsMap m_commandsList;
     OperatorsHandler* m_opHandler;
     VariablesMapContainer* m_vContainer;

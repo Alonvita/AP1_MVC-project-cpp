@@ -155,6 +155,8 @@ void Lexer::resultBasedExecution(LexerEvalResult result, StringsVector& strVecto
         }
 
         case LEXER_PARSE_OPEN_CURLY_BRACKETS: {
+            m_openBracketsCount++;
+            m_readingSection = true;
             m_curlyBracketsFound = true;
             return;
         }
@@ -226,6 +228,13 @@ void Lexer::resultBasedExecution(LexerEvalResult result, StringsVector& strVecto
         }
 
         case LEXER_PARSE_CLOSE_CURLY_BRACKETS: {
+            // increase '}' count
+            m_closeBracketsCount++;
+
+            // check '{' == '}'
+            if(m_closeBracketsCount == m_openBracketsCount)
+                m_readingSection = false;
+
             if(outVecAlias.empty())
                 throw std::runtime_error("No commands were assigned before receiving '}'\n");
 

@@ -19,7 +19,7 @@ public:
     /// ---------- CONSTRUCTORS & DESTRUCTORS ----------
     Client() noexcept;
     explicit Client(int socket_id) noexcept;
-    ~Client() = default;
+    ~Client() { close(g_socket); };
 
     /// ---------- OVERRIDING INTERFACE FUNCTIONS ----------
     std::string     readMessage() override;

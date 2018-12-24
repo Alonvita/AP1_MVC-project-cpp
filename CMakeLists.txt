@@ -83,6 +83,8 @@ set(SERVER
         Server/Controller/Commands/SleepCommand.h Server/Controller/Commands/SleepCommand.cpp
         # If Command
         Server/Controller/Commands/IfCommand.h Server/Controller/Commands/IfCommand.cpp
+        # Start Server Command
+        Server/Controller/Commands/StartServerCommand.h Server/Controller/Commands/StartServerCommand.cpp
         )
 
 set(CLIENTS

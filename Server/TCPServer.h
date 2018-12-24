@@ -7,14 +7,16 @@
 
 
 #include "IServer.h"
+#include "../Shared_Data/Lexer.h"
 #include "ThreadPool/ThreadPool.h"
+#include "Controller/Controller.h"
 #include "ClientHandler/IClientHandler.h"
 
 #define THREADS_NUMBER 2
 
 class TCPServer : public IServer {
 public:
-    TCPServer(uint16_t port, ThreadPool* threadpool);
+    TCPServer(uint16_t port, ThreadPool* threadPool, Controller* controller, Lexer* lexer);
     ~TCPServer() override = default;
 
 protected:
@@ -28,8 +30,11 @@ private:
     struct sockaddr_in m_serverAddress;
     struct sockaddr_in m_clientAddress;
 
+    Lexer* m_lexer;
     ThreadPool* m_threadPool;
-    IClientHandler* m_clientHandler;
+    Controller* m_controller;
+    unsigned long m_clientHandlersCount;
+    std::vector<IClientHandler*> m_clientHandlersContainer;
 };
 
 #endif //AP1_SEMETSER_PROJECT_TCPSERVER_H
