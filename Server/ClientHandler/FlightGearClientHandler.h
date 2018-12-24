@@ -5,6 +5,8 @@
 #ifndef AP1_SEMETSER_PROJECT_FLIGHTGEARCLIENTHANDLER_H
 #define AP1_SEMETSER_PROJECT_FLIGHTGEARCLIENTHANDLER_H
 
+#include <cstring>
+
 #include "ClientHandler.h"
 
 class FlightGearClientHandler : public IClientHandler {

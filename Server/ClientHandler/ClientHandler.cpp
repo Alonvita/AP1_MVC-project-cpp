@@ -12,7 +12,7 @@ void ClientHandler::run() {
     char msg[MAX_PACKET_SIZE];
 
     while(m_client->isConnected()) {
-        // read from client
+        // read from command line
         if(fgets(msg, MAX_PACKET_SIZE, stdin) == 0) {
             m_client->disconnect(false);
             return;

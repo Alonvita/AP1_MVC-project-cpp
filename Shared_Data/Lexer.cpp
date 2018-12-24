@@ -486,27 +486,26 @@ void Lexer::openServer(const StringsVector &strVec, int index, CommandDataVector
  * @param outVector CommandDataVector& -- a reference to a CommandDataVector to modify accordingly.
  */
  void Lexer::connectClientToServer(const StringsVector &strVec, int index, CommandDataVector &outVec) {
-     if(outVec.size() != 2) {
+     if(outVec.size() != 1) {
          throw std::runtime_error("Command's call convention is: \"connect\" [IP_ADDRESS] [PORT]\n");
      }
 
-     if(!isValidIPAddress(outVec[0]->getData())) {
+     if(!isValidIPAddress(strVec[index - 1])) {
          throw std::runtime_error("Please provide a valid IP address of type IPv4: xxx.xxx.xxx.xxx\n");
      }
 
-    if (!isNumeric(outVec[1]->getData())) {
+    if (!isNumeric(outVec[0]->getData())) {
         throw std::runtime_error("Please provide a port. Command's call convention is: \"connect\" [IP_ADDRESS] [PORT]\n");
     }
 
-    std::string IP = outVec[0]->getData(); // take the IP address
-    std::string port = outVec[1]->getData(); // take the port
+    std::string IP = strVec[index - 1]; // take the IP address
+    std::string port = outVec[0]->getData(); // take the port
 
 
     std::stringstream command;
     command << IP << " " << port;
 
     // clear the vector -> commands will not be needed
-    SAFELY_REMOVE_COMMAND_DATA_VEC_BEGIN(outVec);
     SAFELY_REMOVE_COMMAND_DATA_VEC_BEGIN(outVec);
 
     // push the open server command

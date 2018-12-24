@@ -14,7 +14,7 @@
 #include "../Utility/UtilityFunctions.h"
 #include "../Utility/GenericFunctions.h"
 
-#define LEXER_SPLIT_DELIMITERS " {}=\""
+#define LEXER_SPLIT_DELIMITERS " {}=\"\n"
 
 /**
  * Defines the types of evaluations available by this Lexer.

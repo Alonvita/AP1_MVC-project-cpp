@@ -7,7 +7,7 @@
 
 #include "../ICommand.h"
 
-class ServerHandlingCommand : public ICommand {
+class IServerHandlingCommand : public ICommand {
     /// An empty interface.
 };
 

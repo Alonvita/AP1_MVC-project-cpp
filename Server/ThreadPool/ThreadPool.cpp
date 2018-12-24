@@ -28,11 +28,14 @@ void ThreadPool::addTask(Task *nt) {
 // Asking the threads to finish, waiting for the task
 // queue to be consumed and then returning.
 void ThreadPool::finish() {
+
     for (size_t i = 0, e = threads.size(); i < e; ++i)
-        workQueue.addTask(NULL);
+        workQueue.addTask(nullptr);
+
     for (size_t i = 0, e = threads.size(); i < e; ++i) {
         threads[i]->join();
         delete threads[i];
     }
+
     threads.clear();
 }

@@ -31,5 +31,8 @@ void FlightGearClientHandler::run() {
 
         // send command result to client
         m_client->receiveCommandResult(result);
+
+        // clear msg
+        memset(msg,'\0', MAX_PACKET_SIZE);
     }
 }

@@ -25,8 +25,10 @@ Task *WorkQueue::nextTask() {
     while (tasks.empty()) {
         pthread_cond_wait(&wcond, &qmtx);
     }
+
     nt = tasks.front();
     tasks.pop();
+
     // Unlock the mutex and return
     pthread_mutex_unlock(&qmtx);
     return nt;

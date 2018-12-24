@@ -49,6 +49,15 @@ set(SERVER
         Server/ThreadPool/ThreadPool.h Server/ThreadPool/ThreadPool.cpp
         Server/ThreadPool/PoolWorkerThread.h Server/ThreadPool/PoolWorkerThread.cpp
 
+        ### SERVER CREATION & CONNECTION HANDLING ###
+        # Start Server Command
+        Server/ServerOpenAndConnection/StartServerCommand.h Server/ServerOpenAndConnection/StartServerCommand.cpp
+        # Connect to Server Command
+        Server/ServerOpenAndConnection/ConnectToServerCommand.h Server/ServerOpenAndConnection/ConnectToServerCommand.cpp
+        # Tasks
+        Server/ServerOpenAndConnection/ConnectToServerTask.h Server/ServerOpenAndConnection/ConnectToServerTask.cpp
+        Server/ServerOpenAndConnection/OpenServerTask.h Server/ServerOpenAndConnection/OpenServerTask.cpp
+
         #IServer
         Server/IServer.h
         # TCPServer
@@ -68,8 +77,8 @@ set(SERVER
         ### COMMANDS ###
         # ICommand
         Server/ICommand.h
-        # ServerHandlingCommand
-        Server/ServerHandlingCommands/ServerHandlingCommand.h
+        # IServerHandlingCommand
+        Server/ServerOpenAndConnection/IServerHandlingCommand.h
         # IControllerCommand
         Server/Controller/Commands/ControllerCommands/IControllerCommand.h
         # CreateVariableCommand
@@ -88,8 +97,6 @@ set(SERVER
         Server/Controller/Commands/ControllerCommands/SleepCommand.h Server/Controller/Commands/ControllerCommands/SleepCommand.cpp
         # If Command
         Server/Controller/Commands/ControllerCommands/IfCommand.h Server/Controller/Commands/ControllerCommands/IfCommand.cpp
-        # Start Server Command
-        Server/ServerHandlingCommands/StartServerCommand.h Server/ServerHandlingCommands/StartServerCommand.cpp
         )
 
 set(CLIENTS

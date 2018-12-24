@@ -27,6 +27,8 @@ void Thread::join() {
 
 void *Thread::threadProc(void *param) {
     Thread* thread = reinterpret_cast<Thread*>(param);
+
     thread->run();
+
     return NULL;
 }

@@ -4,5 +4,9 @@ PoolWorkerThread::PoolWorkerThread(WorkQueue &_work_queue) : work_queue(_work_qu
 
 void PoolWorkerThread::run() {
     while (Task *task = work_queue.nextTask())
-        task->run();
+        try {
+                task->run();
+        } catch (std::exception& e) {
+            pthread_exit((void*) &e);
+        }
 }
