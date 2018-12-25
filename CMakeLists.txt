@@ -44,31 +44,33 @@ set(OUTER_HANDLERS
 set(SERVER
         ### THREADING ###
         Server/ThreadPool/Task.h
+        Server/ThreadPool/MyThreadLock.h
         Server/ThreadPool/Thread.h Server/ThreadPool/Thread.cpp
         Server/ThreadPool/WorkQueue.h Server/ThreadPool/WorkQueue.cpp
         Server/ThreadPool/ThreadPool.h Server/ThreadPool/ThreadPool.cpp
         Server/ThreadPool/PoolWorkerThread.h Server/ThreadPool/PoolWorkerThread.cpp
 
         ### SERVER CREATION & CONNECTION HANDLING ###
-        # Start Server Command
-        Server/ServerOpenAndConnection/StartServerCommand.h Server/ServerOpenAndConnection/StartServerCommand.cpp
         # Connect to Server Command
         Server/ServerOpenAndConnection/ConnectToServerCommand.h Server/ServerOpenAndConnection/ConnectToServerCommand.cpp
         # Tasks
         Server/ServerOpenAndConnection/ConnectToServer.h Server/ServerOpenAndConnection/ConnectToServer.cpp
         Server/ServerOpenAndConnection/OpenServer.h Server/ServerOpenAndConnection/OpenServer.cpp
+        Server/ServerOpenAndConnection/RunServerTask.h
 
         #IServer
         Server/IServer.h
         # TCPServer
-        Server/TCPServer.h Server/TCPServer.cpp
+        Server/MyTCPServer.h Server/MyTCPServer.cpp
+
         # FlightGearClientHandler
         Server/ClientHandler/FlightGearClientHandler.h Server/ClientHandler/FlightGearClientHandler.cpp
-
         #IClientHandler
         Server/ClientHandler/IClientHandler.h
         #ClientHandler
         Server/ClientHandler/ClientHandler.h Server/ClientHandler/ClientHandler.cpp
+
+        ### CONTROLLER ###
         #IController
         Server/Controller/IController.h
         #Controller
@@ -103,7 +105,9 @@ set(CLIENTS
         #Interface
         View/IClient.h
         #Client
-        View/Client.cpp View/Client.h
+        View/UserClient.h View/UserClient.cpp
+        #FlightGearClient
+        View/FlightGearClient.h
         )
 
 add_executable(projectExecutable ${UTILITIES} ${MAIN} ${SHARED_DATA} ${SERVER} ${CLIENTS} ${OUTER_HANDLERS})

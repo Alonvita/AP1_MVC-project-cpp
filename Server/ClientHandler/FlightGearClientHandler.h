@@ -8,19 +8,25 @@
 #include <cstring>
 
 #include "ClientHandler.h"
+#include "../Controller/Controller.h"
 
-class FlightGearClientHandler : public IClientHandler {
+struct flight_gear_arguments {
 public:
-    FlightGearClientHandler(IController* controller, Lexer* lex, IClient* client) :
-    m_controller(controller), m_lexer(lex), m_client(client) {};
+    flight_gear_arguments(Lexer* lexer, IClient* client, int readsPerSecond, Controller* controller) :
+        lexer(lexer), client(client), readsPerSecond(readsPerSecond), controller(controller) {};
 
-    void run() override;
-    void showTask() override {};
+    Lexer* lexer;
+    IClient* client;
+    int readsPerSecond;
+    Controller* controller;
+};
+
+class FlightGearClientHandler {
+public:
+    static void* handleClient(void* arguments);
 
 private:
-    Lexer* m_lexer;
-    IClient* m_client;
-    IController* m_controller;
+    static void readFlightGearLine(char* msg, Lexer* lexer, CommandDataQueue& outQueue);
 };
 
 

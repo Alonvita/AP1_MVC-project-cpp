@@ -1,6 +1,22 @@
 #include "Lexer.h"
 
 /**
+ * parseFlightGearData(StringsVector& outVec).
+ *
+ * @param vec StringsVector& -- a ref to a vector of strings.
+ */
+void Lexer::parseFlightGearData(const StringsVector& vec, CommandDataQueue& outQueue) {
+    std::initializer_list<std::string> stringsList = FLIGHTGEAR_VALUES_INITIALIZER_LIST;
+
+    unsigned long listSize = std::min(stringsList.size(), vec.size());
+
+    for(unsigned long i = 0; i < listSize; ++i) {
+
+        outQueue.push(new CommandData(UPDATE_EXISTING_COMMAND_STR ,*(stringsList.begin() + i) + " " + vec[i]));
+    }
+}
+
+/**
  * parseLine(const std::string &line).
  *
  * Operation:

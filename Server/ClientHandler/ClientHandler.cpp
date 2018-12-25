@@ -29,9 +29,12 @@ void ClientHandler::run() {
             continue;
 
         // execute given commands
-        CommandResult result = m_controller->executeCommand(commandsQueue, m_client);
+        m_result = m_controller->executeCommand(commandsQueue, m_client);
 
         // send command result to client
-        m_client->receiveCommandResult(result);
+        m_client->receiveCommandResult(m_result);
     }
+
+    // notifies the other end of the server that the client has finished it's operation
+    m_lock.getCondVariable().notify_one();
 }

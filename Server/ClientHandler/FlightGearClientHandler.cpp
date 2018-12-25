@@ -4,35 +4,52 @@
 
 #include "FlightGearClientHandler.h"
 
-/**
- * run().
- */
-void FlightGearClientHandler::run() {
+void* FlightGearClientHandler::handleClient(void* arguments) {
+    // Local Variables
     ssize_t n;
     char msg[MAX_PACKET_SIZE];
+    auto args = (flight_gear_arguments*)arguments;
 
-    while(m_client->isConnected()) {
+    while(args->client->isConnected()) {
         // receive a message
-        n = recv(m_client->getSocketID(), msg, MAX_PACKET_SIZE, 0);
+        n = recv(args->client->getSocketID(), msg, MAX_PACKET_SIZE, 0);
 
         // check file ended while reading
         if(n == 0) {
-            m_client->disconnect(false);
-            return;
+            args->client->disconnect(false);
+            return nullptr;
         }
 
         CommandDataQueue commandsQueue; // local variable
 
-        // parse the line from lexer
-        m_lexer->parseLine(msg, commandsQueue);
+        readFlightGearLine(msg, args->lexer, commandsQueue);
 
         // execute given commands
-        CommandResult result = m_controller->executeCommand(commandsQueue, m_client);
+        CommandResult result = args->controller->executeCommand(commandsQueue, args->client);
 
         // send command result to client
-        m_client->receiveCommandResult(result);
+        args->client->receiveCommandResult(result);
 
         // clear msg
         memset(msg,'\0', MAX_PACKET_SIZE);
     }
+
+    return nullptr;
+}
+
+/**
+ *
+ * @param msg
+ * @param lexer
+ * @param outQueue
+ */
+void FlightGearClientHandler::readFlightGearLine(char* msg, Lexer* lexer, CommandDataQueue& outQueue) {
+
+    StringsVector splitLine;
+    splitStringToVector(std::string(msg), ",", splitLine, false);
+
+    // parse the line from lexer
+    lexer->parseFlightGearData(splitLine, outQueue);
+
+    std::cout << "YAUZA\n";
 }

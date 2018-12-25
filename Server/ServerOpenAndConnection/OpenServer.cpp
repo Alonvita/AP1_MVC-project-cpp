@@ -3,18 +3,26 @@
 //
 
 #include "OpenServer.h"
-#include "StartServerCommand.h"
 
 /**
  * run().
  */
-IServer* OpenServerTask::run() {
-    // start a new Server Command
-    auto startServerCommand = new StartServerCommand(m_controller);
+IServer* OpenServer::run() {
+    CommandData* commandData = m_commandDataQueue.front();
+    std::vector<std::string> dataFromCommand;
 
-    // TODO: open the server
+    splitStringToVector(commandData->getData(), " ", dataFromCommand, false);
 
-    // pop from queue
-    SAFELY_POP_COMMAND_DATA_QUEUE(m_commandDataQueue);
-    delete(startServerCommand); // delete command
+    try {
+        auto server =
+                new TCPServer(stoi(dataFromCommand[0]), m_controller, m_lexer, stoi(dataFromCommand[1]), m_lock);
+
+        // pop from queue
+        SAFELY_POP_COMMAND_DATA_QUEUE(m_commandDataQueue);
+
+        return server;
+    } catch(std::exception& e) {
+        throw std::runtime_error(e.what());
+    }
+
 }

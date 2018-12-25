@@ -9,7 +9,7 @@
 #include "../ThreadPool/Task.h"
 #include "../Controller/IController.h"
 
-#define MAX_PACKET_SIZE 4096
+#define MAX_PACKET_SIZE 1024
 
 class IClientHandler : public Task {
 public:

@@ -10,9 +10,11 @@ class IServer {
 public:
     virtual ~IServer() = default;
 
+    virtual void receive() = 0;
+    virtual void initSocket() = 0;
+
 protected:
     virtual void stop() = 0;
-    virtual void receive() = 0;
 };
 
 

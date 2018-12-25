@@ -23,12 +23,12 @@ Controller::Controller() {
     m_placeHoldersContainer.push_back(new VarData());
 
     // Initialize Commands Map
-    m_commandsList.insert(std::make_pair(SLEEP_COMMAND_STR, new SleepCommand()));
     m_commandsList.insert(std::make_pair(BIND_COMMAND_STR, new BindCommand())); // Create Var
+    m_commandsList.insert(std::make_pair(SLEEP_COMMAND_STR, new SleepCommand()));
     m_commandsList.insert(std::make_pair(IF_COMMAND_STR, new IfCommand(this, &m_commandsList)));
     m_commandsList.insert(std::make_pair(OPERATOR_COMMAND_STR, new OperatorCommand(m_opHandler)));
-    m_commandsList.insert(std::make_pair(WHILE_LOOP_COMMAND_STR, new WhileLoopCommand(this, &m_commandsList)));
     m_commandsList.insert(std::make_pair(CREATE_VAR_COMMAND_STR, new CreateVariableCommand(m_vContainer))); // Create Var
+    m_commandsList.insert(std::make_pair(WHILE_LOOP_COMMAND_STR, new WhileLoopCommand(this, &m_commandsList)));
     m_commandsList.insert(std::make_pair(CALCULATE_MATH_COMMAND_STR, new CalculateMathExpressionCommand(m_mathExpressionsHandler)));
     m_commandsList.insert(std::make_pair(ASSIGN_EXISTING_COMMAND_STR, new AssignExistingVarCommand(m_vContainer ,m_mathExpressionsHandler)));
 }
@@ -82,7 +82,7 @@ CommandResult Controller::executeCommand(const CommandDataQueue& commandsQueue, 
             return CommandResult(false, UNDEFINED, "Unknown Command\n", true); // return unknown commandsQueue
         }
 
-        if(CHECK_SERVER_RUNNING)
+        if(CHECK_SERVER_RUNNING(sender))
             return CommandResult(false, EXECUTION_FAILURE, "Cannot execute command, since server is not running\n", true);
 
 

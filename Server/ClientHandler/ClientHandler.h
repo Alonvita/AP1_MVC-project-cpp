@@ -7,11 +7,14 @@
 
 #include "IClientHandler.h"
 #include "../../Shared_Data/Lexer.h"
+#include "../ThreadPool/MyThreadLock.h"
 
 class ClientHandler : public IClientHandler {
 public:
-    ClientHandler(IController* controller, Lexer* lex, IClient* client) :
-            m_controller(controller), m_lexer(lex), m_client(client) {};
+    ClientHandler(IController* controller, Lexer* lex,
+                  IClient* client, MyThreadLock& lock, CommandResult& result) :
+                  m_controller(controller), m_lexer(lex), m_client(client),
+                  m_lock(lock), m_result(result) {};
 
     void run() override;
     void showTask() override {};
@@ -19,6 +22,8 @@ public:
 private:
     Lexer* m_lexer;
     IClient* m_client;
+    MyThreadLock& m_lock;
+    CommandResult& m_result;
     IController* m_controller;
 };
 
